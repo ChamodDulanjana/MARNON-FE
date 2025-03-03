@@ -1,8 +1,10 @@
 
 const Home = () => {
     return (
-        <div>
-            <h1 className="text-blue-400 text-lg flex justify-center items-center">Home Page</h1>
+        <div className="w-full h-screen bg-cover bg-center bg-fixed bg-[url('/src/assets/landing_image.png')]">
+            <span className="flex justify-center items-center text-4xl font-bold text-white h-full">
+                MARNON
+            </span>
         </div>
     );
 };
