@@ -9,6 +9,8 @@ export default {
       fontFamily: {
         'poppins': ["Poppins", 'sans-serif'],
         'brith-stone': ["Birthstone", 'cursive'],
+        'big-shoulder-stencil': ["Big Shoulders Stencil", 'sans-serif'],
+        'abel': ["Abel", 'sans-serif'],
       },
     },
   },

@@ -3,16 +3,16 @@ import {useState} from "react";
 
 const Header = () => {
 
-    const [cartCount, setCartCount] = useState<number>(0);
+    const [cartCount] = useState<number>(0);
 
     return (
-        <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-10 fixed z-50">
-            <div className="bg-white w-[80vw] rounded-full flex justify-around items-center p-2 gap-20">
+        <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-8 sticky z-50 mb-10">
+            <div className="bg-white w-[80vw] rounded-full flex justify-around items-center p-2 gap-20 shadow-lg">
                 <div className="px-12 font-brith-stone font-extrabold text-3xl">
                     MARNON
                 </div>
                 <div>
-                    <ul className="flex gap-10 text-[16px] font-medium font-poppins">
+                    <ul className="flex gap-10 text-[16px] font-normal font-poppins">
                         <li className="cursor-pointer">Home</li>
                         <li className="cursor-pointer">Men</li>
                         <li className="cursor-pointer">Women</li>

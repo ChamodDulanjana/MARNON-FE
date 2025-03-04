@@ -1,12 +1,10 @@
 import Home from "./pages/home/page.tsx";
-import Header from "./layouts/header/page.tsx";
 
 
 function App() {
 
   return (
-    <section>
-        <Header />
+    <section className="w-full h-full">
         <Home />
     </section>
   )
