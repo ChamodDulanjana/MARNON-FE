@@ -3,7 +3,7 @@
 const Popular = () => {
     return (
         <div className="w-full h-screen flex items-start justify-center">
-            <h1>Popular Items</h1>
+            <h1 className="text-2xl font-poppins mt-16 whitespace-nowrap">Popular Items</h1>
         </div>
     );
 };

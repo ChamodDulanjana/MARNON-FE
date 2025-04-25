@@ -1,22 +1,31 @@
 import { LuShoppingCart } from "react-icons/lu";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 const Header = () => {
 
     const [cartCount] = useState<number>(0);
 
     return (
-        <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-8 sticky z-50 mb-10">
+        <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-8 fixed z-50 mb-10">
             <div className="bg-white w-[80vw] rounded-full flex justify-around items-center p-2 gap-20 shadow-lg">
                 <div className="px-12 font-brith-stone font-extrabold text-3xl">
                     MARNON
                 </div>
                 <div>
                     <ul className="flex gap-10 text-[16px] font-normal font-poppins">
-                        <li className="cursor-pointer">Home</li>
-                        <li className="cursor-pointer">Men</li>
-                        <li className="cursor-pointer">Women</li>
-                        <li className="cursor-pointer">Kids</li>
+                        <li className="cursor-pointer">
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li className="cursor-pointer">
+                            <Link to="/men">Men</Link>
+                        </li>
+                        <li className="cursor-pointer">
+                            <Link to="/women">Women</Link>
+                        </li>
+                        <li className="cursor-pointer">
+                            <Link to="/kids">Kids</Link>
+                        </li>
                     </ul>
                 </div>
                 <div className="flex gap-6 items-center justify-center">
