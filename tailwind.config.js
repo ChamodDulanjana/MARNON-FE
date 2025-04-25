@@ -11,6 +11,7 @@ export default {
         'brith-stone': ["Birthstone", 'cursive'],
         'big-shoulder-stencil': ["Big Shoulders Stencil", 'sans-serif'],
         'abel': ["Abel", 'sans-serif'],
+        'inter': ["Inter", 'sans-serif'],
       },
     },
   },
