@@ -1,6 +1,7 @@
 import {getAllActiveSizes} from '../../services/sizeService.ts'
 import { FaAngleDown } from "react-icons/fa6";
 import {useEffect, useState} from "react";
+import {colors} from "../../assets/colors.ts";
 
 type SizeProps = {
     id: number,
@@ -17,6 +18,7 @@ const FilterProducts = () => {
     const [isSizeDropdownClicked, setIsSizeDropdownClicked] = useState<boolean>(false);
     const [isColorDropdownClicked, setIsColorDropdownClicked] = useState<boolean>(false);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
     useEffect(() => {
         loadSizes();
@@ -95,16 +97,35 @@ const FilterProducts = () => {
                 <div className='flex justify-between items-center w-full'>
                     <p className='font-poppins'>Color</p>
                     <span
-                        className={`cursor-pointer transition-transform duration-300 ${isSizeDropdownClicked ? 'rotate-180' : 'rotate-0'}`}
+                        className={`cursor-pointer transition-transform duration-300 ${isColorDropdownClicked ? 'rotate-180' : 'rotate-0'}`}
                         onClick={() => setIsColorDropdownClicked(!isColorDropdownClicked)}
                     >
                         <FaAngleDown />
                     </span>
                 </div>
                 <div className='w-[20vw] h-[1px] bg-gray-300 mt-2 mb-5'></div>
-
+                <div
+                    className={`w-full flex flex-wrap gap-4 overflow-hidden transition-all duration-300
+                    ${isColorDropdownClicked ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
+                    `}
+                >
+                    {colors.map((color, index) => (
+                        <div
+                            key={index}
+                            className={`w-9 h-9 rounded-full cursor-pointer border-2 p-1
+                            ${selectedColor === color.name ? `border-black` : `border-gray-300`}
+                            `}
+                        >
+                            <div
+                                key={index}
+                                className='w-full h-full rounded-full cursor-pointer border-2 border-gray-300'
+                                style={{ backgroundColor: color.hex }}
+                                onClick={() => setSelectedColor(selectedColor === color.name ? null : color.name)}
+                            ></div>
+                        </div>
+                    ))}
+                </div>
             </div>
-
         </div>
     );
 };
