@@ -1,6 +1,7 @@
 import {getProductsByCategory} from '../../services/productService.ts'
 import {useMemo} from "react";
 import { useQuery } from '@tanstack/react-query';
+import FilterProducts from "../../components/filterProducts/page.tsx";
 
 type Props = {
     category: string
@@ -14,7 +15,7 @@ type ProductProp = {
     newPrice: number,
     color: string,
     image: string,
-    isActive: string,
+    isActive: boolean,
     createBy: string,
     modifyBy: string,
     createDate: string,
@@ -52,9 +53,7 @@ const ShopCategory = ({category} : Props) => {
             {/*Filtering and product section*/}
             <div className='w-[92vw] mt-10 flex justify-center items-start px-5 gap-10'>
                 {/*Filter section*/}
-                <div className='flex justify-center items-center w-[25vw] h-72 border max-xl:hidden border-black rounded-md'>
-                    {/*need to develop*/}
-                </div>
+                <FilterProducts/>
 
                 {/*Products section*/}
                 <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full px-5 gap-5 mb-5'>
