@@ -23,7 +23,6 @@ type ProductCardProps = {
 
 
 const ProductCard = ({category, header}: ProductCardProps) => {
-
     const {
         isLoading,
         isError,
@@ -32,7 +31,6 @@ const ProductCard = ({category, header}: ProductCardProps) => {
         queryKey: ['products', category],
         queryFn: () => getProductsByCategory(header)
     });
-
 
     if (isLoading) return <p>Loading…</p>;
     if (isError)   return <p>Error loading products.</p>;
@@ -55,7 +53,10 @@ const ProductCard = ({category, header}: ProductCardProps) => {
                             LKR {product.newPrice}
                         </h4>
                         <div className='w-6 h-6 border rounded-full border-gray-300 mt-1 p-1 absolute bottom-0'>
-                            <div className='bg-black w-full h-full rounded-full'></div>
+                            <div
+                                className="w-full h-full rounded-full border border-gray-300"
+                                style={{ backgroundColor: product.color }}
+                            ></div>
                         </div>
                         <div className='bg-white w-10 h-9'></div>
                     </div>
