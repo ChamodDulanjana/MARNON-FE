@@ -1,7 +1,7 @@
 import {getAllActiveSizes} from '../../services/sizeService.ts'
 import { FaAngleDown } from "react-icons/fa6";
 import {useEffect, useState} from "react";
-import {colors} from "../../assets/colors.ts";
+import {colors} from "../../data/colors.ts";
 
 type SizeProps = {
     id: number,

@@ -12,4 +12,5 @@ export const colors = [
     { name: 'Brown', hex: '#8B4513' },
     { name: 'Gray', hex: '#808080' },
     { name: 'Cyan', hex: '#00FFFF' },
+    { name: 'Beige', hex: '#F5F5DC' },
 ];
