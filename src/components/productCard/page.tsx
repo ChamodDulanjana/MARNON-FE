@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {getProductsByCategory} from "../../services/productService.ts";
+import {Link} from "react-router-dom";
 
 type ProductProp = {
     id: number,
@@ -39,27 +40,38 @@ const ProductCard = ({category, header}: ProductCardProps) => {
         <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full px-5 gap-5 mb-5'>
             {products.map((product: ProductProp, index: number) => {
                 return(
-                    <div key={index} className='max-w-[300px] flex flex-col relative'>
+                    <Link to={`/product/${product.id}`} key={index} onClick={() =>{
+                        window.scrollTo({
+                            top: 0,
+                            left: 0,
+                            behavior: 'auto'  // Optional: 'auto' or 'smooth'
+                        });
+                    }}>
                         <div
-                            className='w-full h-[400px] rounded-md max-lg:h-[350px] max-sm:h-[300px] max-[540px]:h-[250px] max-[470px]:h-[200px] bg-center bg-cover'
-                            style={{
-                                backgroundImage: `url(${product.image})`,
-                            }}
-                        ></div>
-                        <h3 className='font-medium font-poppins mt-3 text-[15px]'>
-                            {product.name}
-                        </h3>
-                        <h4 className='text-[14px] mt-2 text-gray-500 font-poppins font-medium'>
-                            LKR {product.newPrice}
-                        </h4>
-                        <div className='w-6 h-6 border rounded-full border-gray-300 mt-1 p-1 absolute bottom-0'>
+                            key={index}
+                            className='max-w-[300px] flex flex-col relative'
+                        >
                             <div
-                                className="w-full h-full rounded-full border border-gray-300"
-                                style={{ backgroundColor: product.color }}
+                                className='w-full h-[400px] rounded-md max-lg:h-[350px] max-sm:h-[300px] max-[540px]:h-[250px] max-[470px]:h-[200px] bg-center bg-cover'
+                                style={{
+                                    backgroundImage: `url(${product.image})`,
+                                }}
                             ></div>
+                            <h3 className='font-medium font-poppins mt-3 text-[15px]'>
+                                {product.name}
+                            </h3>
+                            <h4 className='text-[14px] mt-2 text-gray-500 font-poppins font-medium'>
+                                LKR {product.newPrice}
+                            </h4>
+                            <div className='w-6 h-6 border rounded-full border-gray-300 mt-1 p-1 absolute bottom-0'>
+                                <div
+                                    className="w-full h-full rounded-full border border-gray-300"
+                                    style={{ backgroundColor: product.color }}
+                                ></div>
+                            </div>
+                            <div className='bg-white w-10 h-9'></div>
                         </div>
-                        <div className='bg-white w-10 h-9'></div>
-                    </div>
+                    </Link>
                 )
             })}
         </div>

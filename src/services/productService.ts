@@ -24,3 +24,13 @@ export const getProductsByCategory = async (category: string)=> {
         throw error;
     }
 }
+
+export const getProductById = async (id: string | undefined)=> {
+    try {
+        const response = await axios.get(API_BASE_URL + SUB_URL + '/' + id);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching product id- ${id}:`, error);
+        throw error;
+    }
+}
