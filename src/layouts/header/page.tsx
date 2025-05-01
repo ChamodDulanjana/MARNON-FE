@@ -6,10 +6,12 @@ import SignIn from "../../pages/signIn/page.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
 import {useState} from "react";
+import SignUp from "../../pages/signUp/page.tsx";
 
 const Header = () => {
     const [isMenuClicked, setIsMenuClicked] = useState<boolean>(false);
-    const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange} = useDisclosure();
+    const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange, onClose: loginOnClose} = useDisclosure();
+    const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange} = useDisclosure();
 
     return (
         <div className={`w-full bg-black text-white flex items-center justify-around px-10 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
@@ -52,7 +54,10 @@ const Header = () => {
             <ResponsiveNav isMenuClicked={isMenuClicked} loginOnOpen={loginOnOpen}/>
 
             {/*Login model*/}
-            <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange}/>
+            <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
+
+            {/*SignUp model*/}
+            <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange}/>
 
         </div>
     );

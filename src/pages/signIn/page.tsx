@@ -8,8 +8,10 @@ import {
 import {useState} from "react";
 
 interface SignInProps {
-    isOpen?: boolean,
-    onOpenChange?: () => void
+    isOpen: boolean,
+    onOpenChange: () => void
+    loginOnClose: () => void
+    signupOnOpen: () => void
 }
 
 type loginData = {
@@ -17,8 +19,13 @@ type loginData = {
     password: string
 }
 
-const SignIn = ({isOpen, onOpenChange}: SignInProps) => {
+const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps) => {
     const [login, setLogin] = useState<loginData>({email: '', password: ''});
+
+    const handleSignUp = () => {
+        signupOnOpen();
+        loginOnClose();
+    }
 
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
@@ -57,7 +64,11 @@ const SignIn = ({isOpen, onOpenChange}: SignInProps) => {
                                     Login
                                 </Button>
                                 <div className='w-full flex justify-center items-center mb-5'>
-                                    <p className='text-blue-500 text-sm cursor-pointer hover:underline'>Don't have an account ? Sign up</p>
+                                    <p
+                                        onClick={handleSignUp}
+                                        className='text-blue-500 text-sm cursor-pointer hover:underline'
+                                    >Don't have an account ? Sign up
+                                    </p>
                                 </div>
                             </div>
                         </ModalBody>
