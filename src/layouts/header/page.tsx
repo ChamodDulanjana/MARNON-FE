@@ -1,52 +1,59 @@
 import { LuShoppingCart } from "react-icons/lu";
-import {useState} from "react";
+import { FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
-import {Button, useDisclosure} from "@heroui/react";
+import {useDisclosure} from "@heroui/react";
 import SignIn from "../../pages/signIn/page.tsx";
+import {FaBars} from "react-icons/fa";
+import ResponsiveNav from "../../components/responsive-nav/page.tsx";
+import {useState} from "react";
 
 const Header = () => {
-    const [cartCount] = useState<number>(0);
+    const [isMenuClicked, setIsMenuClicked] = useState<boolean>(false);
     const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange} = useDisclosure();
 
     return (
-        <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-8 fixed z-50 mb-10">
-            <div className="bg-white w-[80vw] rounded-full flex justify-around items-center p-2 gap-20 shadow-lg">
-                <div className="px-12 font-brith-stone font-extrabold text-3xl">
-                    MARNON
-                </div>
-                <div>
-                    <ul className="flex gap-10 text-[16px] font-normal font-poppins">
-                        <li className="cursor-pointer">
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li className="cursor-pointer">
-                            <Link to="/men">Men</Link>
-                        </li>
-                        <li className="cursor-pointer">
-                            <Link to="/women">Women</Link>
-                        </li>
-                        <li className="cursor-pointer">
-                            <Link to="/kids">Kids</Link>
-                        </li>
-                    </ul>
-                </div>
-                <div className="flex gap-6 items-center justify-center">
-                    <div className="flex cursor-pointer">
-                        <LuShoppingCart className="text-3xl"/>
-                        <div className="w-[18px] h-[18px] rounded-full bg-red-600 relative -top-1 right-2 flex justify-center items-center">
-                            <span className="text-white text-[12px] font-poppins">{cartCount}</span>
-                        </div>
-                    </div>
-                    <Button
-                        onPress={loginOnOpen}
-                        className="bg-black border-2 border-black text-white text-sm font-medium cursor-pointer py-2 px-6 rounded-full transition-all hover:bg-white hover:text-black font-poppins"
-                    >
-                        Login
-                    </Button>
-                </div>
+        <div className={`w-full bg-black text-white flex items-center justify-around px-10 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
+            {/*Logo*/}
+            <div className="font-brith-stone font-extrabold text-3xl">MARNON</div>
+
+            {/*Navbar*/}
+            <div className='max-[850px]:hidden'>
+                <ul className='flex gap-10 text-[16px] font-normal font-poppins'>
+                    <li className="cursor-pointer">
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li className="cursor-pointer">
+                        <Link to="/men">Men</Link>
+                    </li>
+                    <li className="cursor-pointer">
+                        <Link to="/women">Women</Link>
+                    </li>
+                    <li className="cursor-pointer">
+                        <Link to="/kids">Kids</Link>
+                    </li>
+                </ul>
             </div>
 
+            {/*Cart & User*/}
+            <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
+                <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
+                <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
+            </div>
+
+            {/* Hamburger menu icon for mobile view */}
+            <div
+                className='hidden max-[850px]:inline mr-10 cursor-pointer text-lg'
+                onClick={() => setIsMenuClicked(!isMenuClicked)}
+            >
+                <FaBars />
+            </div>
+
+            {/*Responsive navbar for mobile view*/}
+            <ResponsiveNav isMenuClicked={isMenuClicked} loginOnOpen={loginOnOpen}/>
+
+            {/*Login model*/}
             <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange}/>
+
         </div>
     );
 };

@@ -20,7 +20,7 @@ const ShopCategory = ({category} : Props) => {
 
     return (
         <div className='w-full h-full flex flex-col justify-center items-center'>
-            <span className='mt-40 text-3xl font-inter font-bold'>{header}</span>
+            <span className='mt-14 text-3xl font-inter font-bold'>{header}</span>
             <h2 className='mt-2 text-gray-600'>Category / {header}</h2>
 
             {/*Filtering and product section*/}

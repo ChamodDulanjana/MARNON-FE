@@ -12,14 +12,16 @@ function App() {
         <BrowserRouter>
             <HeroUIProvider>
                 <Header />
-                <Routes>
-                    <Route path="/" element={<Home />}/>
-                    <Route path="/men" element={<ShopCategory category={"men"}/>}/>
-                    <Route path="/women" element={<ShopCategory category={"women"}/>}/>
-                    <Route path="/kids" element={<ShopCategory category={"kid"}/>}/>
-                    <Route path="/singIn" element={<SignIn/>}/>
+                <div className='mt-16'>
+                    <Routes>
+                        <Route path="/" element={<Home />}/>
+                        <Route path="/men" element={<ShopCategory category={"men"}/>}/>
+                        <Route path="/women" element={<ShopCategory category={"women"}/>}/>
+                        <Route path="/kids" element={<ShopCategory category={"kid"}/>}/>
+                        <Route path="/singIn" element={<SignIn/>}/>
 
-                </Routes>
+                    </Routes>
+                </div>
             </HeroUIProvider>
         </BrowserRouter>
     </section>
