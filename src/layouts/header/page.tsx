@@ -1,10 +1,12 @@
 import { LuShoppingCart } from "react-icons/lu";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import {Button, useDisclosure} from "@heroui/react";
+import SignIn from "../../pages/signIn/page.tsx";
 
 const Header = () => {
-
     const [cartCount] = useState<number>(0);
+    const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange} = useDisclosure();
 
     return (
         <div className="bg-transparent rounded-lg w-full flex justify-center items-center top-8 fixed z-50 mb-10">
@@ -35,13 +37,16 @@ const Header = () => {
                             <span className="text-white text-[12px] font-poppins">{cartCount}</span>
                         </div>
                     </div>
-                    <div
+                    <Button
+                        onPress={loginOnOpen}
                         className="bg-black border-2 border-black text-white text-sm font-medium cursor-pointer py-2 px-6 rounded-full transition-all hover:bg-white hover:text-black font-poppins"
                     >
                         Login
-                    </div>
+                    </Button>
                 </div>
             </div>
+
+            <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange}/>
         </div>
     );
 };
