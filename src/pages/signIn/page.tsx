@@ -3,50 +3,64 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter,
     Button,
 } from "@heroui/react";
+import {useState} from "react";
 
 interface SignInProps {
     isOpen?: boolean,
     onOpenChange?: () => void
 }
 
+type loginData = {
+    email: string,
+    password: string
+}
+
 const SignIn = ({isOpen, onOpenChange}: SignInProps) => {
+    const [login, setLogin] = useState<loginData>({email: '', password: ''});
 
     return (
-        <Modal isOpen={isOpen} size={"xl"} onOpenChange={onOpenChange}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
             <ModalContent>
-                {(onClose) => (
+                {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
-                        <ModalBody>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                                risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                                quam.
+                        <ModalHeader className="flex flex-col gap-1">
+                            <h2 className='font-semibold'>Login</h2>
+                            <div className='w-full h-[1px] bg-gray-200 mt-1'></div>
+                        </ModalHeader>
+                        <ModalBody className='flex flex-col items-center'>
+                            <h3 className='font-semibold'>Hello There!</h3>
+                            <p className="text-sm font-semibold w-60 text-center">
+                                Welcome 😊 you’ve been missed. Please enter your data to log in.
                             </p>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                                risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                                quam.
-                            </p>
-                            <p>
-                                Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor
-                                adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                                officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                                nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et. Culpa
-                                deserunt nostrud ad veniam.
-                            </p>
+                            <div className="flex flex-col gap-5 mt-8 w-full px-2">
+                                <input
+                                    type="text"
+                                    placeholder="Email"
+                                    onChange={(e) => setLogin({...login, email: e.target.value})}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={(e) => setLogin({...login, password: e.target.value})}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                />
+                                <div className="w-full flex justify-end items-center">
+                                    <a href="#" className="text-sm text-blue-500 hover:underline">Forgot password?</a>
+                                </div>
+                                <Button
+                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold"
+                                    onPress={() => console.log(login)}
+                                >
+                                    Login
+                                </Button>
+                                <div className='w-full flex justify-center items-center mb-5'>
+                                    <p className='text-blue-500 text-sm cursor-pointer hover:underline'>Don't have an account ? Sign up</p>
+                                </div>
+                            </div>
                         </ModalBody>
-                        <ModalFooter>
-                            <Button color="danger" variant="light" onPress={onClose}>
-                                Close
-                            </Button>
-                            <Button color="primary" onPress={onClose}>
-                                Action
-                            </Button>
-                        </ModalFooter>
                     </>
                 )}
             </ModalContent>
