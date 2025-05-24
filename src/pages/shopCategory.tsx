@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 import FilterProducts from "../components/filterProducts/page.tsx";
-import ProductCard from "../components/productCard/page.tsx";
+import ProductGrid from "../components/productGrid/page.tsx";
 
 type Props = {
     category: string
@@ -29,7 +29,7 @@ const ShopCategory = ({category} : Props) => {
                 <FilterProducts/>
 
                 {/*Products section*/}
-                <ProductCard category={category} header={header}/>
+                <ProductGrid category={category} header={header}/>
             </div>
         </div>
     );

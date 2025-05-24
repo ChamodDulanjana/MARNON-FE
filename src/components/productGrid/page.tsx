@@ -1,6 +1,7 @@
 import {useQuery} from "@tanstack/react-query";
 import {getProductsByCategory} from "../../services/productService.ts";
 import {Link} from "react-router-dom";
+import LoadingAnimation from "../loading-animation/page.tsx";
 
 type ProductProp = {
     id: number,
@@ -17,13 +18,13 @@ type ProductProp = {
     modifyDate: string
 }
 
-type ProductCardProps = {
+type ProductGridProps = {
     category: string,
     header: string
 }
 
 
-const ProductCard = ({category, header}: ProductCardProps) => {
+const ProductGrid = ({category, header}: ProductGridProps) => {
     const {
         isLoading,
         isError,
@@ -33,7 +34,9 @@ const ProductCard = ({category, header}: ProductCardProps) => {
         queryFn: () => getProductsByCategory(header)
     });
 
-    if (isLoading) return <p>Loading…</p>;
+    console.log('Products:', products); // Debugging line to check fetched products
+
+    if (isLoading) return <LoadingAnimation />;
     if (isError)   return <p>Error loading products.</p>;
 
     return (
@@ -78,4 +81,4 @@ const ProductCard = ({category, header}: ProductCardProps) => {
     );
 };
 
-export default ProductCard;
+export default ProductGrid;
