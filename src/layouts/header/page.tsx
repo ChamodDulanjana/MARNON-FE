@@ -2,11 +2,11 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
 import {useDisclosure} from "@heroui/react";
-import SignIn from "../../pages/signIn/page.tsx";
+import SignIn from "../../pages/signIn.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
 import {useState} from "react";
-import SignUp from "../../pages/signUp/page.tsx";
+import SignUp from "../../pages/signUp.tsx";
 
 const Header = () => {
     const [isMenuClicked, setIsMenuClicked] = useState<boolean>(false);

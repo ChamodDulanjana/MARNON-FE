@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getProductById} from "../../services/productService.ts";
-import {colors} from "../../data/colors.ts";
+import {getProductById} from "../services/productService.ts";
+import {colors} from "../data/colors.ts";
 
 type ProductProp = {
     id: number,

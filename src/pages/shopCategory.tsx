@@ -1,6 +1,6 @@
 import {useMemo} from "react";
-import FilterProducts from "../../components/filterProducts/page.tsx";
-import ProductCard from "../../components/productCard/page.tsx";
+import FilterProducts from "../components/filterProducts/page.tsx";
+import ProductCard from "../components/productCard/page.tsx";
 
 type Props = {
     category: string
@@ -35,4 +35,4 @@ const ShopCategory = ({category} : Props) => {
     );
 };
 
-export default ShopCategory;
+export default ShopCategory;  

@@ -1,9 +1,9 @@
-import Home from "./pages/home/page.tsx";
+import Home from "./pages/home.tsx";
 import Header from "./layouts/header/page.tsx";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import ShopCategory from "./pages/shopCategory/page.tsx";
+import ShopCategory from "./pages/shopCategory.tsx";
 import { HeroUIProvider } from "@heroui/react";
-import ProductDisplay from "./pages/productDisplay/page.tsx";
+import ProductDisplay from "./pages/product.tsx";
 
 function App() {
 
@@ -30,4 +30,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

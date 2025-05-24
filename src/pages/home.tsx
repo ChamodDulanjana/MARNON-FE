@@ -1,6 +1,6 @@
-import Hero from "../../components/hero/page.tsx";
-import Popular from "../../components/popular/page.tsx";
-import landing_image from "../../assets/img/landing_image.png"
+import Hero from "../components/hero/page.tsx";
+import Popular from "../components/popular/page.tsx";
+import landing_image from "../assets/img/landing_image.png"
 
 const Home = () => {
     return (
