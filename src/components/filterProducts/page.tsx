@@ -34,27 +34,27 @@ const FilterProducts = () => {
     };
 
     return (
-        <div className='flex flex-col justify-center items-start w-[25vw] border max-xl:hidden border-gray-300 rounded-md px-5 py-3'>
+        <div className='flex flex-col justify-center items-start max-w-xs border max-xl:hidden border-gray-300 rounded-md px-5 py-3'>
             {/*Sort By*/}
             <div className='w-full h-full flex justify-start items-start flex-col'>
                 <p className='font-poppins'>Sort By</p>
-                <div className='w-[20vw] h-[1px] bg-gray-300 mt-2 mb-5'></div>
+                <div className='w-full h-[1px] bg-gray-300 mt-2 mb-5'></div>
 
                 {/* Radio buttons list */}
                 <div className="flex flex-col gap-3">
-                    <label className="flex items-center gap-2 font-poppins text-sm">
+                    <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
                         <input type="radio" name="sort" value="newest" className="accent-indigo-500" />
                         Newest
                     </label>
-                    <label className="flex items-center gap-2 font-poppins text-sm">
+                    <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
                         <input type="radio" name="sort" value="popularity" className="accent-indigo-500" />
                         Popularity
                     </label>
-                    <label className="flex items-center gap-2 font-poppins text-sm">
+                    <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
                         <input type="radio" name="sort" value="priceHighToLow" className="accent-indigo-500" />
                         Price High To Low
                     </label>
-                    <label className="flex items-center gap-2 font-poppins text-sm">
+                    <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
                         <input type="radio" name="sort" value="priceLowToHigh" className="accent-indigo-500" />
                         Price Low To High
                     </label>
@@ -72,7 +72,7 @@ const FilterProducts = () => {
                         <FaAngleDown />
                     </span>
                 </div>
-                <div className='w-[20vw] h-[1px] bg-gray-300 mt-2 mb-5'></div>
+                <div className='w-full h-[1px] bg-gray-300 mt-2 mb-5'></div>
                 <div
                     className={`w-full flex flex-wrap gap-4 overflow-hidden transition-all duration-300
                     ${isSizeDropdownClicked ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
@@ -92,7 +92,7 @@ const FilterProducts = () => {
                 </div>
             </div>
 
-            {/*Colour*/}
+            {/*Color*/}
             <div className='w-full h-full flex justify-start items-start flex-col mt-5'>
                 <div className='flex justify-between items-center w-full'>
                     <p className='font-poppins'>Color</p>
@@ -103,7 +103,7 @@ const FilterProducts = () => {
                         <FaAngleDown />
                     </span>
                 </div>
-                <div className='w-[20vw] h-[1px] bg-gray-300 mt-2 mb-5'></div>
+                <div className='w-full h-[1px] bg-gray-300 mt-2 mb-5'></div>
                 <div
                     className={`w-full flex flex-wrap gap-4 overflow-hidden transition-all duration-300
                     ${isColorDropdownClicked ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
@@ -112,7 +112,7 @@ const FilterProducts = () => {
                     {colors.map((color, index) => (
                         <div
                             key={index}
-                            className={`w-9 h-9 rounded-full cursor-pointer border-2 p-1
+                            className={`w-8 h-8 rounded-full cursor-pointer border-2 p-1
                             ${selectedColor === color.name ? `border-black` : `border-gray-300`}
                             `}
                         >

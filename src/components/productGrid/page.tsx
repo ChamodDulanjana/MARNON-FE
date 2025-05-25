@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getProductsByCategory} from "../../services/productService.ts";
+import {getProductsByCategory, getAllProducts} from "../../services/productService.ts";
 import {Link} from "react-router-dom";
 import LoadingAnimation from "../loading-animation/page.tsx";
 import NotFound from "../../pages/notFound.tsx";
@@ -41,7 +41,7 @@ const ProductGrid = ({category, header}: ProductGridProps) => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full px-5 gap-5 mb-5'>
+        <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full gap-5 mb-5'>
             {products.map((product: ProductProp, index: number) => {
                 return(
                     <Link to={`/product/${product.id}`} key={index} onClick={() =>{
@@ -53,10 +53,10 @@ const ProductGrid = ({category, header}: ProductGridProps) => {
                     }}>
                         <div
                             key={index}
-                            className='max-w-[300px] flex flex-col relative'
+                            className='max-w-64 flex flex-col relative'
                         >
                             <div
-                                className='w-full h-[400px] rounded-md max-lg:h-[350px] max-sm:h-[300px] max-[540px]:h-[250px] max-[470px]:h-[200px] bg-center bg-cover'
+                                className='w-full h-[400px] rounded-md max-lg:h-[350px] max-[425px]:h-[280px] max-[375px]:h-[230px] bg-center bg-cover'
                                 style={{
                                     backgroundImage: `url(${product.image})`,
                                 }}

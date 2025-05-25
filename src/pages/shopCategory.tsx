@@ -24,7 +24,7 @@ const ShopCategory = ({category} : Props) => {
             <h2 className='mt-2 text-gray-600'>Category / {header}</h2>
 
             {/*Filtering and product section*/}
-            <div className='w-[92vw] mt-10 flex justify-center items-start px-5 gap-10'>
+            <div className='max-w-screen-2xl mt-10 mx-5 flex justify-center items-start gap-10'>
                 {/*Filter section*/}
                 <FilterProducts/>
 
