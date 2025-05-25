@@ -2,6 +2,7 @@ import {useQuery} from "@tanstack/react-query";
 import {getProductsByCategory} from "../../services/productService.ts";
 import {Link} from "react-router-dom";
 import LoadingAnimation from "../loading-animation/page.tsx";
+import NotFound from "../../pages/notFound.tsx";
 
 type ProductProp = {
     id: number,
@@ -37,7 +38,7 @@ const ProductGrid = ({category, header}: ProductGridProps) => {
     console.log('Products:', products); // Debugging line to check fetched products
 
     if (isLoading) return <LoadingAnimation />;
-    if (isError)   return <p>Error loading products.</p>;
+    if (isError)   return <NotFound />;
 
     return (
         <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full px-5 gap-5 mb-5'>
