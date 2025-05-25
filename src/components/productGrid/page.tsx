@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {getProductsByCategory, getAllProducts} from "../../services/productService.ts";
+import {getProductsByCategory} from "../../services/productService.ts";
 import {Link} from "react-router-dom";
 import LoadingAnimation from "../loading-animation/page.tsx";
 import NotFound from "../../pages/notFound.tsx";
@@ -34,8 +34,6 @@ const ProductGrid = ({category, header}: ProductGridProps) => {
         queryKey: ['products', category],
         queryFn: () => getProductsByCategory(header)
     });
-
-    console.log('Products:', products); // Debugging line to check fetched products
 
     if (isLoading) return <LoadingAnimation />;
     if (isError)   return <NotFound />;

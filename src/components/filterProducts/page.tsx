@@ -19,10 +19,18 @@ const FilterProducts = () => {
     const [isColorDropdownClicked, setIsColorDropdownClicked] = useState<boolean>(false);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectedSortBy, setSelectedSortBy] = useState<'newest' | 'popularity' | 'priceHighToLow' | 'priceLowToHigh'>("newest");
 
     useEffect(() => {
         loadSizes();
     }, []);
+
+    useEffect(() => {
+        // This effect can be used to handle changes in selectedSortBy if needed
+        console.log(`Selected sort by: ${selectedSortBy}`);
+        console.log(`Selected size: ${selectedSize}`);
+        console.log(`Selected color: ${selectedColor}`);
+    }, [selectedSortBy, selectedSize, selectedColor]);
 
     const loadSizes = async () => {
         try {
@@ -43,19 +51,47 @@ const FilterProducts = () => {
                 {/* Radio buttons list */}
                 <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input type="radio" name="sort" value="newest" className="accent-indigo-500" />
+                        <input 
+                            type="radio" 
+                            name="sort" 
+                            value="newest"
+                            checked={selectedSortBy === 'newest'}
+                            onChange={() => setSelectedSortBy('newest')}
+                            className="accent-indigo-500" 
+                        />
                         Newest
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input type="radio" name="sort" value="popularity" className="accent-indigo-500" />
+                        <input 
+                            type="radio" 
+                            name="sort" 
+                            value="popularity"
+                            checked={selectedSortBy === 'popularity'}
+                            onChange={() => setSelectedSortBy('popularity')}
+                            className="accent-indigo-500" 
+                        />
                         Popularity
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input type="radio" name="sort" value="priceHighToLow" className="accent-indigo-500" />
+                        <input 
+                            type="radio" 
+                            name="sort" 
+                            value="priceHighToLow"
+                            checked={selectedSortBy === 'priceHighToLow'}
+                            onChange={() => setSelectedSortBy('priceHighToLow')}
+                            className="accent-indigo-500" 
+                        />
                         Price High To Low
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input type="radio" name="sort" value="priceLowToHigh" className="accent-indigo-500" />
+                        <input 
+                            type="radio" 
+                            name="sort" 
+                            value="priceLowToHigh"
+                            checked={selectedSortBy === 'priceLowToHigh'}
+                            onChange={() => setSelectedSortBy('priceLowToHigh')}
+                            className="accent-indigo-500" 
+                        />
                         Price Low To High
                     </label>
                 </div>
