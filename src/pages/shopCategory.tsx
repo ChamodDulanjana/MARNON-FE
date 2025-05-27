@@ -1,6 +1,7 @@
-import {useMemo} from "react";
+import {useMemo, useState} from "react";
 import FilterProducts from "../components/filterProducts/page.tsx";
 import ProductGrid from "../components/productGrid/page.tsx";
+import { FilterProductDTO } from "../models/filterProductDTO.ts";
 
 type Props = {
     category: string
@@ -16,6 +17,13 @@ const ShopCategory = ({category} : Props) => {
             default:       return '';
         }
     }, [category]);
+
+    const [filters, seFilters] = useState<FilterProductDTO>({
+        sortBy: 'newest',
+        size: null,
+        color: null,
+        categoryName: null
+    })
 
 
     return (

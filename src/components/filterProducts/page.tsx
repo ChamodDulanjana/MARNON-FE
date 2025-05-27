@@ -29,7 +29,7 @@ const FilterProducts = () => {
         // This effect can be used to handle changes in selectedSortBy if needed
         console.log(`Selected sort by: ${selectedSortBy}`);
         console.log(`Selected size: ${selectedSize}`);
-        console.log(`Selected color: ${selectedColor}`);
+        console.log(`Selected color: ${selectedColor}`);    
     }, [selectedSortBy, selectedSize, selectedColor]);
 
     const loadSizes = async () => {
