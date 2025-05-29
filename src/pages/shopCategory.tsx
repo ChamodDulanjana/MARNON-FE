@@ -42,7 +42,7 @@ const ShopCategory = () => {
             <h2 className='mt-2 text-gray-600'>Category / {header}</h2>
 
             {/*Filtering and product section*/}
-            <div className='max-w-screen-2xl mt-10 mx-5 flex justify-center items-start gap-10'>
+            <div className='max-w-screen-2xl mt-10 px-5 flex justify-start items-start gap-10'>
                 {/*Filter section*/}
                 <FilterProducts filters={filters} setFilters={setFilters}/>
 

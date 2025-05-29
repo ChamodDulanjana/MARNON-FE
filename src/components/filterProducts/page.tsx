@@ -46,7 +46,7 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
     };
 
     return (
-        <div className='flex flex-col justify-center items-start max-w-xs border max-xl:hidden border-gray-300 rounded-md px-5 py-3'>
+        <div className='flex flex-col justify-center items-start max-w-xs min-w-[320px] border max-xl:hidden border-gray-300 rounded-md px-5 py-3'>
             {/*Sort By*/}
             <div className='w-full h-full flex justify-start items-start flex-col'>
                 <p className='font-poppins'>Sort By</p>
