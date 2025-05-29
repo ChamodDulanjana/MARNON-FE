@@ -15,9 +15,9 @@ function App() {
                 <div className='mt-[70px]'>
                     <Routes>
                         <Route path="/" element={<Home />}/>
-                        <Route path="/men" element={<ShopCategory category={"men"}/>}/>
-                        <Route path="/women" element={<ShopCategory category={"women"}/>}/>
-                        <Route path="/kids" element={<ShopCategory category={"kid"}/>}/>
+                        <Route path="/:category" element={<ShopCategory/>}/>
+                        <Route path="/:category" element={<ShopCategory/>}/>
+                        <Route path="/:category" element={<ShopCategory/>}/>
                         <Route path="/product" element={<ProductDisplay/>}>
                             <Route path=":productId" element={<ProductDisplay/>}/>
                         </Route>

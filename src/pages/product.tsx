@@ -92,7 +92,7 @@ const ProductDisplay = () => {
                     <div>
                          {colors.filter(item => item.hex === product.color)
                         .map(item => (
-                            <span className="font-semibold">COLOR:  <span className='text-gray-500 font-normal'>{item.name}</span></span>
+                            <span key={item.hex} className="font-semibold">COLOR:  <span className='text-gray-500 font-normal'>{item.name}</span></span>
                         ))}
                         <div className='w-7 h-7 mt-2 rounded-full flex items-center justify-center border border-gray-300'>
                             <div

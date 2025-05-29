@@ -36,9 +36,9 @@ export const getProductById = async (id: string | undefined)=> {
     }
 }
 
-export const getFilteredProducts = async (FilterProductDTO: FilterProductDTO) => {
+export const getFilteredProducts = async (filterProductDTO: FilterProductDTO) => {
     try {
-        const response = await axios.post(API_BASE_URL + SUB_URL + '/all/filter-products', FilterProductDTO);
+        const response = await axios.post(API_BASE_URL + SUB_URL + '/all/filter-products', filterProductDTO);
         return response.data.data;
     } catch (error) {
         console.error('Error fetching filtered products:', error);

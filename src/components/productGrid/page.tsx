@@ -1,8 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {getProductsByCategory} from "../../services/productService.ts";
+import {getFilteredProducts} from "../../services/productService.ts";
 import {Link} from "react-router-dom";
 import LoadingAnimation from "../loading-animation/page.tsx";
 import NotFound from "../../pages/notFound.tsx";
+import {FilterProductDTO} from "../../models/filterProductDTO.ts";
 
 type ProductProp = {
     id: number,
@@ -20,19 +21,18 @@ type ProductProp = {
 }
 
 type ProductGridProps = {
-    category: string,
-    header: string
+    filters: FilterProductDTO
 }
 
 
-const ProductGrid = ({category, header}: ProductGridProps) => {
+const ProductGrid = ({filters}: ProductGridProps) => {
     const {
         isLoading,
         isError,
         data: products = [],      // default to an empty array
     } = useQuery({
-        queryKey: ['products', category],
-        queryFn: () => getProductsByCategory(header)
+        queryKey: ['products', filters],
+        queryFn: () => getFilteredProducts(filters)
     });
 
     if (isLoading) return <LoadingAnimation />;

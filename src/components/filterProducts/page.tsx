@@ -2,6 +2,9 @@ import {getAllActiveSizes} from '../../services/sizeService.ts'
 import { FaAngleDown } from "react-icons/fa6";
 import {useEffect, useState} from "react";
 import {colors} from "../../assets/data/colors.ts";
+import {FilterProductDTO} from "../../models/filterProductDTO.ts";
+import * as React from "react";
+import {useParams} from "react-router-dom";
 
 type SizeProps = {
     id: number,
@@ -13,24 +16,25 @@ type SizeProps = {
     modifyDate: string
 }
 
-const FilterProducts = () => {
+type FilterProductsProps = {
+    filters: FilterProductDTO,
+    setFilters: React.Dispatch<React.SetStateAction<FilterProductDTO>>
+}
+
+const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
     const [sizes, setSizes] = useState<SizeProps[]>([]);
     const [isSizeDropdownClicked, setIsSizeDropdownClicked] = useState<boolean>(false);
     const [isColorDropdownClicked, setIsColorDropdownClicked] = useState<boolean>(false);
-    const [selectedSize, setSelectedSize] = useState<string | null>(null);
-    const [selectedColor, setSelectedColor] = useState<string | null>(null);
-    const [selectedSortBy, setSelectedSortBy] = useState<'newest' | 'popularity' | 'priceHighToLow' | 'priceLowToHigh'>("newest");
+    const { category } = useParams<{ category: string }>();
 
     useEffect(() => {
         loadSizes();
     }, []);
 
     useEffect(() => {
-        // This effect can be used to handle changes in selectedSortBy if needed
-        console.log(`Selected sort by: ${selectedSortBy}`);
-        console.log(`Selected size: ${selectedSize}`);
-        console.log(`Selected color: ${selectedColor}`);    
-    }, [selectedSortBy, selectedSize, selectedColor]);
+        setIsColorDropdownClicked(false);
+        setIsSizeDropdownClicked(false);
+    }, [category]);
 
     const loadSizes = async () => {
         try {
@@ -51,46 +55,46 @@ const FilterProducts = () => {
                 {/* Radio buttons list */}
                 <div className="flex flex-col gap-3">
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input 
-                            type="radio" 
-                            name="sort" 
+                        <input
+                            type="radio"
+                            name="sort"
                             value="newest"
-                            checked={selectedSortBy === 'newest'}
-                            onChange={() => setSelectedSortBy('newest')}
-                            className="accent-indigo-500" 
+                            checked={filters.sortBy === 'newest'}
+                            onChange={() => setFilters(prevState => ({...prevState, sortBy: 'newest'}))}
+                            className="accent-indigo-500"
                         />
                         Newest
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input 
-                            type="radio" 
-                            name="sort" 
+                        <input
+                            type="radio"
+                            name="sort"
                             value="popularity"
-                            checked={selectedSortBy === 'popularity'}
-                            onChange={() => setSelectedSortBy('popularity')}
-                            className="accent-indigo-500" 
+                            checked={filters.sortBy === 'popularity'}
+                            onChange={() => setFilters(prevState => ({...prevState, sortBy: 'popularity'}))}
+                            className="accent-indigo-500"
                         />
                         Popularity
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input 
-                            type="radio" 
-                            name="sort" 
+                        <input
+                            type="radio"
+                            name="sort"
                             value="priceHighToLow"
-                            checked={selectedSortBy === 'priceHighToLow'}
-                            onChange={() => setSelectedSortBy('priceHighToLow')}
-                            className="accent-indigo-500" 
+                            checked={filters.sortBy === 'priceHighToLow'}
+                            onChange={() => setFilters(prevState => ({...prevState, sortBy: 'priceHighToLow'}))}
+                            className="accent-indigo-500"
                         />
                         Price High To Low
                     </label>
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
-                        <input 
-                            type="radio" 
-                            name="sort" 
+                        <input
+                            type="radio"
+                            name="sort"
                             value="priceLowToHigh"
-                            checked={selectedSortBy === 'priceLowToHigh'}
-                            onChange={() => setSelectedSortBy('priceLowToHigh')}
-                            className="accent-indigo-500" 
+                            checked={filters.sortBy === 'priceLowToHigh'}
+                            onChange={() => setFilters(prevState => ({...prevState, sortBy: 'priceLowToHigh'}))}
+                            className="accent-indigo-500"
                         />
                         Price Low To High
                     </label>
@@ -118,9 +122,9 @@ const FilterProducts = () => {
                         <div
                             key={index}
                             className={`border border-gray-400 w-9 h-9 rounded-md flex items-center justify-center cursor-pointer
-                            ${selectedSize === size.size ? `bg-black text-white border-none` : `bg-white text-black`}
+                            ${filters.size === size.size ? `bg-black text-white border-none` : `bg-white text-black`}
                             `}
-                            onClick={() => setSelectedSize(selectedSize === size.size ? null : size.size)}
+                            onClick={() => setFilters(prev => ({...prev, size: filters.size === size.size ? null : size.size}))}
                         >
                             {size.size}
                         </div>
@@ -149,14 +153,14 @@ const FilterProducts = () => {
                         <div
                             key={index}
                             className={`w-8 h-8 rounded-full cursor-pointer border-2 p-1
-                            ${selectedColor === color.name ? `border-black` : `border-gray-300`}
+                            ${filters.color === color.hex ? `border-black` : `border-gray-300`}
                             `}
                         >
                             <div
                                 key={index}
                                 className='w-full h-full rounded-full cursor-pointer border-2 border-gray-300'
                                 style={{ backgroundColor: color.hex }}
-                                onClick={() => setSelectedColor(selectedColor === color.name ? null : color.name)}
+                                onClick={() => setFilters(prevState => ({...prevState, color: filters.color === color.hex ? null : color.hex }))}
                             ></div>
                         </div>
                     ))}
