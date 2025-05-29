@@ -1,10 +1,15 @@
-import {getAllActiveSizes} from '../../services/sizeService.ts'
-import { FaAngleDown } from "react-icons/fa6";
-import {useEffect, useState} from "react";
+import {FaAngleDown} from "react-icons/fa6";
 import {colors} from "../../assets/data/colors.ts";
 import {FilterProductDTO} from "../../models/filterProductDTO.ts";
 import * as React from "react";
+import {useEffect, useState} from "react";
+import {getAllActiveSizes} from "../../services/sizeService.ts";
 import {useParams} from "react-router-dom";
+
+type FilterContentProps = {
+    filters: FilterProductDTO;
+    setFilters: React.Dispatch<React.SetStateAction<FilterProductDTO>>;
+}
 
 type SizeProps = {
     id: number,
@@ -16,18 +21,23 @@ type SizeProps = {
     modifyDate: string
 }
 
-type FilterProductsProps = {
-    filters: FilterProductDTO,
-    setFilters: React.Dispatch<React.SetStateAction<FilterProductDTO>>
-}
-
-const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
+const FilterContent = ({filters, setFilters}: FilterContentProps) => {
+    const { category } = useParams<{ category: string }>();
     const [sizes, setSizes] = useState<SizeProps[]>([]);
     const [isSizeDropdownClicked, setIsSizeDropdownClicked] = useState<boolean>(false);
     const [isColorDropdownClicked, setIsColorDropdownClicked] = useState<boolean>(false);
-    const { category } = useParams<{ category: string }>();
 
+    // load sizes from backend
     useEffect(() => {
+        const loadSizes = async () => {
+            try {
+                const data = await getAllActiveSizes();
+                setSizes(data);
+            } catch (err) {
+                console.error('Failed to load sizes', err);
+            }
+        };
+
         loadSizes();
     }, []);
 
@@ -36,24 +46,15 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
         setIsSizeDropdownClicked(false);
     }, [category]);
 
-    const loadSizes = async () => {
-        try {
-            const data = await getAllActiveSizes();
-            setSizes(data);
-        } catch (err) {
-            console.error('Failed to load sizes', err);
-        }
-    };
-
     return (
-        <div className='flex flex-col justify-center items-start max-w-xs min-w-[320px] border max-xl:hidden border-gray-300 rounded-md px-5 py-3'>
+        <div>
             {/*Sort By*/}
-            <div className='w-full h-full flex justify-start items-start flex-col'>
+            <div className='w-full flex justify-start items-start flex-col'>
                 <p className='font-poppins'>Sort By</p>
                 <div className='w-full h-[1px] bg-gray-300 mt-2 mb-5'></div>
 
                 {/* Radio buttons list */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 mb-2">
                     <label className="flex items-center gap-2 font-poppins text-sm cursor-pointer">
                         <input
                             type="radio"
@@ -102,7 +103,7 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
             </div>
 
             {/*Size*/}
-            <div className='w-full h-full flex justify-start items-start flex-col mt-5'>
+            <div className='w-full flex justify-start items-start flex-col mt-5'>
                 <div className='flex justify-between items-center w-full'>
                     <p className='font-poppins'>Size</p>
                     <span
@@ -114,7 +115,7 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
                 </div>
                 <div className='w-full h-[1px] bg-gray-300 mt-2 mb-5'></div>
                 <div
-                    className={`w-full flex flex-wrap gap-4 overflow-hidden transition-all duration-300
+                    className={`w-full flex flex-wrap gap-4 overflow-hidden transition-all duration-300 mb-2
                     ${isSizeDropdownClicked ? 'max-h-40 opacity-100 translate-y-0' : 'max-h-0 opacity-0 -translate-y-2'}
                     `}
                 >
@@ -133,7 +134,7 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
             </div>
 
             {/*Color*/}
-            <div className='w-full h-full flex justify-start items-start flex-col mt-5'>
+            <div className='w-full flex justify-start items-start flex-col mt-5'>
                 <div className='flex justify-between items-center w-full'>
                     <p className='font-poppins'>Color</p>
                     <span
@@ -170,4 +171,4 @@ const FilterProducts = ({filters, setFilters}: FilterProductsProps) => {
     );
 };
 
-export default FilterProducts;
+export default FilterContent;
