@@ -5,16 +5,25 @@ import {useDisclosure} from "@heroui/react";
 import SignIn from "../../pages/signIn.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
-import {useState} from "react";
 import SignUp from "../../pages/signUp.tsx";
+import {useIsScreenWide} from "../../hooks/useIsScreenWide.tsx";
+import {useEffect} from "react";
+import {Tooltip} from "@heroui/tooltip";
 
 const Header = () => {
-    const [isMenuClicked, setIsMenuClicked] = useState<boolean>(false);
+    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange, onClose: loginOnClose} = useDisclosure();
     const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange} = useDisclosure();
+    const isWide = useIsScreenWide(850);
+
+    useEffect(() => {
+        if (isWide){
+            onClose(); // Close the responsive nav when the screen is wide
+        }
+    }, [isWide, onClose]);
 
     return (
-        <div className={`w-full bg-black text-white flex items-center justify-around px-10 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
+        <div className={`w-full bg-black text-white flex items-center justify-around px-10 max-sm:px-5 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
             {/*Logo*/}
             <div className="font-brith-stone font-extrabold text-3xl">MARNON</div>
 
@@ -43,15 +52,17 @@ const Header = () => {
             </div>
 
             {/* Hamburger menu icon for mobile view */}
-            <div
-                className='hidden max-[850px]:inline mr-10 cursor-pointer text-lg'
-                onClick={() => setIsMenuClicked(!isMenuClicked)}
-            >
-                <FaBars />
-            </div>
+            <Tooltip content="Menu" placement="bottom">
+                <div
+                    className='hidden max-[850px]:inline cursor-pointer text-lg'
+                    onClick={() => onOpen()}
+                >
+                    <FaBars />
+                </div>
+            </Tooltip>
 
             {/*Responsive navbar for mobile view*/}
-            <ResponsiveNav isMenuClicked={isMenuClicked} loginOnOpen={loginOnOpen}/>
+            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} loginOnOpen={loginOnOpen}/>
 
             {/*Login model*/}
             <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
