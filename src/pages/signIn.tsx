@@ -5,11 +5,12 @@ import {
     ModalBody,
     Button,
 } from "@heroui/react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {signIn} from "../services/authService.ts";
 import {SignInDTO} from "../models/signInDTO.ts";
 import {addToast} from "@heroui/react";
 import {saveToStorage} from "../services/storageService.ts";
+import * as React from "react";
 
 
 interface SignInProps {
@@ -19,8 +20,21 @@ interface SignInProps {
     signupOnOpen: () => void
 }
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps) => {
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
+    const [emailError, setEmailError] = useState<string | null>('');
+    const [passwordError, setPasswordError] = useState<string | null>('');
+
+    useEffect(() => {
+        if (isOpen) {
+            setLogin({ email: '', password: '' });
+            setEmailError('');
+            setPasswordError('');
+        }
+    }, [isOpen]);
+
 
     const handleSignUp = () => {
         signupOnOpen();
@@ -28,31 +42,74 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
     }
 
     const handleLogin = async () => {
-        const response = await signIn(login);
-        console.log(response);
-        if (response.statusCode === 200) {
-            // save user details in session storage
-            saveToStorage(response.data);
-
-            addToast({
-                title: "Login Successful",
-                color: "success",
-            });
-        } else if (response.statusCode === 401) {
-            addToast({
-                title: "Login Failed",
-                color: "danger",
-                description: "Please check your email and password.",
-            });
+        // Validate email and password before making the API call
+        if (login.email.trim() === '') {
+            setEmailError("Please enter your email.");
+        } else if (!emailRegex.test(login.email)) {
+            setEmailError("Please enter a valid email address.");
         } else {
-            addToast({
-                title: "Login Failed",
-                color: "danger",
-                description: "An unexpected error occurred. Please try again later.",
-            });
+            setEmailError(null);
         }
-        loginOnClose();
+
+        if (login.password.trim() === '') {
+            setPasswordError("Please enter your password.");
+        } else {
+            setPasswordError(null);
+        }
+
+        if (emailError === null && passwordError === null) {
+            console.log('both fields are valid, proceeding with login...');
+            console.log(login)
+            const response = await signIn(login);
+            if (response.statusCode === 200) {
+                // save user details in session storage
+                saveToStorage(response.data);
+
+                addToast({
+                    title: "Login Successful",
+                    color: "success",
+                });
+            } else if (response.statusCode === 401) {
+                addToast({
+                    title: "Login Failed",
+                    color: "danger",
+                    description: "Please check your email and password.",
+                });
+            } else {
+                addToast({
+                    title: "Login Failed",
+                    color: "danger",
+                    description: "An unexpected error occurred. Please try again later.",
+                });
+            }
+            loginOnClose();
+        }
+
     };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        setLogin({...login, email});
+
+        if (email.trim() === '') {
+            setEmailError("Please enter your email.");
+        } else if (!emailRegex.test(email)){
+            setEmailError("Please enter a valid email address.");
+        } else {
+            setEmailError(null);
+        }
+    }
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const password = e.target.value;
+        setLogin({...login, password});
+
+        if (password.trim() === '') {
+            setPasswordError("Please enter your password.");
+        } else {
+            setPasswordError(null);
+        }
+    }
 
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
@@ -68,29 +125,31 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                             <p className="text-sm font-semibold w-60 text-center">
                                 Welcome 😊 you’ve been missed. Please enter your data to log in.
                             </p>
-                            <div className="flex flex-col gap-5 mt-8 w-full px-2">
+                            <div className="flex flex-col mt-8 w-full px-2">
                                 <input
                                     type="text"
                                     placeholder="Email"
-                                    onChange={(e) => setLogin({...login, email: e.target.value})}
+                                    onChange={(e) => handleEmailChange(e)}
                                     className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
                                 />
+                                <p className='text-red-500 text-[13px]'>{emailError}</p>
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    onChange={(e) => setLogin({...login, password: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handlePasswordChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
-                                <div className="w-full flex justify-end items-center">
+                                <p className='text-red-500 text-[13px]'>{passwordError}</p>
+                                <div className="w-full flex justify-end items-center mt-5">
                                     <a href="#" className="text-sm text-blue-500 hover:underline">Forgot password?</a>
                                 </div>
                                 <Button
-                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold"
+                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-5"
                                     onPress={() => handleLogin()}
                                 >
                                     Login
                                 </Button>
-                                <div className='w-full flex justify-center items-center mb-5'>
+                                <div className='w-full flex justify-center items-center my-5'>
                                     <p
                                         onClick={handleSignUp}
                                         className='text-blue-500 text-sm cursor-pointer hover:underline'
