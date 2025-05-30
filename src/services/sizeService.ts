@@ -4,11 +4,6 @@ const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/size';
 
 export const getAllActiveSizes = async () => {
-    try {
-        const response = await axios.get(API_BASE_URL + SUB_URL + '/all/active-sizes');
-        return response.data.data;
-    } catch (error) {
-        console.error('Error fetching all active sizes:', error);
-        throw error;
-    }
+    const response = await axios.get(API_BASE_URL + SUB_URL + '/all/active-sizes');
+    return response.data.data;
 }
