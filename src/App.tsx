@@ -3,6 +3,7 @@ import Header from "./layouts/header/page.tsx";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import ShopCategory from "./pages/shopCategory.tsx";
 import { HeroUIProvider } from "@heroui/react";
+import {ToastProvider} from "@heroui/toast";
 import ProductDisplay from "./pages/product.tsx";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <section className="w-full h-full">
         <BrowserRouter>
             <HeroUIProvider>
+                <ToastProvider />
                 <Header />
                 <div className='mt-[70px]'>
                     <Routes>
