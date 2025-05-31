@@ -9,3 +9,8 @@ export const signIn = async (signInDTO: SignInDTO) => {
     const response = await axios.post(API_BASE_URL + SUB_URL + '/signin', signInDTO);
     return response.data;
 }
+
+export const signUp = async (signUpDTO: SignInDTO) => {
+    const response = await axios.post(API_BASE_URL + SUB_URL + '/signup', signUpDTO);
+    return response.data;
+}

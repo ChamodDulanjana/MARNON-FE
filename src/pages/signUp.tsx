@@ -3,10 +3,12 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    Button,
+    Button, addToast,
 } from "@heroui/react";
 import {useEffect, useState} from "react";
 import * as React from "react";
+import {SignUpDTO} from "../models/signUpDTO.ts";
+import {signUp} from "../services/authService.ts";
 
 interface SignUpProps {
     isOpen: boolean,
@@ -31,7 +33,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
 const contactRegex = /^\d{9,15}$/;
 
 const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps) => {
-    const [signUp, setSignUp] = useState<signUpData>({
+    const [signUpData, setSignUpData] = useState<signUpData>({
         fName: "",
         lName: "",
         email: '',
@@ -55,7 +57,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
         setConfirmPasswordError('');
         setContactError('');
         setAddressError('');
-        setSignUp({
+        setSignUpData({
             fName: "",
             lName: "",
             email: '',
@@ -72,15 +74,15 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
         loginOnOpen();
     }
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         // Validate fields before proceeding
-        validateFirstName(signUp.fName);
-        validateLastName(signUp.lName);
-        validateEmail(signUp.email);
-        validateContact(signUp.contact);
-        validateAddress(signUp.address);
-        validatePassword(signUp.password);
-        validateConfirmPassword(signUp.confirmPassword);
+        validateFirstName(signUpData.fName);
+        validateLastName(signUpData.lName);
+        validateEmail(signUpData.email);
+        validateContact(signUpData.contact);
+        validateAddress(signUpData.address);
+        validatePassword(signUpData.password);
+        validateConfirmPassword(signUpData.confirmPassword);
 
         // If all validations pass, proceed with sign-up
         if (nameError === null &&
@@ -90,57 +92,79 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
             contactError === null &&
             addressError === null) {
 
-            // Here you would typically call your sign-up API
-            console.log("Sign Up Data:", signUp);
+            const signUpDTO: SignUpDTO = {
+                name: `${signUpData.fName} ${signUpData.lName}`,
+                email: signUpData.email,
+                password: signUpData.password,
+                contact: signUpData.contact,
+                address: signUpData.address,
+                role: "USER" // Role is always USER for sign-up
+            }
+
+            const response = await signUp(signUpDTO);
+            if (response.statusCode === 201) {
+                addToast({
+                    title: "Sign Up Successful",
+                    color: "success",
+                });
+                loginOnOpen();
+            }  else {
+                addToast({
+                    title: "Sign Up Failed",
+                    color: "danger",
+                    description: "An unexpected error occurred. Please try again later.",
+                });
+            }
+            signUpOnClose();
         }
     }
 
     const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, fName: value});
+        setSignUpData({...signUpData, fName: value});
         validateFirstName(value);
     }
 
     const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, lName: value});
+        setSignUpData({...signUpData, lName: value});
         validateLastName(value);
     }
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, email: value});
+        setSignUpData({...signUpData, email: value});
         validateEmail(value);
     }
 
     const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, contact: value});
+        setSignUpData({...signUpData, contact: value});
         validateContact(value);
     }
 
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, address: value});
+        setSignUpData({...signUpData, address: value});
         validateAddress(value);
     }
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, password: value});
+        setSignUpData({...signUpData, password: value});
         validatePassword(value);
     }
 
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
-        setSignUp({...signUp, confirmPassword: value});
+        setSignUpData({...signUpData, confirmPassword: value});
         validateConfirmPassword(value);
     }
 
     const validateFirstName = (value: string) => {
         if (value.trim() === '') {
             setNameError("Both first and last names are required.");
-        } else if (signUp.lName.trim() === '') {
+        } else if (signUpData.lName.trim() === '') {
             setNameError("Both first and last names are required.");
         } else {
             setNameError(null);
@@ -150,7 +174,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
     const validateLastName = (value: string) => {
         if (value.trim() === '') {
             setNameError("Both first and last names are required.");
-        } else if (signUp.fName.trim() === '') {
+        } else if (signUpData.fName.trim() === '') {
             setNameError("Both first and last names are required.");
         } else {
             setNameError(null);
@@ -205,7 +229,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
     const validateConfirmPassword = (value: string) => {
         if (value.trim() === '') {
             setConfirmPasswordError("Please confirm your password.");
-        } else if (value !== signUp.password) {
+        } else if (value !== signUpData.password) {
             setConfirmPasswordError("Passwords do not match.");
         } else {
             setConfirmPasswordError(null);
