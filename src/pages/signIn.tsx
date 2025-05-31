@@ -127,7 +127,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                             </p>
                             <div className="flex flex-col mt-8 w-full px-2">
                                 <input
-                                    type="text"
+                                    type="email"
                                     placeholder="Email"
                                     onChange={(e) => handleEmailChange(e)}
                                     className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"

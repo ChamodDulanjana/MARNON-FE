@@ -5,8 +5,28 @@ import ShopCategory from "./pages/shopCategory.tsx";
 import { HeroUIProvider } from "@heroui/react";
 import {ToastProvider} from "@heroui/toast";
 import ProductDisplay from "./pages/product.tsx";
+import {useEffect, useState} from "react";
+import LoadingAnimation from "./components/loading-animation/page.tsx";
 
 function App() {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const handlePageLoad = () => {
+            setIsLoaded(true);
+        };
+
+        if (document.readyState === "complete") {
+            // Already loaded
+            handlePageLoad();
+        } else {
+            // Wait for full load (including images/videos)
+            window.addEventListener("load", handlePageLoad);
+            return () => window.removeEventListener("load", handlePageLoad);
+        }
+    }, []);
+
+    if (!isLoaded) return <LoadingAnimation />;
 
   return (
     <section className="w-full h-full">

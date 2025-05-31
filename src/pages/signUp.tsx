@@ -5,11 +5,14 @@ import {
     ModalBody,
     Button,
 } from "@heroui/react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import * as React from "react";
 
 interface SignUpProps {
-    isOpen?: boolean,
-    onOpenChange?: () => void
+    isOpen: boolean,
+    onOpenChange: () => void,
+    signUpOnClose: () => void,
+    loginOnOpen: () => void
 }
 
 type signUpData = {
@@ -23,7 +26,11 @@ type signUpData = {
     role: string
 }
 
-const SignUp = ({isOpen, onOpenChange}: SignUpProps) => {
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+const contactRegex = /^\d{9,15}$/;
+
+const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps) => {
     const [signUp, setSignUp] = useState<signUpData>({
         fName: "",
         lName: "",
@@ -34,6 +41,179 @@ const SignUp = ({isOpen, onOpenChange}: SignUpProps) => {
         address: "",
         role: ""
     });
+    const [nameError, setNameError] = useState<string | null>('');
+    const [emailError, setEmailError] = useState<string | null>('');
+    const [passwordError, setPasswordError] = useState<string | null>('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>('');
+    const [contactError, setContactError] = useState<string | null>('');
+    const [addressError, setAddressError] = useState<string | null>('');
+
+    useEffect(() => {
+        setNameError('');
+        setEmailError('');
+        setPasswordError('');
+        setConfirmPasswordError('');
+        setContactError('');
+        setAddressError('');
+        setSignUp({
+            fName: "",
+            lName: "",
+            email: '',
+            password: '',
+            confirmPassword: "",
+            contact: "",
+            address: "",
+            role: ""
+        });
+    }, [isOpen]);
+
+    const handleSignIn = () => {
+        signUpOnClose();
+        loginOnOpen();
+    }
+
+    const handleSignUp = () => {
+        // Validate fields before proceeding
+        validateFirstName(signUp.fName);
+        validateLastName(signUp.lName);
+        validateEmail(signUp.email);
+        validateContact(signUp.contact);
+        validateAddress(signUp.address);
+        validatePassword(signUp.password);
+        validateConfirmPassword(signUp.confirmPassword);
+
+        // If all validations pass, proceed with sign-up
+        if (nameError === null &&
+            emailError === null &&
+            passwordError === null &&
+            confirmPasswordError === null &&
+            contactError === null &&
+            addressError === null) {
+
+            // Here you would typically call your sign-up API
+            console.log("Sign Up Data:", signUp);
+        }
+    }
+
+    const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, fName: value});
+        validateFirstName(value);
+    }
+
+    const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, lName: value});
+        validateLastName(value);
+    }
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, email: value});
+        validateEmail(value);
+    }
+
+    const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, contact: value});
+        validateContact(value);
+    }
+
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, address: value});
+        validateAddress(value);
+    }
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, password: value});
+        validatePassword(value);
+    }
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim();
+        setSignUp({...signUp, confirmPassword: value});
+        validateConfirmPassword(value);
+    }
+
+    const validateFirstName = (value: string) => {
+        if (value.trim() === '') {
+            setNameError("Both first and last names are required.");
+        } else if (signUp.lName.trim() === '') {
+            setNameError("Both first and last names are required.");
+        } else {
+            setNameError(null);
+        }
+    }
+
+    const validateLastName = (value: string) => {
+        if (value.trim() === '') {
+            setNameError("Both first and last names are required.");
+        } else if (signUp.fName.trim() === '') {
+            setNameError("Both first and last names are required.");
+        } else {
+            setNameError(null);
+        }
+    }
+
+    const validateEmail = (value: string) => {
+        if (value.trim() === '') {
+            setEmailError("Please enter your email.");
+        } else if (!emailRegex.test(value)) {
+            setEmailError("Please enter a valid email address.");
+        } else {
+            setEmailError(null);
+        }
+    }
+
+    const validateContact = (value: string) => {
+        if (value.trim() === '') {
+            setContactError("Please enter your contact number.");
+        } else if (!contactRegex.test(value)) {
+            setContactError("Please enter a valid contact number (9-15 digits).");
+        } else {
+            setContactError(null);
+        }
+    }
+
+    const validateAddress = (value: string) => {
+        if (value.trim() === '') {
+            setAddressError("Please enter your address.");
+        } else {
+            setAddressError(null);
+        }
+    }
+
+    const validatePassword = (value: string) => {
+        if (value.trim() === '') {
+            setPasswordError("Please enter your password.");
+        } else if (!passwordRegex.test(value)) {
+            setPasswordError(
+                `Password should be:\n` +
+                `• 8–12 characters long\n` +
+                `• At least one uppercase letter\n` +
+                `• At least one lowercase letter\n` +
+                `• At least one number\n` +
+                `• At least one special character`
+            );
+        } else {
+            setPasswordError(null);
+        }
+    }
+
+    const validateConfirmPassword = (value: string) => {
+        if (value.trim() === '') {
+            setConfirmPasswordError("Please confirm your password.");
+        } else if (value !== signUp.password) {
+            setConfirmPasswordError("Passwords do not match.");
+        } else {
+            setConfirmPasswordError(null);
+        }
+    }
+
+
+
 
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
@@ -49,58 +229,76 @@ const SignUp = ({isOpen, onOpenChange}: SignUpProps) => {
                             <p className="text-sm font-semibold w-60 text-center">
                                 Glad to see you joining with us. Please fill up the following fields to set your account up.
                             </p>
-                            <div className="flex flex-col gap-5 mt-8 w-full px-2">
+                            <div className="flex flex-col mt-8 w-full px-2">
                                 <div className='flex gap-5'>
                                     <input
                                         type="text"
                                         placeholder="First name"
-                                        onChange={(e) => setSignUp({...signUp, fName: e.target.value})}
+                                        onChange={(e) => handleFirstNameChange(e)}
                                         className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
                                     />
                                     <input
                                         type="text"
                                         placeholder="Last name"
-                                        onChange={(e) => setSignUp({...signUp, lName: e.target.value})}
+                                        onChange={(e) => handleLastNameChange(e)}
                                         className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
                                     />
                                 </div>
+                                <p className='text-red-500 text-[13px]'>{nameError}</p>
                                 <input
-                                    type="text"
+                                    type="email"
                                     placeholder="Email"
-                                    onChange={(e) => setSignUp({...signUp, email: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handleEmailChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
+                                <p className='text-red-500 text-[13px]'>{emailError}</p>
                                 <input
                                     type="text"
                                     placeholder="Contact"
-                                    onChange={(e) => setSignUp({...signUp, contact: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handleContactChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
+                                <p className='text-red-500 text-[13px]'>{contactError}</p>
                                 <input
                                     type="text"
                                     placeholder="Address"
-                                    onChange={(e) => setSignUp({...signUp, address: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handleAddressChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
+                                <p className='text-red-500 text-[13px]'>{addressError}</p>
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    onChange={(e) => setSignUp({...signUp, password: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handlePasswordChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
+                                <p className='text-red-500 text-[13px]'>
+                                    {passwordError && (
+                                        <div className="text-red-500 text-[13px] mt-2">
+                                            {passwordError.split('\n').map((line, index) => (
+                                                <p key={index}>{line}</p>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                </p>
                                 <input
                                     type="password"
                                     placeholder="Confirm password"
-                                    onChange={(e) => setSignUp({...signUp, confirmPassword: e.target.value})}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onChange={(e) => handleConfirmPasswordChange(e)}
+                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
+                                <p className='text-red-500 text-[13px]'>{confirmPasswordError}</p>
                                 <Button
-                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold"
-                                    onPress={() => console.log(signUp)}
+                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-5"
+                                    onPress={() => handleSignUp()}
                                 >
                                     Sign Up
                                 </Button>
-                                <div className='w-full flex justify-center items-center mb-5'>
+                                <div
+                                    className='w-full flex justify-center items-center my-5'
+                                    onClick={handleSignIn}
+                                >
                                     <p className='text-blue-500 text-sm cursor-pointer hover:underline'>Already have an account ? Login</p>
                                 </div>
                             </div>

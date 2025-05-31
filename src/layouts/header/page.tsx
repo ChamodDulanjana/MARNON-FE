@@ -13,7 +13,7 @@ import {Tooltip} from "@heroui/tooltip";
 const Header = () => {
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange, onClose: loginOnClose} = useDisclosure();
-    const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange} = useDisclosure();
+    const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange, onClose: signUpOnClose} = useDisclosure();
     const isWide = useIsScreenWide(850);
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const Header = () => {
             <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
 
             {/*SignUp model*/}
-            <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange}/>
+            <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange} signUpOnClose={signUpOnClose} loginOnOpen={loginOnOpen}/>
 
         </div>
     );
