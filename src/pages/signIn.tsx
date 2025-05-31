@@ -35,7 +35,6 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
         }
     }, [isOpen]);
 
-
     const handleSignUp = () => {
         signupOnOpen();
         loginOnClose();
@@ -43,23 +42,11 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
 
     const handleLogin = async () => {
         // Validate email and password before making the API call
-        if (login.email.trim() === '') {
-            setEmailError("Please enter your email.");
-        } else if (!emailRegex.test(login.email)) {
-            setEmailError("Please enter a valid email address.");
-        } else {
-            setEmailError(null);
-        }
+        validateEmail(login.email);
+        validatePassword(login.password);
 
-        if (login.password.trim() === '') {
-            setPasswordError("Please enter your password.");
-        } else {
-            setPasswordError(null);
-        }
-
+        // If there are no errors, proceed with the login
         if (emailError === null && passwordError === null) {
-            console.log('both fields are valid, proceeding with login...');
-            console.log(login)
             const response = await signIn(login);
             if (response.statusCode === 200) {
                 // save user details in session storage
@@ -84,26 +71,31 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
             }
             loginOnClose();
         }
-
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setLogin({...login, email});
+        validateEmail(email);
+    }
 
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const password = e.target.value;
+        setLogin({...login, password});
+        validatePassword(password);
+    }
+
+    const validateEmail = (email: string) => {
         if (email.trim() === '') {
             setEmailError("Please enter your email.");
-        } else if (!emailRegex.test(email)){
+        } else if (!emailRegex.test(email)) {
             setEmailError("Please enter a valid email address.");
         } else {
             setEmailError(null);
         }
     }
 
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const password = e.target.value;
-        setLogin({...login, password});
-
+    const validatePassword = (password: string) => {
         if (password.trim() === '') {
             setPasswordError("Please enter your password.");
         } else {
