@@ -34,7 +34,7 @@ function App() {
             <HeroUIProvider>
                 <ToastProvider />
                 <Header />
-                <div className='mt-[70px]'>
+                <div className='mt-[70px] h-[calc(100vh-70px)] overflow-y-auto custom-scrollbar'>
                     <Routes>
                         <Route path="/" element={<Home />}/>
                         <Route path="/:category" element={<ShopCategory/>}/>

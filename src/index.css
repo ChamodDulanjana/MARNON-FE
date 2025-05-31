@@ -7,16 +7,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/*html, body {
+html, body #root{
     overflow: hidden;
 }
 
 .custom-scrollbar {
     scrollbar-width: auto;
-    scrollbar-color: #1e3799 transparent;
+    scrollbar-color: #95afc0 black;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
+/*.custom-scrollbar::-webkit-scrollbar {
     width: 8px;
 }
 
