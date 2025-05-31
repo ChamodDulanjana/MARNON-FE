@@ -7,6 +7,7 @@ import {ToastProvider} from "@heroui/toast";
 import ProductDisplay from "./pages/product.tsx";
 import {useEffect, useState} from "react";
 import LoadingAnimation from "./components/loading-animation/page.tsx";
+import {AuthContextProvider} from "./context/authContext.tsx";
 
 function App() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -33,19 +34,21 @@ function App() {
         <BrowserRouter>
             <HeroUIProvider>
                 <ToastProvider />
-                <Header />
-                <div className='mt-[70px] h-[calc(100vh-70px)] overflow-y-auto custom-scrollbar'>
-                    <Routes>
-                        <Route path="/" element={<Home />}/>
-                        <Route path="/:category" element={<ShopCategory/>}/>
-                        <Route path="/:category" element={<ShopCategory/>}/>
-                        <Route path="/:category" element={<ShopCategory/>}/>
-                        <Route path="/product" element={<ProductDisplay/>}>
-                            <Route path=":productId" element={<ProductDisplay/>}/>
-                        </Route>
+                <AuthContextProvider>
+                    <Header />
+                    <div className='mt-[70px] h-[calc(100vh-70px)] overflow-y-auto custom-scrollbar'>
+                        <Routes>
+                            <Route path="/" element={<Home />}/>
+                            <Route path="/:category" element={<ShopCategory/>}/>
+                            <Route path="/:category" element={<ShopCategory/>}/>
+                            <Route path="/:category" element={<ShopCategory/>}/>
+                            <Route path="/product" element={<ProductDisplay/>}>
+                                <Route path=":productId" element={<ProductDisplay/>}/>
+                            </Route>
 
-                    </Routes>
-                </div>
+                        </Routes>
+                    </div>
+                </AuthContextProvider>
             </HeroUIProvider>
         </BrowserRouter>
     </section>

@@ -9,14 +9,16 @@ import SignUp from "../../pages/signUp.tsx";
 import {useIsScreenWide} from "../../hooks/useIsScreenWide.tsx";
 import {useEffect} from "react";
 import {Tooltip} from "@heroui/tooltip";
+import UserProfile from "../../pages/userProfile.tsx";
+import {useAuthContext} from "../../context/authContext.tsx";
 
 const Header = () => {
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
     const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange, onClose: loginOnClose} = useDisclosure();
     const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange, onClose: signUpOnClose} = useDisclosure();
+    const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();
     const isWide = useIsScreenWide(850);
-    const isUserLoggedIn = sessionStorage.getItem('userId') !== null;
-    const userName = sessionStorage.getItem('userName') || '';
+    const { isLoggedIn, userName } = useAuthContext();
 
     useEffect(() => {
         if (isWide){
@@ -50,9 +52,14 @@ const Header = () => {
             {/*Cart & User*/}
             <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
                 <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
-                { isUserLoggedIn ? (
+                { isLoggedIn ? (
                     <Tooltip content={userName} placement={'bottom'}>
-                        <Avatar name={userName[0].toUpperCase()} size={"sm"} className='text-[16px] cursor-pointer'/>
+                        <Avatar
+                            name={userName ? userName[0].toUpperCase() : ''}
+                            size={"sm"}
+                            className='text-[15px] cursor-pointer'
+                            onClick={() => UserProfileOnOpen()}
+                        />
                     </Tooltip>
                 ) : (
                     <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
@@ -78,6 +85,8 @@ const Header = () => {
             {/*SignUp model*/}
             <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange} signUpOnClose={signUpOnClose} loginOnOpen={loginOnOpen}/>
 
+            {/*User Profile model*/}
+            <UserProfile isOpen={isUserProfileOpen} onOpenChange={UserProfileOpenChange}/>
         </div>
     );
 };

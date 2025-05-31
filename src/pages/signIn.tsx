@@ -11,6 +11,7 @@ import {SignInDTO} from "../models/signInDTO.ts";
 import {addToast} from "@heroui/react";
 import {saveToStorage} from "../services/storageService.ts";
 import * as React from "react";
+import {useAuthContext} from "../context/authContext.tsx";
 
 
 interface SignInProps {
@@ -26,6 +27,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
     const [emailError, setEmailError] = useState<string | null>('');
     const [passwordError, setPasswordError] = useState<string | null>('');
+    const { setIsLoggedIn, setUserName } = useAuthContext();
 
     useEffect(() => {
         if (isOpen) {
@@ -51,7 +53,8 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
             if (response.statusCode === 200) {
                 // save user details in session storage
                 saveToStorage(response.data);
-
+                setIsLoggedIn(true);
+                setUserName(response.data.userName);
                 addToast({
                     title: "Login Successful",
                     color: "success",
