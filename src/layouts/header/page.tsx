@@ -2,14 +2,14 @@ import { LuShoppingCart } from "react-icons/lu";
 import { FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
 import {Avatar, useDisclosure} from "@heroui/react";
-import SignIn from "../../pages/signIn.tsx";
+import SignIn from "../../components/sign-in/page.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
-import SignUp from "../../pages/signUp.tsx";
+import SignUp from "../../components/sign-up/page.tsx";
 import {useIsScreenWide} from "../../hooks/useIsScreenWide.tsx";
 import {useEffect} from "react";
 import {Tooltip} from "@heroui/tooltip";
-import UserProfile from "../../pages/userProfile.tsx";
+import UserProfile from "../../components/user-profile/page.tsx";
 import {useAuthContext} from "../../context/authContext.tsx";
 
 const Header = () => {
@@ -80,13 +80,19 @@ const Header = () => {
             <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} loginOnOpen={loginOnOpen}/>
 
             {/*Login model*/}
-            <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
+            {isLoginOpen && (
+                <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
+            )}
 
             {/*SignUp model*/}
-            <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange} signUpOnClose={signUpOnClose} loginOnOpen={loginOnOpen}/>
+            {isSignupOpen && (
+                <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange} signUpOnClose={signUpOnClose} loginOnOpen={loginOnOpen}/>
+            )}
 
             {/*User Profile model*/}
-            <UserProfile isOpen={isUserProfileOpen} onOpenChange={UserProfileOpenChange}/>
+            {isUserProfileOpen && (
+                <UserProfile isOpen={isUserProfileOpen} onOpenChange={UserProfileOpenChange}/>
+            )}
         </div>
     );
 };
