@@ -7,8 +7,8 @@ import {
 } from "@heroui/react";
 import {useEffect, useState} from "react";
 import * as React from "react";
-import {SignUpDTO} from "../models/signUpDTO.ts";
-import {signUp} from "../services/authService.ts";
+import {SignUpDTO} from "../../models/signUpDTO.ts";
+import {signUp} from "../../services/authService.ts";
 
 interface SignUpProps {
     isOpen: boolean,

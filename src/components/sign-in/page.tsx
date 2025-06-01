@@ -6,12 +6,12 @@ import {
     Button,
 } from "@heroui/react";
 import {useEffect, useState} from "react";
-import {signIn} from "../services/authService.ts";
-import {SignInDTO} from "../models/signInDTO.ts";
+import {signIn} from "../../services/authService.ts";
+import {SignInDTO} from "../../models/signInDTO.ts";
 import {addToast} from "@heroui/react";
-import {saveToStorage} from "../services/storageService.ts";
+import {saveToStorage} from "../../services/storageService.ts";
 import * as React from "react";
-import {useAuthContext} from "../context/authContext.tsx";
+import {useAuthContext} from "../../context/authContext.tsx";
 
 
 interface SignInProps {
