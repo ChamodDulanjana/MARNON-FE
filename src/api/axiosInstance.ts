@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 // Add a request interceptor to include JWT token
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = sessionStorage.getItem('token');
+        const token = sessionStorage.getItem('accessToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

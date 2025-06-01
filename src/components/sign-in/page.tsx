@@ -12,6 +12,7 @@ import {addToast} from "@heroui/react";
 import {saveToStorage} from "../../services/storageService.ts";
 import * as React from "react";
 import {useAuthContext} from "../../context/authContext.tsx";
+import {emailRegex} from "../sign-up/page.tsx";
 
 
 interface SignInProps {
@@ -20,8 +21,6 @@ interface SignInProps {
     loginOnClose: () => void
     signupOnOpen: () => void
 }
-
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps) => {
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
