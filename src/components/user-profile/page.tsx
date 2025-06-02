@@ -174,7 +174,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
     }
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior={'inside'} size={'lg'}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior={'inside'} size={'lg'} className='m-4 my-auto'>
             <ModalContent>
                 <ModalHeader className='flex flex-col gap-2'>
                     <h1 className='text-xl'>User Profile</h1>

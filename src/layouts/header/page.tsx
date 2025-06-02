@@ -52,14 +52,16 @@ const Header = () => {
             {/*Cart & User*/}
             <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
                 <Tooltip content="Cart" placement={'bottom'}>
-                    <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
+                    <Link to='/checkout/cart'>
+                        <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
+                    </Link>
                 </Tooltip>
                 { isLoggedIn ? (
                     <Tooltip content={userName} placement={'bottom'}>
                         <Avatar
                             name={userName ? userName[0].toUpperCase() : ''}
                             size={"sm"}
-                            className='text-[15px] cursor-pointer'
+                            className='text-[15px] cursor-pointer font-poppins'
                             onClick={() => UserProfileOnOpen()}
                         />
                     </Tooltip>
@@ -69,15 +71,13 @@ const Header = () => {
                     </Tooltip>
                 )}
                 { isLoggedIn && role === 'ADMIN' && (
-                    <Tooltip content="Admin Dashboard" placement={'bottom'}>
-                        <Link to="/admin/dashboard">
-                            <button
-                                className='px-4 py-2 rounded-lg text-white text-sm font-semibold bg-black border-2 border-white hover:bg-[#ecf0f1] hover:text-black transition-all duration-300 ease-in-out'
-                            >
-                                Admin
-                            </button>
-                        </Link>
-                    </Tooltip>
+                    <Link to="/admin/dashboard">
+                        <button
+                            className='px-4 py-2 rounded-lg text-white font-poppins text-[12px] text-sm font-semibold bg-black border-2 border-white hover:bg-[#ecf0f1] hover:text-black transition-all duration-300 ease-in-out'
+                        >
+                            Admin Dashboard
+                        </button>
+                    </Link>
                 )}
             </div>
 
@@ -92,7 +92,7 @@ const Header = () => {
             </Tooltip>
 
             {/*Responsive navbar for mobile view*/}
-            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} loginOnOpen={loginOnOpen}/>
+            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} loginOnOpen={loginOnOpen} UserProfileOnOpen={UserProfileOnOpen}/>
 
             {/*Login model*/}
             {isLoginOpen && (
