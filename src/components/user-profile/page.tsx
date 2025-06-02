@@ -4,8 +4,6 @@ import {useEffect, useState} from "react";
 import {UserUpdateDTO} from "../../models/userUpdateDTO.ts";
 import {getUserById, updateByRegularUser} from "../../services/userService.ts";
 import * as React from "react";
-import {contactRegex} from "../sign-up/page.tsx";
-
 
 interface UserProfileProps {
     isOpen: boolean;
@@ -18,6 +16,8 @@ interface UserDataProps {
     contact: string;
     address: string;
 }
+
+const contactRegex = /^\d{9,15}$/;
 
 const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
     const [userName] = useState(sessionStorage.getItem('userName') || '')

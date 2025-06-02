@@ -28,9 +28,9 @@ type signUpData = {
     role: string
 }
 
-export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
-export const contactRegex = /^\d{9,15}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
+const contactRegex = /^\d{9,15}$/;
 
 const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps) => {
     const [signUpData, setSignUpData] = useState<signUpData>({
@@ -240,7 +240,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
 
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto' scrollBehavior={'inside'}>
             <ModalContent>
                 {() => (
                     <>
@@ -323,7 +323,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                                     className='w-full flex justify-center items-center my-5'
                                     onClick={handleSignIn}
                                 >
-                                    <p className='text-blue-500 text-sm cursor-pointer hover:underline'>Already have an account ? Login</p>
+                                    <p className='text-blue-500 text-sm cursor-pointer hover:underline text-center'>Already have an account ? Login</p>
                                 </div>
                             </div>
                         </ModalBody>

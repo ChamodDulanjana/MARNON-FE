@@ -12,8 +12,6 @@ import {addToast} from "@heroui/react";
 import {saveToStorage} from "../../services/storageService.ts";
 import * as React from "react";
 import {useAuthContext} from "../../context/authContext.tsx";
-import {emailRegex} from "../sign-up/page.tsx";
-
 
 interface SignInProps {
     isOpen: boolean,
@@ -21,6 +19,8 @@ interface SignInProps {
     loginOnClose: () => void
     signupOnOpen: () => void
 }
+
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps) => {
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
@@ -107,7 +107,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
     }
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-10' scrollBehavior={'inside'}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"sm"} className='m-4 my-auto overflow-hidden' scrollBehavior={'normal'}>
             <ModalContent>
                 {() => (
                     <>
@@ -147,7 +147,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                                 <div className='w-full flex justify-center items-center my-5'>
                                     <p
                                         onClick={handleSignUp}
-                                        className='text-blue-500 text-sm cursor-pointer hover:underline'
+                                        className='text-blue-500 text-sm cursor-pointer hover:underline text-center'
                                     >Don't have an account ? Sign up
                                     </p>
                                 </div>

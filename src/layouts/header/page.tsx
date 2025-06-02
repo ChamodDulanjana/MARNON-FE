@@ -92,7 +92,7 @@ const Header = () => {
             </Tooltip>
 
             {/*Responsive navbar for mobile view*/}
-            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} loginOnOpen={loginOnOpen}/>
+            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} loginOnOpen={loginOnOpen}/>
 
             {/*Login model*/}
             {isLoginOpen && (
