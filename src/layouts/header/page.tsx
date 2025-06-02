@@ -51,7 +51,9 @@ const Header = () => {
 
             {/*Cart & User*/}
             <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
-                <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
+                <Tooltip content="Cart" placement={'bottom'}>
+                    <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
+                </Tooltip>
                 { isLoggedIn ? (
                     <Tooltip content={userName} placement={'bottom'}>
                         <Avatar
@@ -62,7 +64,9 @@ const Header = () => {
                         />
                     </Tooltip>
                 ) : (
-                    <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
+                    <Tooltip content="Login" placement={'bottom'}>
+                        <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
+                    </Tooltip>
                 )}
             </div>
 
