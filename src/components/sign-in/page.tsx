@@ -26,7 +26,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
     const [emailError, setEmailError] = useState<string | null>('');
     const [passwordError, setPasswordError] = useState<string | null>('');
-    const { setIsLoggedIn, setUserName } = useAuthContext();
+    const { setIsLoggedIn, setUserName, setRole } = useAuthContext();
 
     useEffect(() => {
         if (isOpen) {
@@ -54,6 +54,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                 saveToStorage(response.data);
                 setIsLoggedIn(true);
                 setUserName(response.data.userName);
+                setRole(response.data.role);
                 addToast({
                     title: "Login Successful",
                     color: "success",

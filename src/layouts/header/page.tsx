@@ -18,7 +18,7 @@ const Header = () => {
     const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange, onClose: signUpOnClose} = useDisclosure();
     const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();
     const isWide = useIsScreenWide(850);
-    const { isLoggedIn, userName } = useAuthContext();
+    const { isLoggedIn, userName, role } = useAuthContext();
 
     useEffect(() => {
         if (isWide){
@@ -66,6 +66,17 @@ const Header = () => {
                 ) : (
                     <Tooltip content="Login" placement={'bottom'}>
                         <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
+                    </Tooltip>
+                )}
+                { isLoggedIn && role === 'ADMIN' && (
+                    <Tooltip content="Admin Dashboard" placement={'bottom'}>
+                        <Link to="/admin/dashboard">
+                            <button
+                                className='px-4 py-2 rounded-lg text-white text-sm font-semibold bg-black border-2 border-white hover:bg-[#ecf0f1] hover:text-black transition-all duration-300 ease-in-out'
+                            >
+                                Admin
+                            </button>
+                        </Link>
                     </Tooltip>
                 )}
             </div>

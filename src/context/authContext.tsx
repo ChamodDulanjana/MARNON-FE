@@ -6,6 +6,8 @@ interface AuthContextType {
     setIsLoggedIn: (value: boolean) => void;
     userName: string;
     setUserName: (value: string) => void;
+    role: string;
+    setRole: (value: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,8 +15,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider = ({children}: { children: React.ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!sessionStorage.getItem("accessToken"));
     const [userName, setUserName] = useState<string>(sessionStorage.getItem('userName') || '');
+    const [role, setRole] = useState<string>(sessionStorage.getItem('role') || '');
 
-    const contextValue: AuthContextType = { isLoggedIn, setIsLoggedIn, userName, setUserName };
+    const contextValue: AuthContextType = { isLoggedIn, setIsLoggedIn, userName, setUserName, role, setRole };
 
     return (
         <AuthContext.Provider value={contextValue}>
