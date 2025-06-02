@@ -6,3 +6,8 @@ export const getUserById = async (userId: number) => {
     const response = await axiosInstance.get(SUB_URL + '/' + userId);
     return response.data;
 }
+
+export const updateByRegularUser = async (id: number, userDTO: any) => {
+    const response = await axiosInstance.patch(SUB_URL + '/regular/' + id, userDTO);
+    return response.data;
+}

@@ -1,8 +1,8 @@
-import {Avatar, Button, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
+import {addToast, Avatar, Button, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
 import { CiEdit } from "react-icons/ci";
 import {useEffect, useState} from "react";
-//import {UserDTO} from "../../models/userDTO.ts";
-import {getUserById} from "../../services/userService.ts";
+import {UserUpdateDTO} from "../../models/userUpdateDTO.ts";
+import {getUserById, updateByRegularUser} from "../../services/userService.ts";
 import * as React from "react";
 import {contactRegex} from "../sign-up/page.tsx";
 
@@ -35,8 +35,16 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
 
     useEffect(() => {
         setIsEditBtnClicked(false);
+        setUserData({
+            fName: '',
+            lName: '',
+            contact: '',
+            address: ''
+        });
+        setNameError('');
+        setContactError('');
+        setAddressError('');
     }, [isOpen]);
-
 
     // Fetch user data from the server
     useEffect(() => {
@@ -55,8 +63,40 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
         fetchUserById();
     }, [userId]);
 
-    const handleUserUpdate = () => {
+    const handleUserUpdate = async () => {
+        // Validate all fields before updating
+        const fNameErr = validateFirstName(userData.fName);
+        validateLastName(userData.lName);
+        const contactErr = validateContact(userData.contact);
+        const addressErr = validateAddress(userData.address);
 
+        setNameError(fNameErr);
+        setContactError(contactErr);
+        setAddressError(addressErr);
+
+        // If there are no errors, proceed with the update
+        if (!fNameErr && !contactErr && !addressErr) {
+            const userDTO: UserUpdateDTO = {
+                name: `${userData.fName} ${userData.lName}`,
+                contact: userData.contact,
+                address: userData.address,
+                role: 'null' // Role is not being updated by regular users
+            }
+
+            const response = await updateByRegularUser(userId, userDTO);
+            if (response.statusCode === 200) {
+                addToast({
+                    title: "User profile updated successfully",
+                    color: "success",
+                });
+                onOpenChange(); // Close the modal after successful update
+            } else {
+                addToast({
+                    title: "Failed to update user profile",
+                    color: "danger",
+                });
+            }
+        }
     }
 
     const handleEditBtnClick = () => {
@@ -88,42 +128,49 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
         validateAddress(value);
     }
 
-    const validateFirstName = (value: string) => {
+    const validateFirstName = (value: string): string | null => {
         if (value.trim() === '') {
             setNameError("Both first and last names are required.");
+            return "Both first and last names are required.";
         } else if (userData.lName.trim() === '') {
             setNameError("Both first and last names are required.");
-        } else {
-            setNameError(null);
+            return "Both first and last names are required.";
         }
+        setNameError(null);
+        return null;
     }
 
-    const validateLastName = (value: string) => {
+    const validateLastName = (value: string): string | null => {
         if (value.trim() === '') {
             setNameError("Both first and last names are required.");
+            return "Both first and last names are required.";
         } else if (userData.fName.trim() === '') {
             setNameError("Both first and last names are required.");
-        } else {
-            setNameError(null);
+            return "Both first and last names are required.";
         }
+        setNameError(null);
+        return null;
     }
 
-    const validateContact = (value: string) => {
+    const validateContact = (value: string): string | null => {
         if (value.trim() === '') {
             setContactError("Please enter your contact number.");
+            return "Please enter your contact number.";
         } else if (!contactRegex.test(value)) {
             setContactError("Please enter a valid contact number (9-15 digits).");
-        } else {
-            setContactError(null);
+            return "Please enter a valid contact number (9-15 digits).";
         }
+        setContactError(null);
+        return null;
     }
 
     const validateAddress = (value: string) => {
         if (value.trim() === '') {
             setAddressError("Please enter your address.");
-        } else {
-            setAddressError(null);
-        }
+            return "Please enter your address.";
+        };
+        setAddressError(null);
+        return null;
     }
 
     return (
@@ -152,7 +199,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                     disabled={!isEditBtnClicked}
                                     onChange={(e) => {handleFirstNameChange(e)}}
                                     className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-50' : ''}
+                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
                                     `}
                                 />
                             </div>
@@ -165,7 +212,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                     disabled={!isEditBtnClicked}
                                     onChange={(e) => {handleLastNameChange(e)}}
                                     className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-50' : ''}
+                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
                                     `}
                                 />
                             </div>
@@ -180,7 +227,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                 disabled={!isEditBtnClicked}
                                 onChange={(e) => {handleContactChange(e)}}
                                 className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-50' : ''}
+                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
                                     `}
                             />
                         </div>
@@ -194,7 +241,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                 disabled={!isEditBtnClicked}
                                 onChange={(e) => {handleAddressChange(e)}}
                                 className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-50' : ''}
+                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
                                     `}
                             />
                         </div>

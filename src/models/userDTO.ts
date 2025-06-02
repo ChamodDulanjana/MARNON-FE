@@ -1,11 +1,11 @@
 
 export interface UserDTO{
-    id?: string;
+    id?: number | null;
     name: string;
-    email?: string;
+    email: string;
     contact: string;
     address: string;
-    role?: string;
+    role: string;
     createDate?: string;
     createBy?: string;
     modifyDate?: string;
