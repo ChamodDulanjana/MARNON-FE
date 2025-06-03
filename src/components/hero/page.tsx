@@ -2,7 +2,7 @@
 
 const Hero = () => {
     return (
-        <div className="w-full h-full flex items-center justify-center bg-transparent overflow-auto">
+        <div className="w-full h-screen flex items-center justify-center bg-transparent overflow-auto">
             <span className="flex justify-center items-center text-[80px] sm:text-[150px] lg:text-[250px] xl:text-[350px] font-light tracking-wider text-white h-full font-abel">
                 MARNON
             </span>

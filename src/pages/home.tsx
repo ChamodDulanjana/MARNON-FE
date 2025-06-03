@@ -5,7 +5,7 @@ import landing_image from "../assets/img/landing_image.png"
 const Home = () => {
     return (
         <div 
-            className="w-full h-screen bg-cover bg-center bg-fixed"
+            className="w-full min-h-screen bg-cover bg-center bg-fixed"
             style={{ backgroundImage: `url(${landing_image})` }}
         >
             <Hero />
