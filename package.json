@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroui/avatar": "^2.2.15",
     "@heroui/drawer": "^2.2.16",
+    "@heroui/dropdown": "^2.3.20",
     "@heroui/react": "^2.7.8",
     "@heroui/toast": "^2.0.9",
     "@heroui/tooltip": "^2.2.16",

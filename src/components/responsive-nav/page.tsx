@@ -51,7 +51,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
         >
             <DrawerContent>
                 <DrawerBody>
-                    <ul className='space-y-3 mt-10 text-[15px] text-gray-600'>
+                    <ul className='space-y-3 mt-10 text-[15px] text-gray-600 font-semibold'>
                         <li
                             className="cursor-pointer w-full hover:translate-x-2 transition-all duration-300 ease-in-out"
                             onClick={onClose}
@@ -81,6 +81,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                     {/*Cart & User*/}
                     <div className="flex flex-col gap-5 text-gray-600">
                         <ul className='space-y-3 mt-10 text-[15px] text-gray-600 font-semibold'>
+                            {/*Cart*/}
                             <li
                                 className="cursor-pointer w-full"
                                 onClick={onClose}
@@ -93,6 +94,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                 </Link>
                             </li>
                             {isLoggedIn ? (
+                                /*User Profile*/
                                 <li
                                     className="cursor-pointer w-full"
                                     onClick={onClose}
@@ -106,6 +108,8 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                     </span>
                                 </li>
                             ) : (
+
+                                /*Login Btn*/
                                 <li
                                     className="cursor-pointer w-full"
                                     onClick={handelLogin}
@@ -116,6 +120,8 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                     </span>
                                 </li>
                             )}
+
+                            {/*Admin Dashboard*/}
                             {isLoggedIn && role === 'ADMIN' && (
                                 <li
                                     className="cursor-pointer w-full"
@@ -129,6 +135,8 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                     </Link>
                                 </li>
                             )}
+
+                            {/*Logout Btn*/}
                             {isLoggedIn && (
                                 <li
                                     className="cursor-pointer w-full text-red-500"

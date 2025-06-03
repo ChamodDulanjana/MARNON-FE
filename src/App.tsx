@@ -5,12 +5,12 @@ import ShopCategory from "./pages/shopCategory.tsx";
 import { HeroUIProvider } from "@heroui/react";
 import {ToastProvider} from "@heroui/toast";
 import ProductDisplay from "./pages/product.tsx";
-import {useEffect, useState} from "react";
-import LoadingAnimation from "./components/loading-animation/page.tsx";
+/*import {useEffect, useState} from "react";
+import LoadingAnimation from "./components/loading-animation/page.tsx";*/
 import {AuthContextProvider} from "./context/authContext.tsx";
 
 function App() {
-    const [isLoaded, setIsLoaded] = useState(false);
+    /*const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const handlePageLoad = () => {
@@ -25,9 +25,9 @@ function App() {
             window.addEventListener("load", handlePageLoad);
             return () => window.removeEventListener("load", handlePageLoad);
         }
-    }, []);
+    }, []);*/
 
-    if (!isLoaded) return <LoadingAnimation />;
+    //if (!isLoaded) return <LoadingAnimation />;
 
   return (
     <section className="w-full h-full">

@@ -1,7 +1,7 @@
 import { LuShoppingCart } from "react-icons/lu";
 import { FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
-import {Avatar, useDisclosure} from "@heroui/react";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure} from "@heroui/react";
 import SignIn from "../../components/sign-in/page.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
@@ -11,20 +11,46 @@ import {useEffect} from "react";
 import {Tooltip} from "@heroui/tooltip";
 import UserProfile from "../../components/user-profile/page.tsx";
 import {useAuthContext} from "../../context/authContext.tsx";
+import {IoPower, IoSettingsOutline} from "react-icons/io5";
+import {MdAdminPanelSettings} from "react-icons/md";
+import {clearStorage} from "../../services/storageService.ts";
+import { Key } from "@react-types/shared";
 
 const Header = () => {
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
-    const {isOpen: isLoginOpen, onOpen: loginOnOpen, onOpenChange: isLoginOpenChange, onClose: loginOnClose} = useDisclosure();
-    const {isOpen: isSignupOpen, onOpen: signupOnOpen, onOpenChange: isSignupOpenChange, onClose: signUpOnClose} = useDisclosure();
+    const {
+        isOpen: isLoginOpen,
+        onOpen: loginOnOpen,
+        onOpenChange: isLoginOpenChange,
+        onClose: loginOnClose
+    } = useDisclosure();
+    const {
+        isOpen: isSignupOpen,
+        onOpen: signupOnOpen,
+        onOpenChange: isSignupOpenChange,
+        onClose: signUpOnClose
+    } = useDisclosure();
     const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();
     const isWide = useIsScreenWide(850);
-    const { isLoggedIn, userName, role } = useAuthContext();
+    const {isLoggedIn, role} = useAuthContext();
 
     useEffect(() => {
-        if (isWide){
+        if (isWide) {
             onClose(); // Close the responsive nav when the screen is wide
         }
     }, [isWide, onClose]);
+
+    // Handle dropdown action
+    const handleDropdownAction = (key: Key) => {
+        if (key === 'logout') {
+            clearStorage();
+            window.location.href = '/'; // Redirect to home page after logout
+        } else if (key === 'account') {
+            UserProfileOnOpen();
+        } else if (key === 'admin') {
+            window.location.href = '/admin/dashboard'; // Redirect to admin dashboard
+        }
+    };
 
     return (
         <div className={`w-full bg-black text-white flex items-center justify-around px-10 max-sm:px-5 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
@@ -51,33 +77,65 @@ const Header = () => {
 
             {/*Cart & User*/}
             <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
+                {/*Cart Icon*/}
                 <Tooltip content="Cart" placement={'bottom'}>
                     <Link to='/checkout/cart'>
                         <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
                     </Link>
                 </Tooltip>
-                { isLoggedIn ? (
-                    <Tooltip content={userName} placement={'bottom'}>
-                        <Avatar
-                            name={userName ? userName[0].toUpperCase() : ''}
-                            size={"sm"}
-                            className='text-[15px] cursor-pointer font-poppins'
-                            onClick={() => UserProfileOnOpen()}
-                        />
-                    </Tooltip>
-                ) : (
+
+                {/*User Icon*/}
+                { !isLoggedIn && (
                     <Tooltip content="Login" placement={'bottom'}>
                         <span onClick={loginOnOpen} className='text-white text-xl cursor-pointer'><FiUser /></span>
                     </Tooltip>
                 )}
-                { isLoggedIn && role === 'ADMIN' && (
-                    <Link to="/admin/dashboard">
-                        <button
-                            className='px-4 py-2 rounded-lg text-white font-poppins text-[12px] text-sm font-semibold bg-black border-2 border-white hover:bg-[#ecf0f1] hover:text-black transition-all duration-300 ease-in-out'
+
+                {/*Setting / Dropdown*/}
+                { isLoggedIn && (
+                    <Dropdown className='font-poppins mt-2'>
+                        <DropdownTrigger>
+                            <div>
+                                <Tooltip content="Setting" placement={'bottom'}>
+                                    <IoSettingsOutline className='text-xl outline-0 cursor-pointer'/>
+                                </Tooltip>
+                            </div>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                            aria-label="Static Actions"
+                            onAction={(key) => handleDropdownAction(key)}
                         >
-                            Admin Dashboard
-                        </button>
-                    </Link>
+                            {/*User Profile*/}
+                            <DropdownItem
+                                key="account"
+                                className='flex flex-row gap-2'
+                                startContent={<FiUser className='text-sm -mt-px'/>}
+                            >
+                                Account
+                            </DropdownItem>
+
+                            {/*Admin Dashboard*/}
+                            { isLoggedIn && role === 'ADMIN' ? (
+                                <DropdownItem
+                                    key="admin"
+                                    startContent={<MdAdminPanelSettings className='text-sm -mt-px'/>}
+                                >
+                                    Admin Dashboard
+                                </DropdownItem>
+
+                            ) : null }
+
+                            {/*Logout*/}
+                            <DropdownItem
+                                key="logout"
+                                className="text-danger"
+                                color="danger"
+                                startContent={<IoPower className='text-sm -mt-px'/>}
+                            >
+                                Logout
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                 )}
             </div>
 
