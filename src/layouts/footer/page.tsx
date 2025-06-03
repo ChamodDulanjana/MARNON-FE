@@ -5,6 +5,14 @@ import {Link} from "react-router-dom";
 import {CiLocationOn, CiPhone} from "react-icons/ci";
 
 const Footer = () => {
+
+    const scrollToTop = () => {
+        setTimeout(
+            () => window.scrollTo({ top: 0, behavior: 'auto' }),
+            10
+        )
+    }
+
     return (
         <div className='w-full bg-black flex flex-col items-center justify-start px-8 pt-10 pb-5 z-20 relative bottom-0'>
             <div className='flex items-start justify-around w-full max-[860px]:flex-col max-[860px]:items-center max-[860px]:space-y-20'>
@@ -34,14 +42,14 @@ const Footer = () => {
                 <div className='space-y-5 mt-2'>
                     <h2 className='text-white text-2xl font-semibold tracking-normal'>Important Links</h2>
                     <ul className='text-white space-y-2 max-[860px]:flex max-[860px]:flex-col max-[860px]:items-center max-[860px]:space-y-5'>
-                        <li className='cursor-pointer hover:underline'>
-                            <Link to='/'>FAQs</Link>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
+                            <Link to='/information/faq'>FAQs</Link>
                         </li>
-                        <li className='cursor-pointer hover:underline'>
-                            <Link to='/men'>Privacy Policy</Link>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
+                            <Link to='/information/privacy-and-policy'>Privacy Policy</Link>
                         </li>
-                        <li className='cursor-pointer hover:underline'>
-                            <Link to='/women'>Terms & Conditions</Link>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
+                            <Link to='/information/terms-and-conditions'>Terms & Conditions</Link>
                         </li>
                     </ul>
                 </div>
@@ -50,16 +58,16 @@ const Footer = () => {
                 <div className='space-y-5 mt-2'>
                     <h2 className='text-white text-2xl font-semibold tracking-normal'>Featured Links</h2>
                     <ul className='text-white space-y-2 max-[860px]:flex max-[860px]:flex-col max-[860px]:items-center max-[860px]:space-y-5'>
-                        <li className='cursor-pointer hover:underline'>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
                             <Link to='/'>Home</Link>
                         </li>
-                        <li className='cursor-pointer hover:underline'>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
                             <Link to='/men'>Men</Link>
                         </li>
-                        <li className='cursor-pointer hover:underline'>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
                             <Link to='/women'>Women</Link>
                         </li>
-                        <li className='cursor-pointer hover:underline'>
+                        <li className='cursor-pointer hover:underline' onClick={scrollToTop}>
                             <Link to='/kids'>Kids</Link>
                         </li>
                     </ul>
