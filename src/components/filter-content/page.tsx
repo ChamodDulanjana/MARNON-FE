@@ -5,6 +5,9 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {getAllActiveSizes} from "../../services/sizeService.ts";
 import {useParams} from "react-router-dom";
+import {useQuery} from "@tanstack/react-query";
+import LoadingAnimation from "../loading-animation/page.tsx";
+import NotFound from "../../pages/notFound.tsx";
 
 type FilterContentProps = {
     filters: FilterProductDTO;
@@ -23,28 +26,26 @@ type SizeProps = {
 
 const FilterContent = ({filters, setFilters}: FilterContentProps) => {
     const { category } = useParams<{ category: string }>();
-    const [sizes, setSizes] = useState<SizeProps[]>([]);
     const [isSizeDropdownClicked, setIsSizeDropdownClicked] = useState<boolean>(false);
     const [isColorDropdownClicked, setIsColorDropdownClicked] = useState<boolean>(false);
 
     // load sizes from backend
-    useEffect(() => {
-        const loadSizes = async () => {
-            try {
-                const data = await getAllActiveSizes();
-                setSizes(data);
-            } catch (err) {
-                console.error('Failed to load sizes', err);
-            }
-        };
-
-        loadSizes();
-    }, []);
+    const {
+        isLoading,
+        isError,
+        data: sizes = [], // default to an empty array
+    } = useQuery({
+        queryKey: ['sizes'],
+        queryFn: () => getAllActiveSizes()
+    })
 
     useEffect(() => {
         setIsColorDropdownClicked(false);
         setIsSizeDropdownClicked(false);
     }, [category]);
+
+    if (isLoading) return <LoadingAnimation />;
+    if (isError)   return <NotFound />;
 
     return (
         <div>
