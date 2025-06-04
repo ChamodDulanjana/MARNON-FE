@@ -4,6 +4,11 @@ import { FilterProductDTO } from '../models/filterProductDTO';
 const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/product';
 
+export const getAllProducts = async () => {
+    const response = await axios.get(API_BASE_URL + SUB_URL + '/all/products');
+    return response.data.data;
+}
+
 export const getProductsByCategory = async (category: string)=> {
     const response = await axios.get(API_BASE_URL + SUB_URL + '/all/products/' + category);
     return response.data;

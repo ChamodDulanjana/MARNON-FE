@@ -10,7 +10,7 @@ import Footer from "./layouts/footer/page.tsx";
 
 function App() {
     return (
-        <section className="w-full h-full">
+        <section className="w-full h-full overflow-y-hidden">
             <BrowserRouter>
                 <HeroUIProvider>
                     <ToastProvider/>
