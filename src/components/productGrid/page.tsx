@@ -5,7 +5,7 @@ import LoadingAnimation from "../loading-animation/page.tsx";
 import NotFound from "../../pages/notFound.tsx";
 import {FilterProductDTO} from "../../models/filterProductDTO.ts";
 
-type ProductProp = {
+export type ProductProp = {
     id: number,
     name: string,
     description: string,
