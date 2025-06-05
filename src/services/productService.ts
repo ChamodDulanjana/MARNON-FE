@@ -11,12 +11,12 @@ export const getAllProducts = async () => {
 
 export const getProductsByCategory = async (category: string)=> {
     const response = await axios.get(API_BASE_URL + SUB_URL + '/all/products/' + category);
-    return response.data;
+    return response.data.data;
 }
 
 export const getProductById = async (id: string | undefined)=> {
     const response = await axios.get(API_BASE_URL + SUB_URL + '/' + id);
-    return response.data;
+    return response.data.data;
 }
 
 export const getFilteredProducts = async (filterProductDTO: FilterProductDTO) => {

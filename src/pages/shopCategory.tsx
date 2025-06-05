@@ -43,6 +43,14 @@ const ShopCategory = () => {
         )
     }, [header]);
 
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'auto'  // Optional: 'auto' or 'smooth'
+        })
+    }, []);
+
     return (
         <div className='w-full flex flex-col justify-center items-center mb-10'>
             <span className='mt-14 text-3xl font-inter font-bold'>{header}</span>

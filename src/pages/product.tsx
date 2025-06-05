@@ -2,8 +2,11 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getProductById} from "../services/productService.ts";
 import {colors} from "../assets/data/colors.ts";
+import {useQuery} from "@tanstack/react-query";
+import LoadingAnimation from "@/components/loading-animation/page.tsx";
+import NotFound from "@/pages/notFound.tsx";
 
-type ProductProp = {
+type ProductType = {
     id: number,
     name: string,
     description: string,
@@ -28,27 +31,38 @@ type ProductProp = {
 
 const ProductDisplay = () => {
     const {productId} = useParams();
-    const [product, setProduct] = useState<ProductProp>({
-        id: 0,
-        name: "",
-        description: "",
-        oldPrice: 0,
-        newPrice: 0,
-        color: "",
-        image: [],
-        size: [],
-        category: [],
-    });
     const [selectedSize, setSelectedSize] = useState<string>("S");
     const [quantity, setQuantity] = useState<number>(1);
 
-    useEffect(() => {
-        if (!productId) return;
+    const {
+        isLoading,
+        isError,
+        data: product = {
+            id: 0,
+            name: "",
+            description: "",
+            oldPrice: 0,
+            newPrice: 0,
+            color: "",
+            image: [],
+            size: [],
+            category: [],
+        },      // default to an empty object
+    } = useQuery<ProductType>({
+        queryKey: ['product', productId],
+        queryFn: () => getProductById(productId)
+    });
 
-        getProductById(productId)
-            .then((resp) => setProduct(resp.data))
-            .catch((err) => console.error("Error fetching product", err));
-    }, [productId]);
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'auto'  // Optional: 'auto' or 'smooth'
+        })
+    }, []);
+
+    if (isLoading) return <LoadingAnimation />;
+    if (isError)   return <NotFound />;
 
     return (
         <div className="flex flex-col lg:flex-row gap-14 p-6 lg:p-16 max-w-7xl mx-auto">

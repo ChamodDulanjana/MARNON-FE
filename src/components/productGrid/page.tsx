@@ -1,9 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {getFilteredProducts} from "../../services/productService.ts";
+import {getFilteredProducts} from "@/services/productService.ts";
 import {Link} from "react-router-dom";
 import LoadingAnimation from "../loading-animation/page.tsx";
 import NotFound from "../../pages/notFound.tsx";
-import {FilterProductDTO} from "../../models/filterProductDTO.ts";
+import {FilterProductDTO} from "@/models/filterProductDTO.ts";
 
 export type ProductProp = {
     id: number,
@@ -44,13 +44,7 @@ const ProductGrid = ({filters}: ProductGridProps) => {
                 <div className='grid grid-cols-4 max-2xl:grid-cols-3 max-md:grid-cols-2 w-full gap-5 mb-5'>
                     {products.map((product: ProductProp, index: number) => {
                         return(
-                            <Link to={`/product/${product.id}`} key={index} onClick={() =>{
-                                window.scrollTo({
-                                    top: 0,
-                                    left: 0,
-                                    behavior: 'auto'  // Optional: 'auto' or 'smooth'
-                                });
-                            }}>
+                            <Link to={`/product/${product.id}`} key={index}>
                                 <div
                                     key={index}
                                     className='max-w-64 flex flex-col relative'
