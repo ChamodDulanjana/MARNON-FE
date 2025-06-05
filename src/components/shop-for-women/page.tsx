@@ -63,7 +63,7 @@ const ShopForWomen = () => {
 
             <div className="w-full h-fit flex flex-col lg:flex-row py-10 gap-4">
                 {/*Img area*/}
-                <div className="max-lg:w-full aspect-video bg-cover bg-center rounded-lg shadow-lg w-[776px] min-[2560px]:my-12 min-[2560px]:w-[1600px] "
+                <div className="max-lg:w-full aspect-video bg-cover lg:bg-center rounded-lg shadow-lg w-[776px] min-[2560px]:my-12 min-[2560px]:w-[1600px] "
                      style={{backgroundImage: `url(${imageUrl})`}}>
 
                 </div>

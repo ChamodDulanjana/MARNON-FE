@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 
 const carouselItemStyle = 'basis-1/2  md:basis-1/3 lg:basis-1/2 xl:basis-1/3';
 
-const ShopForMen = () => {
+const ShopForKids = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
@@ -20,14 +20,14 @@ const ShopForMen = () => {
         isError: isProductsError,
         data: products = [],      // default to an empty array
     } = useQuery({
-        queryKey: ['Men'],
-        queryFn: () => getProductsByCategoryAndCount('Men', 10),
+        queryKey: ['Kids'],
+        queryFn: () => getProductsByCategoryAndCount('Kid', 10),
     });
 
     useEffect(() => {
         // Fetching the home display image
         const fetchHomeDisplayImage = async () => {
-            const response = await getHomeDisplayImgByType('men');
+            const response = await getHomeDisplayImgByType('kids');
 
             if (response.statusCode === 200) {
                 setImageUrl(response.data.imageUrl);
@@ -51,12 +51,12 @@ const ShopForMen = () => {
 
     return (
         <div className="w-full h-full flex flex-col items-start justify-start bg-white py-8 lg:py-12 px-4 lg:px-10 xl:px-20 font-poppins min-[2560px]:py-28">
-            <h1 className="text-xl lg:text-3xl min-[2560px]:text-5xl font-bold whitespace-nowrap mb-4 min-[2560px]:mb-8">Shop For Men</h1>
+            <h1 className="text-xl lg:text-3xl min-[2560px]:text-5xl font-bold whitespace-nowrap mb-4 min-[2560px]:mb-8">Shop For Kids</h1>
             <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 text-justify'>
-                We are excited to bring you fresh and innovative products that combine style, functionality, and quality. Here’s a sneak peek at what’s new
+                Make every day playful and stylish with our adorable kids’ collection. From comfy basics to colorful outfits, explore everything you need to keep your little ones looking and feeling their best.
             </p>
             <Button className='mt-5 min-[2560px]:mt-8 min-[2560px]:h-14 min-[2560px]:w-36'>
-                <Link to='/men'>
+                <Link to='/kids'>
                     <span className="text-xs lg:text-sm min-[2560px]:text-lg font-semibold">Shop Now</span>
                 </Link>
             </Button>
@@ -74,4 +74,4 @@ const ShopForMen = () => {
     );
 };
 
-export default ShopForMen;
+export default ShopForKids;
