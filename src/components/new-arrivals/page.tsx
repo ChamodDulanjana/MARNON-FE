@@ -20,9 +20,9 @@ const NewArrivals = () => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className="w-full min-h-screen flex flex-col items-start justify-start bg-white py-16 px-4 lg:px-10 xl:px-20 font-poppins min-[2560px]:py-28">
+        <div className="w-full h-full flex flex-col items-start justify-start bg-white py-8 lg:py-12 px-4 lg:px-10 xl:px-20 font-poppins min-[2560px]:py-28">
             <h1 className="text-xl lg:text-3xl min-[2560px]:text-5xl font-bold whitespace-nowrap mb-4 min-[2560px]:mb-8">New Arrivals</h1>
-            <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 text-justify'>
+            <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 text-justify mb-8'>
                 We are excited to bring you fresh and innovative products that combine style, functionality, and quality. Here’s a sneak peek at what’s new
             </p>
 

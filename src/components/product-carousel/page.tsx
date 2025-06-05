@@ -9,7 +9,7 @@ type ProductCarouselProp = {
 
 const ProductCarousel = ({products, carouselItemStyle} : ProductCarouselProp) => {
     return (
-        <div className="w-full mt-10 min-[2560px]:mt-12">
+        <div className="w-full min-[2560px]:mt-12">
             <Carousel
                 opts={{
                     align: "start",
@@ -19,13 +19,7 @@ const ProductCarousel = ({products, carouselItemStyle} : ProductCarouselProp) =>
                 <CarouselContent>
                     {products.map((product: ProductProp, index: number) => (
                         <CarouselItem key={index} className={carouselItemStyle}>
-                            <Link to={`/product/${product.id}`} key={index} onClick={() =>{
-                                window.scrollTo({
-                                    top: 0,
-                                    left: 0,
-                                    behavior: 'auto'  // Optional: 'auto' or 'smooth'
-                                });
-                            }}>
+                            <Link to={`/product/${product.id}`} key={index}>
                                 <div
                                     key={index}
                                     className='w-full flex flex-col relative'
