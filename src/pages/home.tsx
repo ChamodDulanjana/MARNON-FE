@@ -11,9 +11,11 @@ const Home = () => {
             style={{ backgroundImage: `url(${landing_image})` }}
         >
             <Hero />
-            <Popular />
-            <NewArrivals />
-            <ShopForMen />
+            <div className='w-full h-full bg-white'>
+                <Popular />
+                <NewArrivals />
+                <ShopForMen />
+            </div>
         </div>
     );
 };

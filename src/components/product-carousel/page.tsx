@@ -25,7 +25,7 @@ const ProductCarousel = ({products, carouselItemStyle} : ProductCarouselProp) =>
                                     className='w-full flex flex-col relative'
                                 >
                                     <div
-                                        className='w-full h-[300px] min-[470px]:h-[400px] min-[600px]:h-[500px] 2xl:h-[600px] min-[2560px]:h-[900px]  rounded-md  bg-center bg-cover'
+                                        className='w-full h-[300px] min-[470px]:h-[400px] min-[600px]:h-[500px] 2xl:h-[600px] min-[2560px]:h-[900px]  rounded-md  bg-center bg-cover transition-all duration-300 ease-in-out'
                                         style={{
                                             backgroundImage: `url(${product.image})`,
                                         }}
