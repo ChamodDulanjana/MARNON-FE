@@ -28,14 +28,14 @@ const ProductCarousel = ({products, carouselItemStyle} : ProductCarouselProp) =>
             >
                 <CarouselContent>
                     {products.map((product: ProductProp, index: number) => (
-                        <CarouselItem key={index} className={`lg:pl-6 min-[2560px]:pl-10 ${carouselItemStyle}`}>
+                        <CarouselItem key={index} className={`lg:pl-6 ${carouselItemStyle}`}>
                             <Link to={`/product/${product.id}`} key={index}>
                                 <div
                                     key={index}
                                     className='w-full flex flex-col relative'
                                 >
                                     <div
-                                        className='w-full h-[200px] min-[375px]:h-[260px] min-[768px]:h-[340px] min-[1044px]:h-[440px] 2xl:h-[450px] min-[2560px]:h-[740px]  rounded-md min-[2560px]:rounded-xl  bg-center bg-cover transition-all duration-300 ease-in-out'
+                                        className='w-full h-[200px] min-[340px]:h-[260px] min-[400px]:h-[300px] min-[480px]:h-[400px] min-[920px]:h-[440px] lg:h-[360px] xl:h-[400px] min-[1700px]:h-[550px] min-[2260px]:h-[740px]  rounded-md min-[2560px]:rounded-xl  bg-center bg-cover transition-all duration-300 ease-in-out'
                                         style={{
                                             backgroundImage: `url(${product.image})`,
                                         }}

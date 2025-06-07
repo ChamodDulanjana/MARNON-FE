@@ -50,9 +50,9 @@ const ShopForKids = () => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className="w-full h-full flex flex-col items-start justify-start bg-white py-8 lg:py-12 px-4 lg:px-10 xl:px-20 min-[2560px]:px-40 font-poppins min-[2560px]:py-28">
+        <div className="w-full h-full flex flex-col items-start justify-start bg-white pb-10 px-4 lg:px-10 xl:px-20 min-[2560px]:px-40 font-poppins min-[2560px]:py-20">
             <h1 className="text-xl lg:text-3xl min-[2560px]:text-5xl font-bold whitespace-nowrap mb-4 min-[2560px]:mb-8">Shop For Kids</h1>
-            <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 text-justify'>
+            <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 max-sm:leading-4 text-justify'>
                 Make every day playful and stylish with our adorable kids’ collection. From comfy basics to colorful outfits, explore everything you need to keep your little ones looking and feeling their best.
             </p>
             <Button className='mt-5 min-[2560px]:mt-8 min-[2560px]:h-14 min-[2560px]:w-36'>
