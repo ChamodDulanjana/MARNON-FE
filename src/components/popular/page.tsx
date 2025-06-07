@@ -20,7 +20,7 @@ const Popular = () => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className="w-full h-full flex flex-col items-start justify-start bg-white py-8 lg:py-12 px-4 lg:px-10 xl:px-20 font-poppins min-[2560px]:py-28">
+        <div className="w-full h-full flex flex-col items-start justify-start bg-white pb-4 px-4 lg:px-10 xl:px-20 min-[2560px]:px-40 font-poppins min-[2560px]:py-20">
             <h1 className="text-xl lg:text-3xl min-[2560px]:text-5xl font-bold whitespace-nowrap mb-4 min-[2560px]:mb-8 mt-6 lg:mt-12">Popular Items</h1>
             <p className='text-[12px] lg:text-sm min-[2560px]:text-xl w-full sm:w-[448px] min-[2560px]:w-[630px] leading-5 text-justify mb-8'>
                 Explore our most-loved styles in one place. From best-selling outfits to must-have accessories,
