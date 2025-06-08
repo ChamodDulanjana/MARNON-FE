@@ -127,7 +127,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                     className="cursor-pointer w-full"
                                     onClick={onClose}
                                 >
-                                    <Link to="/admin/dashboard">
+                                    <Link to="/admin-panel">
                                         <span className='flex gap-2'>
                                             <MdAdminPanelSettings className='text-lg mt-[2px]'/>
                                             Admin Dashboard

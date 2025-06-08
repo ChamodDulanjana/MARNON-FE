@@ -48,7 +48,7 @@ const Header = () => {
         } else if (key === 'account') {
             UserProfileOnOpen();
         } else if (key === 'admin') {
-            window.location.href = '/admin/dashboard'; // Redirect to admin dashboard
+            window.location.href = '/admin-panel'; // Redirect to admin dashboard
         }
     };
 
