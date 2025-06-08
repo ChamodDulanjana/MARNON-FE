@@ -7,6 +7,7 @@ import {ToastProvider} from "@heroui/toast";
 import ProductDisplay from "./pages/product.tsx";
 import {AuthContextProvider} from "./context/authContext.tsx";
 import Footer from "./layouts/footer/page.tsx";
+import AdminPanel from "./pages/adminPanel.tsx";
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                                 <Route path="/product" element={<ProductDisplay/>}>
                                     <Route path=":productId" element={<ProductDisplay/>}/>
                                 </Route>
+                                <Route path="/admin-panel" element={<AdminPanel/>}/>
                             </Routes>
                         </div>
                         <Footer/>
