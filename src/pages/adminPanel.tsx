@@ -33,23 +33,23 @@ const adminPanel = () => {
     }
     
   return (
-    <div className="w-full h-full overflow-y-hidden">
+    <div className="w-full overflow-y-hidden">
         {/* Admin Panel Layout */}
         <SidebarProvider>
-        <div className="flex">
+        <div className="flex w-full">
             {/* Admin Side Navigation */}
             <AdminSideNav />
 
             {/* Main Content Area */}
-            <div className="w-full flex-1 p-6">
+            <div className="w-full p-6">
                 {/* Page header */}
-                <div className="mb-4">
+                <div className="mb-6">
                     <div className="flex mb-1">
                         <Tooltip content="Toggle Navigation" placement="top">
-                            <SidebarTrigger/>
+                            <SidebarTrigger />
                         </Tooltip>
                         <Separator className="mr-2 ml-1 h-[15px] mt-[6px] border-[1px] border-gray-300" orientation="vertical"/>
-                        <h1 className="text-lg font-semibold -mt-[.5px]">{header}</h1>
+                        <h1 className="text-2xl font-semibold -mt-[4px]">{header}</h1>
                     </div>
                     <p className="text-gray-600 text-sm ml-[5px]">{description}</p>
                 </div>

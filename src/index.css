@@ -33,6 +33,12 @@
 
 /*---break---*/
 
+:root {
+  --color-men: #fdcb6e;
+  --color-women: #74b9ff;
+  --color-kid: #ff7675;
+}
+
 @layer base {
   :root {
 
