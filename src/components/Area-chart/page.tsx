@@ -14,25 +14,17 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
 import {useState} from "react";
 
 
-
 const chartData = [
-    { date: "2025-04-01", men: 248, women: 187, kid: 165 },
+    { date: "2025-04-01", men: 448, women: 187, kid: 265 },
     { date: "2025-04-02", men: 383, women: 108, kid: 109 },
     { date: "2025-04-03", men: 257, women: 124, kid: 219 },
     { date: "2025-04-04", men: 202, women: 118, kid: 280 },
     { date: "2025-04-05", men: 274, women: 145, kid: 181 },
     { date: "2025-04-06", men: 121, women: 245, kid: 234 },
-    { date: "2025-04-07", men: 256, women: 189, kid: 155 },
+    { date: "2025-04-07", men: 256, women: 189, kid: 355 },
     { date: "2025-04-08", men: 320, women: 150, kid: 130 },
     { date: "2025-04-09", men: 195, women: 261, kid: 144 },
     { date: "2025-04-10", men: 210, women: 132, kid: 258 },
@@ -118,17 +110,12 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const AreaChartForSales = () => {
-    const [timeRange, setTimeRange] = useState("90d")
+    const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("men")
 
     const filteredData = chartData.filter((item) => {
         const date = new Date(item.date)
         const referenceDate = new Date().toISOString().split('T')[0];
-        let daysToSubtract = 90
-        if (timeRange === "30d") {
-            daysToSubtract = 30
-        } else if (timeRange === "7d") {
-            daysToSubtract = 7
-        }
+        const daysToSubtract = 90 // Default to 90 days
         const startDate = new Date(referenceDate)
         startDate.setDate(startDate.getDate() - daysToSubtract)
         return date >= startDate
@@ -137,41 +124,40 @@ const AreaChartForSales = () => {
     return (
         <div className='w-full mt-2'>
             <Card>
-                <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+                <CardHeader className="flex items-center gap-2 space-y-0 border-b py-3 sm:flex-row">
                     <div className="grid flex-1 gap-1 text-center sm:text-left">
                         <CardTitle>Product Sales</CardTitle>
                         <CardDescription>
                             Showing total sales for the last 3 months
                         </CardDescription>
                     </div>
-                    <Select value={timeRange} onValueChange={setTimeRange}>
-                        <SelectTrigger
-                            className="w-[160px] rounded-lg sm:ml-auto"
-                            aria-label="Select a value"
-                        >
-                            <SelectValue placeholder="Last 3 months" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl">
-                            <SelectItem value="90d" className="rounded-lg">
-                                Last 3 months
-                            </SelectItem>
-                            <SelectItem value="30d" className="rounded-lg">
-                                Last 30 days
-                            </SelectItem>
-                            <SelectItem value="7d" className="rounded-lg">
-                                Last 7 days
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+
+                    <div className="flex">
+                        {["men", "women", "kid"].map((key) => {
+                            const chart = key as keyof typeof chartConfig
+                            return (
+                                <button
+                                    key={chart}
+                                    data-active={activeChart === chart}
+                                    className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
+                                    onClick={() => setActiveChart(chart)}
+                                >
+                                    <span className="text-sm text-muted-foreground">
+                                      {chartConfig[chart].label}
+                                    </span>
+                                </button>
+                            )
+                        })}
+                    </div>
                 </CardHeader>
                 <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
                     <ChartContainer
                         config={chartConfig}
-                        className="aspect-auto h-[250px] w-full"
+                        className="aspect-auto h-[300px] w-full"
                     >
                         <AreaChart data={filteredData}>
                             <defs>
-                                <linearGradient id="fillMen" x1="0" y1="0" x2="0" y2="1">
+                                <linearGradient id="fillmen" x1="0" y1="0" x2="0" y2="1">
                                     <stop
                                         offset="5%"
                                         stopColor="var(--color-men)"
@@ -183,7 +169,7 @@ const AreaChartForSales = () => {
                                         stopOpacity={0.1}
                                     />
                                 </linearGradient>
-                                <linearGradient id="fillWomen" x1="0" y1="0" x2="0" y2="1">
+                                <linearGradient id="fillwomen" x1="0" y1="0" x2="0" y2="1">
                                     <stop
                                         offset="5%"
                                         stopColor="var(--color-women)"
@@ -195,7 +181,7 @@ const AreaChartForSales = () => {
                                         stopOpacity={0.1}
                                     />
                                 </linearGradient>
-                                <linearGradient id="fillKid" x1="0" y1="0" x2="0" y2="1">
+                                <linearGradient id="fillkid" x1="0" y1="0" x2="0" y2="1">
                                     <stop
                                         offset="5%"
                                         stopColor="var(--color-kid)"
@@ -237,26 +223,12 @@ const AreaChartForSales = () => {
                                     />
                                 }
                             />
+
                             <Area
-                                dataKey="men"
+                                dataKey={activeChart}
                                 type="natural"
-                                fill="url(#fillMen)"
-                                stroke="var(--color-men)"
-                                stackId="a"
-                            />
-                            <Area
-                                dataKey="women"
-                                type="natural"
-                                fill="url(#fillWomen)"
-                                stroke="var(--color-women)"
-                                stackId="a"
-                            />
-                            <Area
-                                dataKey="kid"
-                                type="natural"
-                                fill="url(#fillKid)"
-                                stroke="var(--color-kid)"
-                                stackId="a"
+                                fill={`url(#fill${activeChart})`}
+                                stroke={`var(--color-${activeChart})`}
                             />
                             <ChartLegend content={<ChartLegendContent />} />
                         </AreaChart>

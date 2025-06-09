@@ -41,10 +41,10 @@ const adminPanel = () => {
             <AdminSideNav />
 
             {/* Main Content Area */}
-            <div className="w-full p-6">
+            <div className="w-full px-6 py-8">
                 {/* Page header */}
-                <div className="mb-6">
-                    <div className="flex mb-1">
+                <div className="mb-10">
+                    <div className="flex mb-2">
                         <Tooltip content="Toggle Navigation" placement="top">
                             <SidebarTrigger />
                         </Tooltip>
