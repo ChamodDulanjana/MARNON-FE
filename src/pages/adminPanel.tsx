@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import AdminSideNav from "@/layouts/admin-side-nav/page"
+import { Tooltip } from "@heroui/react";
 import { Outlet, useLocation } from "react-router-dom"
 
 let header = 'Dashboard';
@@ -43,8 +44,10 @@ const adminPanel = () => {
             <div className="w-full flex-1 p-6">
                 {/* Page header */}
                 <div className="mb-4">
-                    <div className="flex mb-2">
-                        <SidebarTrigger/>
+                    <div className="flex mb-1">
+                        <Tooltip content="Toggle Navigation" placement="top">
+                            <SidebarTrigger/>
+                        </Tooltip>
                         <Separator className="mr-2 ml-1 h-[15px] mt-[6px] border-[1px] border-gray-300" orientation="vertical"/>
                         <h1 className="text-lg font-semibold -mt-[.5px]">{header}</h1>
                     </div>
