@@ -1,35 +1,39 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+import { TfiDashboard } from "react-icons/tfi";
+import { PiDressDuotone } from "react-icons/pi";
+import { BiCategoryAlt } from "react-icons/bi";
+import { IoResizeSharp } from "react-icons/io5";
+import { FiUser } from "react-icons/fi";
+import { FaRegImages } from "react-icons/fa6";
 
 export const menus = [
   {
     title: "Dashboard",
     url: "/admin-panel/dashboard",
-    icon: Home,
+    icon: TfiDashboard,
   },
   {
     title: "Products",
     url: "/admin-panel/products",
-    icon: Inbox,
+    icon: PiDressDuotone,
   },
   {
     title: "Category",
     url: "/admin-panel/category",
-    icon: Calendar,
+    icon: BiCategoryAlt,
   },
   {
     title: "Sizes",
     url: "/admin-panel/sizes",
-    icon: Search,
+    icon: IoResizeSharp,
   },
   {
     title: "Users",
     url: "/admin-panel/users",
-    icon: Settings,
+    icon: FiUser,
   },
   {
     title: "Home Page Images",
     url: "/admin-panel/home-page-images",
-    icon: Settings,
+    icon: FaRegImages,
   },
 ]
