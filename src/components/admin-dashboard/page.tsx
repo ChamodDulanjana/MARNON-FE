@@ -4,6 +4,8 @@ import { BsFillHandbagFill } from "react-icons/bs";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import AreaChart from "@/components/Area-chart/page.tsx";
+import PieChartByCategory from "@/components/pie-chart/page.tsx";
+import BarChart from "@/components/bar-chart/page.tsx";
 
 type FirstInfoCardsType = {
     totalCustomers: number;
@@ -67,6 +69,12 @@ const AdminDashboard = () => {
 
             {/*Area Chart*/}
             <AreaChart />
+
+            {/*Pie Chart & Bar chart*/}
+            <div className="w-full flex flex-col lg:flex-row gap-8 mt-6">
+                <PieChartByCategory />
+                <BarChart />
+            </div>
         </div>
     )
 }

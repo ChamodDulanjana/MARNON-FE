@@ -37,6 +37,10 @@
   --color-men: #A3CB38;
   --color-women: #74b9ff;
   --color-kid: #ff7675;
+
+  --color-men-pieChart: #9AECDB;
+  --color-women-pieChart: #f7d794;
+  --color-kid-pieChart: #f8a5c2;
 }
 
 @layer base {
