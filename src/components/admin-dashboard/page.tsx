@@ -16,7 +16,7 @@ type FirstInfoCardsType = {
 }
 
 const AdminDashboard = () => {
-    const [firstInfoCards, setFirstInfoCards] = useState<FirstInfoCardsType>({
+    const [firstInfoCards] = useState<FirstInfoCardsType>({
         totalCustomers: 1000,
         todayOrders: 1001,
         monthlyRevenue: 1002,
@@ -70,10 +70,12 @@ const AdminDashboard = () => {
             {/*Area Chart*/}
             <AreaChart />
 
-            {/*Pie Chart & Bar chart*/}
-            <div className="w-full flex flex-col lg:flex-row gap-8 mt-6">
+            {/*Bar chart*/}
+            <BarChart />
+
+            {/*Pie Chart */}
+            <div className="w-full flex flex-col lg:flex-row gap-4 mt-6">
                 <PieChartByCategory />
-                <BarChart />
             </div>
         </div>
     )

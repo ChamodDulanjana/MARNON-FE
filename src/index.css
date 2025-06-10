@@ -34,13 +34,17 @@
 /*---break---*/
 
 :root {
-  --color-men: #A3CB38;
-  --color-women: #74b9ff;
-  --color-kid: #ff7675;
+  --color-men: #74b9ff;
+  --color-women: #ff7675;
+  --color-kid: #A3CB38;
 
   --color-men-pieChart: #9AECDB;
-  --color-women-pieChart: #f7d794;
-  --color-kid-pieChart: #f8a5c2;
+  --color-women-pieChart: #f8a5c2;
+  --color-kid-pieChart: #f7d794;
+
+  --color-men-barChart: #74b9ff;
+  --color-women-barChart: #ff9ff3;
+  --color-kid-barChart: #fab1a0;
 }
 
 @layer base {

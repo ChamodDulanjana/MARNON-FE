@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card'
 import {
     ChartConfig,
-    ChartContainer,
+    ChartContainer, ChartLegend, ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
@@ -42,22 +42,22 @@ const chartConfig = {
 
 const PieChartByCategory = () => {
     const now = new Date();
-    const [date, setDate] = useState<{month: string, year: number}>({
+    const [date] = useState<{month: string, year: number}>({
         month: now.toLocaleString('default', { month: 'long' }),
         year: now.getFullYear(),
     });
 
     return (
-        <div className="w-full">
+        <div className="w-1/3 max-lg:w-full">
             <Card className="flex flex-col">
-                <CardHeader className="items-center pb-0">
+                <CardHeader className="items-center pb-1">
                     <CardTitle>Sales by Product Category</CardTitle>
                     <CardDescription>{`${date.month} - ${date.year}`}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 pb-0">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto aspect-square max-h-[250px]"
+                        className="mx-auto aspect-square max-h-[280px]"
                     >
                         <PieChart>
                             <ChartTooltip
@@ -78,6 +78,7 @@ const PieChartByCategory = () => {
                                     <Sector {...props} outerRadius={outerRadius + 10} />
                                 )}
                             />
+                            <ChartLegend content={<ChartLegendContent />} />
                         </PieChart>
                     </ChartContainer>
                 </CardContent>
