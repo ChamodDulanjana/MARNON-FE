@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { FilterProductDTO } from '../models/filterProductDTO';
+import {PaginationDTO} from "@/models/paginationDTO.ts";
 
 const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/product';
@@ -32,4 +33,10 @@ export const getProductsByCategoryAndCount = async (category: string, count: num
         }
     });
     return response.data.data;
+}
+
+export const getPopularProductsForAdmin = async (paginationDTO: PaginationDTO) => {
+    const response = await axios.post(API_BASE_URL + SUB_URL + '/all/admin/popular-products', paginationDTO);
+    return response.data;
+
 }

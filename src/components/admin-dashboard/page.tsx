@@ -6,6 +6,7 @@ import { FaHandHoldingDollar } from "react-icons/fa6";
 import AreaChart from "@/components/Area-chart/page.tsx";
 import PieChartByCategory from "@/components/pie-chart/page.tsx";
 import BarChart from "@/components/bar-chart/page.tsx";
+import TablePopularProducts from "@/components/table-popular-products/page.tsx";
 
 type FirstInfoCardsType = {
     totalCustomers: number;
@@ -73,9 +74,10 @@ const AdminDashboard = () => {
             {/*Bar chart*/}
             <BarChart />
 
-            {/*Pie Chart */}
-            <div className="w-full flex flex-col lg:flex-row gap-4 mt-6">
+            {/*Pie Chart & Popular-products-table*/}
+            <div className="w-full flex flex-col min-[1260px]:flex-row gap-6 mt-6">
                 <PieChartByCategory />
+                <TablePopularProducts />
             </div>
         </div>
     )
