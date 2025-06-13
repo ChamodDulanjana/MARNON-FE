@@ -77,6 +77,7 @@ const TablePopularProducts = () => {
                 </CardHeader>
                 <CardContent className="flex-1 p-0">
                     <Table
+                        aria-label='Popular Products Table'
                         bottomContent={
                             <div className="flex w-full justify-center">
                                 <Pagination
