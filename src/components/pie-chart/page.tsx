@@ -13,8 +13,11 @@ import {
     ChartTooltipContent,
 } from '@/components/ui/chart'
 import {PieSectorDataItem} from "recharts/types/polar/Pie";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {getProductSalesByMonthAndYear} from "@/services/productService.ts";
+import {useQuery} from "@tanstack/react-query";
+import LoadingAnimation from "@/components/loading-animation/page.tsx";
+import NotFound from "@/pages/notFound.tsx";
 
 type DateType = {
     monthNumber: number;
@@ -29,9 +32,6 @@ type ChartDataType = {
 }
 
 const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
     men: {
         label: "Men",
         color: "var(color-men-pieChart)",
@@ -53,12 +53,31 @@ const PieChartByCategory = () => {
         monthName: now.toLocaleString('default', { month: 'long' }),
         year: now.getFullYear(),
     })
-    const [chartData, setChartData] = useState<ChartDataType[]>([{
-        category: "",
-        sales: 0,
-        fill: "",
-    }])
-    
+
+    const fetchData = async () => {
+        const response = await getProductSalesByMonthAndYear(date.monthNumber, date.year);
+        if (response.statusCode === 200) {
+            const data: ChartDataType[] = response.data.map((item: {category: string, sales: number}) => ({
+                category: item.category.toLowerCase(),
+                sales: item.sales,
+                fill: setFillColor(item.category), // Set fill color based on category
+            }));
+            return data;
+        }
+        throw new Error('Failed to fetch sales data');
+    }
+
+    // Use react-query to fetch sales
+    const {
+        isLoading,
+        isError,
+        data: chartData = []  // Default values to avoid undefined errors
+    } = useQuery<ChartDataType[]>({
+        queryKey: ['sales', date.monthNumber, date.year],
+        queryFn: () => fetchData(),
+    });
+
+    // Function to set fill color based on category
     const setFillColor = (category: string): string =>  {
         switch (category) {
             case "Men":
@@ -72,23 +91,8 @@ const PieChartByCategory = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await getProductSalesByMonthAndYear(date.monthNumber, date.year);
-            if (response.statusCode === 200) {
-                const data: ChartDataType[] = response.data.map((item: {category: string, sales: number}) => ({
-                    category: item.category.toLowerCase(),
-                    sales: item.sales,
-                    fill: setFillColor(item.category), // Set fill color based on category
-                }));
-                setChartData(data);
-            }
-        }
-
-        fetchData();
-    }, [date.monthNumber, date.year]);
-
-    console.log(chartData)
+    if (isLoading) return <LoadingAnimation />;
+    if (isError)   return <NotFound />;
 
     return (
         <div className="w-1/3 max-[1260px]:w-full">
