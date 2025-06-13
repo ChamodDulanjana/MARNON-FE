@@ -56,3 +56,8 @@ export const getAllSalesInMonths = async () => {
     const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales/in-months');
     return response.data.data;
 }
+
+export const getAllSalesInDays = async (numberOfDays: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales/in-days/' + numberOfDays);
+    return response.data.data;
+}

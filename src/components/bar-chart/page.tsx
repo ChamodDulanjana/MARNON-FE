@@ -48,7 +48,7 @@ const BarChartForProduct = () => {
         isError,
         data: chartData = []  // Default values to avoid undefined errors
     } = useQuery<ChartDataType[]>({
-        queryKey: ['sales'],
+        queryKey: ['sales-bar-chart'],
         queryFn: () => getAllSalesInMonths(),
     });
 

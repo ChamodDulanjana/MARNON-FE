@@ -73,7 +73,7 @@ const PieChartByCategory = () => {
         isError,
         data: chartData = []  // Default values to avoid undefined errors
     } = useQuery<ChartDataType[]>({
-        queryKey: ['sales', date.monthNumber, date.year],
+        queryKey: ['sales-pie-chart', date.monthNumber, date.year],
         queryFn: () => fetchData(),
     });
 
