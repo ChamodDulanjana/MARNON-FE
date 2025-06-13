@@ -5,6 +5,7 @@ import {PaginationDTO} from "@/models/paginationDTO.ts";
 import {getPopularProductsForAdmin} from "@/services/productService.ts";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
+import {useQuery} from "@tanstack/react-query";
 
 type ColumnType = {
     name: string;
@@ -27,43 +28,33 @@ const tableColumns: ColumnType[] = [
 ];
 
 const TablePopularProducts = () => {
-    const [products, setProducts] = useState<PopularItemType[]>([{
-        id: 0,
-        itemCode: "",
-        name: "",
-        category: "",
-        sales: "",
-    }])
     const [page, setPage] = useState(1);
     const [pages, setPages] = useState(1);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
     const rowsPerPage = 5;
 
+    // Build pagination dto
+    const paginationDto: PaginationDTO = {
+        page: page,
+        limit: rowsPerPage,
+    };
 
-    // Get popular products from the server
+    // Use react-query to fetch popular products
+    const {
+        isLoading,
+        isError,
+        data = { productList: [], totalRows: 0 } // Default values to avoid undefined errors
+    } = useQuery<{productList: PopularItemType[], totalRows: number}>({
+        queryKey: ['products', page],
+        queryFn: () => getPopularProductsForAdmin(paginationDto),
+    });
+
+    // If data is successfully fetched, extract product list and total rows
+    const { productList, totalRows } = data;
+
+    // Set pages based on total rows
     useEffect(() => {
-        // Build pagination dto
-        const paginationDto: PaginationDTO = {
-            page: page,
-            limit: rowsPerPage,
-        };
-
-        // Fetch popular products from the server
-        const fetchPopularProducts = async () => {
-            const response = await getPopularProductsForAdmin(paginationDto);
-            if (response.statusCode === 200) {
-                const { productList, totalRows } = response.data;
-                setProducts(productList);
-                setPages(Math.ceil(totalRows / rowsPerPage));
-                setIsLoading(false);
-            } else {
-                setIsError(true);
-            }
-        }
-
-        fetchPopularProducts();
-    }, [page]);
+        setPages(Math.ceil(totalRows / rowsPerPage));
+    }, [totalRows]);
 
     if (isLoading) return <LoadingAnimation />;
     if (isError)   return <NotFound />;
@@ -102,7 +93,7 @@ const TablePopularProducts = () => {
                                 </TableColumn>
                             )}
                         </TableHeader>
-                        <TableBody items={products}>
+                        <TableBody items={productList} emptyContent={"No rows to display."}>
                             {(item) => (
                                 <TableRow key={item.id}>
                                     {(columnKey) => (
