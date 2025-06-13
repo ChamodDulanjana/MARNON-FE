@@ -41,3 +41,13 @@ export const getPopularProductsForAdmin = async (paginationDTO: PaginationDTO) =
     return response.data;
 
 }
+
+export const getProductSalesByMonthAndYear = async (month: number, year: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/product/sales/by-month-year', {
+        params: {
+            month: month,
+            year: year
+        }
+    });
+    return response.data;
+}
