@@ -13,21 +13,17 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
+import {getAllSalesInMonths} from "@/services/productService.ts";
+import {useQuery} from "@tanstack/react-query";
+import LoadingAnimation from "@/components/loading-animation/page.tsx";
+import NotFound from "@/pages/notFound.tsx";
 
-const chartData = [
-    { month: "January", men: 186, women: 80, kid: 102 },
-    { month: "February", men: 305, women: 200, kid: 150 },
-    { month: "March", men: 237, women: 120, kid: 187 },
-    { month: "April", men: 73, women: 190, kid: 123 },
-    { month: "May", men: 209, women: 130, kid: 157 },
-    { month: "June", men: 214, women: 140, kid: 194 },
-    { month: "July", men: 198, women: 160, kid: 176 },/*
-    { month: "August", men: 250, women: 145, kid: 163 },
-    { month: "September", men: 221, women: 180, kid: 142 },
-    { month: "October", men: 194, women: 130, kid: 188 },
-    { month: "November", men: 233, women: 175, kid: 129 },
-    { month: "December", men: 205, women: 190, kid: 171 },*/
-];
+type ChartDataType = {
+    month: string;
+    men: number;
+    women: number;
+    kid: number;
+}
 
 const chartConfig = {
     men: {
@@ -45,8 +41,23 @@ const chartConfig = {
 } satisfies ChartConfig
 
 const BarChartForProduct = () => {
+
+    // Use react-query to fetch sales
+    const {
+        isLoading,
+        isError,
+        data: chartData = []  // Default values to avoid undefined errors
+    } = useQuery<ChartDataType[]>({
+        queryKey: ['sales'],
+        queryFn: () => getAllSalesInMonths(),
+    });
+
+
+    if (isLoading) return <LoadingAnimation />;
+    if (isError)   return <NotFound />;
+
     return (
-        <div className="w-full">
+        <div className="w-full mt-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Sales by Month</CardTitle>
