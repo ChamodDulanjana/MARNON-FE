@@ -7,8 +7,8 @@ import {
 } from "@heroui/react";
 import {useEffect, useState} from "react";
 import * as React from "react";
-import {SignUpDTO} from "../../models/signUpDTO.ts";
-import {signUp} from "../../services/authService.ts";
+import {SignUpDTO} from "@/models/signUpDTO.ts";
+import {signUp} from "@/services/authService.ts";
 
 interface SignUpProps {
     isOpen: boolean,
@@ -101,18 +101,33 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                 role: "USER" // Role is always USER for sign-up
             }
 
-            const response = await signUp(signUpDTO);
-            if (response.statusCode === 201) {
-                addToast({
-                    title: "Sign Up Successful",
-                    color: "success",
-                });
-                loginOnOpen();
-            }  else {
+            try {
+                const response = await signUp(signUpDTO);
+                if (response.statusCode === 201) {
+                    addToast({
+                        title: "Sign Up Successful",
+                        color: "success",
+                    });
+                    loginOnOpen();
+                }  else {
+                    addToast({
+                        title: "Sign Up Failed",
+                        color: "danger",
+                        description: response.message || "An unexpected error occurred. Please try again later.",
+                    });
+                }
+                signUpOnClose();
+            } catch (error: unknown) {
+                let message = "An unexpected error occurred.";
+
+                if (typeof error === "object" && error !== null && "response" in error) {
+                    const err = error as { response?: { data?: { message?: string } } };
+                    message = err.response?.data?.message || message;
+                }
                 addToast({
                     title: "Sign Up Failed",
                     color: "danger",
-                    description: "An unexpected error occurred. Please try again later.",
+                    description: message || "An unexpected error occurred.",
                 });
             }
             signUpOnClose();

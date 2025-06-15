@@ -6,12 +6,12 @@ import {
     Button,
 } from "@heroui/react";
 import {useEffect, useState} from "react";
-import {signIn} from "../../services/authService.ts";
-import {SignInDTO} from "../../models/signInDTO.ts";
+import {signIn} from "@/services/authService.ts";
+import {SignInDTO} from "@/models/signInDTO.ts";
 import {addToast} from "@heroui/react";
-import {saveToStorage} from "../../services/storageService.ts";
+import {saveToStorage} from "@/services/storageService.ts";
 import * as React from "react";
-import {useAuthContext} from "../../context/authContext.tsx";
+import {useAuthContext} from "@/context/authContext.tsx";
 
 interface SignInProps {
     isOpen: boolean,
@@ -48,31 +48,46 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
 
         // If there are no errors, proceed with the login
         if (emailError === null && passwordError === null) {
-            const response = await signIn(login);
-            if (response.statusCode === 200) {
-                // save user details in session storage
-                saveToStorage(response.data);
-                setIsLoggedIn(true);
-                setUserName(response.data.userName);
-                setRole(response.data.role);
-                addToast({
-                    title: "Login Successful",
-                    color: "success",
-                });
-            } else if (response.statusCode === 401) {
+            try {
+                const response = await signIn(login);
+                if (response.statusCode === 200) {
+                    // save user details in session storage
+                    saveToStorage(response.data);
+                    setIsLoggedIn(true);
+                    setUserName(response.data.userName);
+                    setRole(response.data.role);
+                    addToast({
+                        title: "Login Successful",
+                        color: "success",
+                    });
+                } else if (response.statusCode === 401) {
+                    addToast({
+                        title: "Login Failed",
+                        color: "danger",
+                        description: "Please check your email and password.",
+                    });
+                } else {
+                    addToast({
+                        title: "Login Failed",
+                        color: "danger",
+                        description: "An unexpected error occurred. Please try again later.",
+                    });
+                }
+                loginOnClose();
+
+            } catch (error: unknown) {
+                let message = "An unexpected error occurred.";
+
+                if (typeof error === "object" && error !== null && "response" in error) {
+                    const err = error as { response?: { data?: { message?: string } } };
+                    message = err.response?.data?.message || message;
+                }
                 addToast({
                     title: "Login Failed",
                     color: "danger",
-                    description: "Please check your email and password.",
-                });
-            } else {
-                addToast({
-                    title: "Login Failed",
-                    color: "danger",
-                    description: "An unexpected error occurred. Please try again later.",
+                    description: message || "An unexpected error occurred. Please try again later.",
                 });
             }
-            loginOnClose();
         }
     };
 
