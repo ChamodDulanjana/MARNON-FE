@@ -48,46 +48,35 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
 
         // If there are no errors, proceed with the login
         if (emailError === null && passwordError === null) {
-            try {
-                const response = await signIn(login);
-                if (response.statusCode === 200) {
+            signIn(login).then(res => {
+                if (res.statusCode === 200) {
                     // save user details in session storage
-                    saveToStorage(response.data);
+                    saveToStorage(res.data);
                     setIsLoggedIn(true);
-                    setUserName(response.data.userName);
-                    setRole(response.data.role);
+                    setUserName(res.data.userName);
+                    setRole(res.data.role);
                     addToast({
                         title: "Login Successful",
                         color: "success",
                     });
-                } else if (response.statusCode === 401) {
+                }  else {
                     addToast({
                         title: "Login Failed",
                         color: "danger",
-                        description: "Please check your email and password.",
-                    });
-                } else {
-                    addToast({
-                        title: "Login Failed",
-                        color: "danger",
-                        description: "An unexpected error occurred. Please try again later.",
+                        description: res.message,
                     });
                 }
                 loginOnClose();
 
-            } catch (error: unknown) {
-                let message = "An unexpected error occurred.";
-
-                if (typeof error === "object" && error !== null && "response" in error) {
-                    const err = error as { response?: { data?: { message?: string } } };
-                    message = err.response?.data?.message || message;
-                }
+            }).catch(error => {
+                const backendResponse = error.response?.data;
                 addToast({
-                    title: "Login Failed",
+                    title: "Sign Up Failed",
                     color: "danger",
-                    description: message || "An unexpected error occurred. Please try again later.",
+                    description: backendResponse?.message || "An unexpected error occurred.",
                 });
-            }
+            })
+            loginOnClose();
         }
     };
 

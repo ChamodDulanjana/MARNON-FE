@@ -101,35 +101,31 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                 role: "USER" // Role is always USER for sign-up
             }
 
-            try {
-                const response = await signUp(signUpDTO);
-                if (response.statusCode === 201) {
+            // Call the signUp service
+            signUp(signUpDTO).then(res => {
+                if (res.statusCode === 201) {
                     addToast({
                         title: "Sign Up Successful",
                         color: "success",
                     });
                     loginOnOpen();
-                }  else {
+                } else {
                     addToast({
                         title: "Sign Up Failed",
                         color: "danger",
-                        description: response.message || "An unexpected error occurred. Please try again later.",
+                        description: res.message || "An unexpected error occurred. Please try again later.",
                     });
                 }
                 signUpOnClose();
-            } catch (error: unknown) {
-                let message = "An unexpected error occurred.";
 
-                if (typeof error === "object" && error !== null && "response" in error) {
-                    const err = error as { response?: { data?: { message?: string } } };
-                    message = err.response?.data?.message || message;
-                }
+            }).catch(error => {
+                const backendResponse = error.response?.data;
                 addToast({
                     title: "Sign Up Failed",
                     color: "danger",
-                    description: message || "An unexpected error occurred.",
+                    description: backendResponse?.message || "An unexpected error occurred.",
                 });
-            }
+            });
             signUpOnClose();
         }
     }
