@@ -13,7 +13,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
-import {getAllSalesInMonths} from "@/services/productService.ts";
+import {getAllSalesInMonths} from "@/services/userProductService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
