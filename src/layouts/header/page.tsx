@@ -13,8 +13,10 @@ import UserProfile from "../../components/user-profile/page.tsx";
 import {useAuthContext} from "../../context/authContext.tsx";
 import {IoPower, IoSettingsOutline} from "react-icons/io5";
 import {MdAdminPanelSettings} from "react-icons/md";
-import {clearStorage} from "../../services/storageService.ts";
+import {clearStorage} from "@/services/storageService.ts";
 import { Key } from "@react-types/shared";
+
+const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
 const Header = () => {
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
@@ -48,7 +50,7 @@ const Header = () => {
         } else if (key === 'account') {
             UserProfileOnOpen();
         } else if (key === 'admin') {
-            window.location.href = '/admin-panel'; // Redirect to admin dashboard
+            window.open(ADMIN_PANEL_URL, '_blank'); // Opens admin panel in a new tab
         }
     };
 
@@ -120,7 +122,7 @@ const Header = () => {
                                     key="admin"
                                     startContent={<MdAdminPanelSettings className='text-sm -mt-px'/>}
                                 >
-                                    Admin Dashboard
+                                    Admin Panel
                                 </DropdownItem>
 
                             ) : null }

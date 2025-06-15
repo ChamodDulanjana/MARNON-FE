@@ -5,7 +5,7 @@ import {FiUser} from "react-icons/fi";
 import {IoPower} from "react-icons/io5";
 import {useAuthContext} from "../../context/authContext.tsx";
 import { MdAdminPanelSettings } from "react-icons/md";
-import {clearStorage} from "../../services/storageService.ts";
+import {clearStorage} from "@/services/storageService.ts";
 
 type ResponsiveNavProps = {
     isOpen: boolean,
@@ -14,6 +14,8 @@ type ResponsiveNavProps = {
     loginOnOpen: () => void,
     UserProfileOnOpen: () => void
 }
+
+const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
 const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileOnOpen}: ResponsiveNavProps) => {
     const {isLoggedIn, role} = useAuthContext();
@@ -125,14 +127,15 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                             {isLoggedIn && role === 'ADMIN' && (
                                 <li
                                     className="cursor-pointer w-full"
-                                    onClick={onClose}
+                                    onClick={() => {
+                                        onClose();
+                                        window.open(ADMIN_PANEL_URL, '_blank');
+                                    }}
                                 >
-                                    <Link to="/admin-panel">
-                                        <span className='flex gap-2'>
+                                    <span className='flex gap-2'>
                                             <MdAdminPanelSettings className='text-lg mt-[2px]'/>
-                                            Admin Dashboard
-                                        </span>
-                                    </Link>
+                                            Admin Panel
+                                    </span>
                                 </li>
                             )}
 
