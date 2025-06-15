@@ -15,7 +15,7 @@ import {
     ChartTooltipContent,
 } from '@/components/ui/chart'
 import {useState} from "react";
-import {getAllSalesInDays} from "@/services/userProductService.ts";
+import {getSalesCountOfDayRange} from "@/services/userProductService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
@@ -52,7 +52,7 @@ const AreaChartForSales = () => {
         data: chartData = []  // Default values to avoid undefined errors
     } = useQuery<ChartDataType[]>({
         queryKey: ['sales-area-chart'],
-        queryFn: () => getAllSalesInDays(daysToSubtract),
+        queryFn: () => getSalesCountOfDayRange(daysToSubtract),
     });
 
     const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("men")

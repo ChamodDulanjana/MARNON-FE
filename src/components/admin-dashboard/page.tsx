@@ -10,6 +10,7 @@ import TablePopularProducts from "@/components/table-popular-products/page.tsx";
 import { formatNumber } from "@/util/formatNumber.ts";
 import {Tooltip} from "@heroui/tooltip";
 import {getAllCustomersCount} from "@/services/userService.ts";
+import {getSalesCountByDate, getMonthlySales} from "@/services/userProductService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
@@ -20,6 +21,10 @@ type FirstInfoCardsType = {
     monthlySales: number;
     monthlyRevenue: number;
 }
+
+const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed in JavaScript, so we add 1
 
 const AdminDashboard = () => {
     const [firstInfoCards] = useState<FirstInfoCardsType>({
@@ -32,9 +37,9 @@ const AdminDashboard = () => {
     const getAllInfoCardsData = async () => {
         const [totalCustomers, todayOrders, monthlySales, monthlyRevenue] = await Promise.all([
             getAllCustomersCount(),
-            /*getTodayOrdersCount(),
-            getMonthlySales(),
-            getMonthlyRevenue(),*/
+            getSalesCountByDate(today),
+            getMonthlySales(currentYear, currentMonth),
+            /*getMonthlyRevenue(),*/
         ]);
 
         return {
@@ -81,7 +86,9 @@ const AdminDashboard = () => {
                         <BsFillHandbagFill className='mt-[2px]'/>
                         Today Orders
                     </h2>
-                    <p className='text-lg font-bold text-yellow-600'>{firstInfoCards.todayOrders}</p>
+                    <Tooltip content={Intl.NumberFormat().format(infoCardsData?.todayOrders)} placement={'bottom-start'}>
+                        <p className='text-lg font-bold text-yellow-600'>{formatNumber(infoCardsData?.todayOrders)}</p>
+                    </Tooltip>
                 </div>
 
                 {/*3st card*/}
@@ -90,7 +97,9 @@ const AdminDashboard = () => {
                         <AiFillDollarCircle className='mt-[2px]'/>
                         Monthly sales
                     </h2>
-                    <p className='text-lg font-bold text-red-600'>{firstInfoCards.monthlySales}</p>
+                    <Tooltip content={Intl.NumberFormat().format(infoCardsData?.monthlySales)} placement={'bottom-start'}>
+                        <p className='text-lg font-bold text-red-600'>{formatNumber(infoCardsData?.monthlySales)}</p>
+                    </Tooltip>
                 </div>
 
                 {/*4st card*/}

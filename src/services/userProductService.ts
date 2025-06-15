@@ -3,8 +3,8 @@ import axiosInstance from "@/api/axiosInstance.ts";
 const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/user-product';
 
-export const getProductSalesByMonthAndYear = async (month: number, year: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/product/sales/by-month-year', {
+export const getSalesCountByMonthAndYear = async (month: number, year: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales-count/by-month-year', {
         params: {
             month: month,
             year: year
@@ -13,12 +13,27 @@ export const getProductSalesByMonthAndYear = async (month: number, year: number)
     return response.data;
 }
 
-export const getAllSalesInMonths = async () => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales/in-months');
+export const getSalesCountOfAllMonths = async () => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/of/all-months');
     return response.data.data;
 }
 
-export const getAllSalesInDays = async (numberOfDays: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales/in-days/' + numberOfDays);
+export const getSalesCountOfDayRange = async (numberOfDays: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/of/day-range/' + numberOfDays);
+    return response.data.data;
+}
+
+export const getSalesCountByDate = async (date: string) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/' + date);
+    return response.data.data;
+}
+
+export const getMonthlySales = async (year: number, month: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/monthly-sales', {
+        params: {
+            year: year,
+            month: month
+        }
+    });
     return response.data.data;
 }

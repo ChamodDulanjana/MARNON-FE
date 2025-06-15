@@ -13,7 +13,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from '@/components/ui/chart'
-import {getAllSalesInMonths} from "@/services/userProductService.ts";
+import {getSalesCountOfAllMonths} from "@/services/userProductService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
@@ -49,7 +49,7 @@ const BarChartForProduct = () => {
         data: chartData = []  // Default values to avoid undefined errors
     } = useQuery<ChartDataType[]>({
         queryKey: ['sales-bar-chart'],
-        queryFn: () => getAllSalesInMonths(),
+        queryFn: () => getSalesCountOfAllMonths(),
     });
 
 
