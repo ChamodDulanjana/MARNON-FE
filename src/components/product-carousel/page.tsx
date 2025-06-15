@@ -44,7 +44,7 @@ const ProductCarousel = ({products, carouselItemStyle} : ProductCarouselProp) =>
                                         {product.name}
                                     </h3>
                                     <h4 className='text-[14px] min-[2560px]:text-[22px] mt-2 text-gray-500 font-poppins font-medium'>
-                                        LKR {product.newPrice}
+                                        LKR {product.sellingPrice}
                                     </h4>
                                     <div className='w-6 h-6 border-2 rounded-full border-gray-300 mt-1 p-1 absolute bottom-0 min-[2560px]:w-10  min-[2560px]:h-10 min-[2560px]:border-gray-500 min-[2560px]:p-2'>
                                         <div

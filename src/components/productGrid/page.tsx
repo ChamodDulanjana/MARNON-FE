@@ -9,8 +9,8 @@ export type ProductProp = {
     id: number,
     name: string,
     description: string,
-    oldPrice: number,
-    newPrice: number,
+    buyingPrice: number,
+    sellingPrice: number,
     color: string,
     image: string,
     isActive: boolean,
@@ -59,7 +59,7 @@ const ProductGrid = ({filters}: ProductGridProps) => {
                                         {product.name}
                                     </h3>
                                     <h4 className='text-[14px] mt-2 text-gray-500 font-poppins font-medium'>
-                                        LKR {product.newPrice}
+                                        LKR {product.sellingPrice}
                                     </h4>
                                     <div className='w-6 h-6 border rounded-full border-gray-300 mt-1 p-1 absolute bottom-0'>
                                         <div
