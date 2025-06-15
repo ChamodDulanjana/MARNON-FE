@@ -37,3 +37,13 @@ export const getMonthlySales = async (year: number, month: number) => {
     });
     return response.data.data;
 }
+
+export const getMonthlyRevenue = async (year: number, month: number) => {
+    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/monthly-revenue', {
+        params: {
+            year: year,
+            month: month
+        }
+    });
+    return response.data.data;
+}

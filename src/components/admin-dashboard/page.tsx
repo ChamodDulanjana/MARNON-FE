@@ -1,4 +1,3 @@
-import {useEffect, useState} from "react";
 import { HiMiniUsers } from "react-icons/hi2";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -10,36 +9,22 @@ import TablePopularProducts from "@/components/table-popular-products/page.tsx";
 import { formatNumber } from "@/util/formatNumber.ts";
 import {Tooltip} from "@heroui/tooltip";
 import {getAllCustomersCount} from "@/services/userService.ts";
-import {getSalesCountByDate, getMonthlySales} from "@/services/userProductService.ts";
+import {getSalesCountByDate, getMonthlySales, getMonthlyRevenue} from "@/services/userProductService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
-
-type FirstInfoCardsType = {
-    totalCustomers: number;
-    todayOrders: number;
-    monthlySales: number;
-    monthlyRevenue: number;
-}
 
 const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 const currentYear = new Date().getFullYear();
 const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed in JavaScript, so we add 1
 
 const AdminDashboard = () => {
-    const [firstInfoCards] = useState<FirstInfoCardsType>({
-        totalCustomers: 13002,
-        todayOrders: 1001,
-        monthlySales: 1003,
-        monthlyRevenue: 1002,
-    })
-
     const getAllInfoCardsData = async () => {
         const [totalCustomers, todayOrders, monthlySales, monthlyRevenue] = await Promise.all([
             getAllCustomersCount(),
             getSalesCountByDate(today),
             getMonthlySales(currentYear, currentMonth),
-            /*getMonthlyRevenue(),*/
+            getMonthlyRevenue(currentYear, currentMonth),
         ]);
 
         return {
@@ -108,7 +93,9 @@ const AdminDashboard = () => {
                         <FaHandHoldingDollar className='mt-[2px]'/>
                         Monthly Revenue
                     </h2>
-                    <p className='text-lg font-bold text-green-600'>{firstInfoCards.monthlyRevenue}</p>
+                    <Tooltip content={Intl.NumberFormat().format(infoCardsData?.monthlyRevenue)} placement={'bottom-start'}>
+                        <p className='text-lg font-bold text-green-600'>{formatNumber(infoCardsData?.monthlyRevenue)}</p>
+                    </Tooltip>
                 </div>
 
             </div>
