@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { HiMiniUsers } from "react-icons/hi2";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -7,22 +7,56 @@ import AreaChart from "@/components/Area-chart/page.tsx";
 import PieChartByCategory from "@/components/pie-chart/page.tsx";
 import BarChart from "@/components/bar-chart/page.tsx";
 import TablePopularProducts from "@/components/table-popular-products/page.tsx";
+import { formatNumber } from "@/util/formatNumber.ts";
+import {Tooltip} from "@heroui/tooltip";
+import {getAllCustomersCount} from "@/services/userService.ts";
+import {useQuery} from "@tanstack/react-query";
+import LoadingAnimation from "@/components/loading-animation/page.tsx";
+import NotFound from "@/pages/notFound.tsx";
 
 type FirstInfoCardsType = {
     totalCustomers: number;
     todayOrders: number;
+    monthlySales: number;
     monthlyRevenue: number;
-    monthlyIncome: number;
-
 }
 
 const AdminDashboard = () => {
     const [firstInfoCards] = useState<FirstInfoCardsType>({
-        totalCustomers: 1000,
+        totalCustomers: 13002,
         todayOrders: 1001,
+        monthlySales: 1003,
         monthlyRevenue: 1002,
-        monthlyIncome: 1003,
     })
+
+    const getAllInfoCardsData = async () => {
+        const [totalCustomers, todayOrders, monthlySales, monthlyRevenue] = await Promise.all([
+            getAllCustomersCount(),
+            /*getTodayOrdersCount(),
+            getMonthlySales(),
+            getMonthlyRevenue(),*/
+        ]);
+
+        return {
+            totalCustomers,
+            todayOrders,
+            monthlySales,
+            monthlyRevenue,
+        };
+    }
+
+    // Use react-query to fetch Total Customers
+    const {
+        isLoading,
+        isError,
+        data: infoCardsData,
+    } = useQuery({
+        queryKey: ['info-cards'],
+        queryFn: () => getAllInfoCardsData(),
+    });
+
+    if (isLoading) return <LoadingAnimation />;
+    if (isError)   return <NotFound />;
 
     return (
         <div className="w-full flex-1 flex flex-col gap-4">
@@ -36,7 +70,9 @@ const AdminDashboard = () => {
                       <HiMiniUsers className='mt-[2px]'/>
                       Total Customers
                   </h2>
-                  <p className='text-lg font-bold text-blue-600'>{firstInfoCards.totalCustomers}</p>
+                  <Tooltip content={Intl.NumberFormat().format(infoCardsData?.totalCustomers)} placement={'bottom-start'}>
+                      <p className='text-lg font-bold text-blue-600'>{formatNumber(infoCardsData?.totalCustomers)}</p>
+                  </Tooltip>
                 </div>
 
                 {/*2st card*/}
@@ -52,18 +88,18 @@ const AdminDashboard = () => {
                 <div className="min-w-60 p-4  rounded-lg shadow-md bg-red-100 border border-gray-200">
                     <h2 className="text-[13px] font-normal mb-2 text-gray-600 flex gap-1">
                         <AiFillDollarCircle className='mt-[2px]'/>
-                        Monthly Revenue
+                        Monthly sales
                     </h2>
-                    <p className='text-lg font-bold text-red-600'>{firstInfoCards.monthlyRevenue}</p>
+                    <p className='text-lg font-bold text-red-600'>{firstInfoCards.monthlySales}</p>
                 </div>
 
                 {/*4st card*/}
                 <div className="min-w-60 p-4  rounded-lg shadow-md bg-green-100 border border-gray-200">
                     <h2 className="text-[13px] font-normal mb-2 text-gray-600 flex gap-1">
                         <FaHandHoldingDollar className='mt-[2px]'/>
-                        Monthly Income
+                        Monthly Revenue
                     </h2>
-                    <p className='text-lg font-bold text-green-600'>{firstInfoCards.monthlyIncome}</p>
+                    <p className='text-lg font-bold text-green-600'>{firstInfoCards.monthlyRevenue}</p>
                 </div>
 
             </div>

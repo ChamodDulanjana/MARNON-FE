@@ -11,3 +11,8 @@ export const updateByRegularUser = async (id: number, userDTO: any) => {
     const response = await axiosInstance.patch(SUB_URL + '/regular/' + id, userDTO);
     return response.data;
 }
+
+export const getAllCustomersCount = async () => {
+    const response = await axiosInstance.get(SUB_URL + '/all/customers/count');
+    return response.data.data;
+}
