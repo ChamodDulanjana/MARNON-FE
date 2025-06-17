@@ -5,7 +5,7 @@ import {FiUser} from "react-icons/fi";
 import {IoPower} from "react-icons/io5";
 import {useAuthContext} from "../../context/authContext.tsx";
 import { MdAdminPanelSettings } from "react-icons/md";
-import {clearStorage} from "@/services/storageService.ts";
+import handleLogout from "@/util/logout.ts";
 
 type ResponsiveNavProps = {
     isOpen: boolean,
@@ -25,11 +25,9 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
         onClose();
     }
 
-    const handelLogout = () => {
-        clearStorage();
-        onClose();
-        window.location.href = '/'; // Redirect to home page after logout
-        //window.location.reload(); // Reload the page to reflect the logout
+    const handleLoggingOut = () => {
+        handleLogout();
+        onClose() // close the drawer after logout
     }
 
     const handelUserProfile = () => {
@@ -147,7 +145,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                 >
                                 <span
                                     className='flex gap-2 mt-5'
-                                    onClick={handelLogout}
+                                    onClick={handleLoggingOut}
                                 >
                                     <IoPower className='text-lg mt-[2px]'/>
                                     Logout

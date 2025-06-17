@@ -1,21 +1,24 @@
 import axios from 'axios';
+import logout from "@/util/logout.ts";
 
 const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
 });
 
-// Add a request interceptor to include JWT token
-axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = sessionStorage.getItem('accessToken');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+export const axiosInstanceWithCredentials = axios.create({
+    baseURL: API_BASE_URL,
+    withCredentials: true, // 🔥 this is key for cookie-based auth
+});
 
-export default axiosInstance;
+// Add interceptor
+axiosInstanceWithCredentials.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            logout();
+        }
+        return Promise.reject(error);
+    }
+);

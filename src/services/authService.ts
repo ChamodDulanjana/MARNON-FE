@@ -1,16 +1,19 @@
 import {SignInDTO} from "../models/signInDTO.ts";
-import axios from "axios";
+import {axiosInstance, axiosInstanceWithCredentials} from "@/api/axiosInstance.ts";
 
-
-const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/auth';
 
 export const signIn = async (signInDTO: SignInDTO) => {
-    const response = await axios.post(API_BASE_URL + SUB_URL + '/signin', signInDTO);
+    const response = await axiosInstanceWithCredentials.post(SUB_URL + '/signin', signInDTO);
     return response.data;
 }
 
 export const signUp = async (signUpDTO: SignInDTO) => {
-    const response = await axios.post(API_BASE_URL + SUB_URL + '/signup', signUpDTO);
+    const response = await axiosInstance.post(SUB_URL + '/signup', signUpDTO);
+    return response.data;
+}
+
+export const logout = async () => {
+    const response = await axiosInstanceWithCredentials.patch(SUB_URL + '/logout');
     return response.data;
 }

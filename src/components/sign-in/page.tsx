@@ -71,7 +71,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
             }).catch(error => {
                 const backendResponse = error.response?.data;
                 addToast({
-                    title: "Sign Up Failed",
+                    title: "Login Failed",
                     color: "danger",
                     description: backendResponse?.message || "An unexpected error occurred.",
                 });

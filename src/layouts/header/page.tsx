@@ -1,7 +1,7 @@
 import { LuShoppingCart } from "react-icons/lu";
 import { FiUser } from "react-icons/fi";
 import {Link} from "react-router-dom";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure} from "@heroui/react";
+import {Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure} from "@heroui/react";
 import SignIn from "../../components/sign-in/page.tsx";
 import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
@@ -13,8 +13,8 @@ import UserProfile from "../../components/user-profile/page.tsx";
 import {useAuthContext} from "../../context/authContext.tsx";
 import {IoPower, IoSettingsOutline} from "react-icons/io5";
 import {MdAdminPanelSettings} from "react-icons/md";
-import {clearStorage} from "@/services/storageService.ts";
 import { Key } from "@react-types/shared";
+import handleLogout from "@/util/logout.ts";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
@@ -45,8 +45,9 @@ const Header = () => {
     // Handle dropdown action
     const handleDropdownAction = (key: Key) => {
         if (key === 'logout') {
-            clearStorage();
-            window.location.href = '/'; // Redirect to home page after logout
+            handleLogout();
+        } else if (key === 'setting') {
+            // Handle setting action if needed
         } else if (key === 'account') {
             UserProfileOnOpen();
         } else if (key === 'admin') {

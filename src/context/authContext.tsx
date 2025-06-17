@@ -13,7 +13,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthContextProvider = ({children}: { children: React.ReactNode }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!sessionStorage.getItem("accessToken"));
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!sessionStorage.getItem("userName"));
     const [userName, setUserName] = useState<string>(sessionStorage.getItem('userName') || '');
     const [role, setRole] = useState<string>(sessionStorage.getItem('role') || '');
 
