@@ -1,9 +1,8 @@
-import axios from "axios";
+import {axiosInstance} from "@/api/axiosInstance.ts";
 
-const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/home-display-img';
 
 export const getHomeDisplayImgByType = async (type: string) => {
-    const response = await axios.get(API_BASE_URL + SUB_URL + '/' + type);
+    const response = await axiosInstance.get(SUB_URL + '/' + type);
     return response.data;
 }

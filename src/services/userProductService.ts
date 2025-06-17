@@ -1,10 +1,10 @@
-import axiosInstance from "@/api/axiosInstance.ts";
+import {axiosInstanceWithCredentials} from "@/api/axiosInstance.ts";
 
 const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? '';
 const SUB_URL: string = '/user-product';
 
 export const getSalesCountByMonthAndYear = async (month: number, year: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/all/sales-count/by-month-year', {
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/all/sales-count/by-month-year', {
         params: {
             month: month,
             year: year
@@ -14,22 +14,22 @@ export const getSalesCountByMonthAndYear = async (month: number, year: number) =
 }
 
 export const getSalesCountOfAllMonths = async () => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/of/all-months');
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/sales-count/of/all-months');
     return response.data.data;
 }
 
 export const getSalesCountOfDayRange = async (numberOfDays: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/of/day-range/' + numberOfDays);
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/sales-count/of/day-range/' + numberOfDays);
     return response.data.data;
 }
 
 export const getSalesCountByDate = async (date: string) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/sales-count/' + date);
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/sales-count/' + date);
     return response.data.data;
 }
 
 export const getMonthlySales = async (year: number, month: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/monthly-sales', {
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/monthly-sales', {
         params: {
             year: year,
             month: month
@@ -39,7 +39,7 @@ export const getMonthlySales = async (year: number, month: number) => {
 }
 
 export const getMonthlyRevenue = async (year: number, month: number) => {
-    const response = await axiosInstance.get(API_BASE_URL + SUB_URL + '/monthly-revenue', {
+    const response = await axiosInstanceWithCredentials.get(API_BASE_URL + SUB_URL + '/monthly-revenue', {
         params: {
             year: year,
             month: month
