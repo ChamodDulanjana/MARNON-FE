@@ -127,7 +127,7 @@ const ResponsiveNav = ({isOpen, onOpenChange, onClose, loginOnOpen, UserProfileO
                                     className="cursor-pointer w-full"
                                     onClick={() => {
                                         onClose();
-                                        window.open(ADMIN_PANEL_URL, '_blank'); // Opens admin panel in a new tab
+                                        window.location.href = ADMIN_PANEL_URL; // Redirects to admin panel in the same tab
                                     }}
                                 >
                                     <span className='flex gap-2'>
