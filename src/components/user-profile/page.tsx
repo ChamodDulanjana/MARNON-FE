@@ -2,8 +2,9 @@ import {addToast, Avatar, Button, Modal, ModalBody, ModalContent, ModalHeader} f
 import { CiEdit } from "react-icons/ci";
 import {useEffect, useState} from "react";
 import {UserUpdateDTO} from "../../models/userUpdateDTO.ts";
-import {getUserById, updateByRegularUser} from "../../services/userService.ts";
+import {getUserByEmail, updateByRegularUser} from "../../services/userService.ts";
 import * as React from "react";
+import {useAuthContext} from "@/context/authContext.tsx";
 
 interface UserProfileProps {
     isOpen: boolean;
@@ -20,8 +21,8 @@ interface UserDataProps {
 const contactRegex = /^\d{9,15}$/;
 
 const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
-    const [userName] = useState(sessionStorage.getItem('userName') || '')
-    const [userId] = useState(Number(sessionStorage.getItem('userId')) || 0)
+    const { userName } = useAuthContext();
+    const [userId, setUserId] = useState(0);
     const [isEditBtnClicked, setIsEditBtnClicked] = useState(false);
     const [userData, setUserData] = useState<UserDataProps>({
         fName: '',
@@ -33,6 +34,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
     const [contactError, setContactError] = useState<string | null>('');
     const [addressError, setAddressError] = useState<string | null>('');
 
+    // Reset form fields when the modal opens
     useEffect(() => {
         setIsEditBtnClicked(false);
         setUserData({
@@ -48,20 +50,30 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
 
     // Fetch user data from the server
     useEffect(() => {
-        const fetchUserById = async () => {
-            const response = await getUserById(userId);
-            if (response.statusCode === 200) {
+        getUserByEmail(userName).then(res => {
+            if (res.statusCode === 200) {
+                setUserId(res.data.id);
                 setUserData({
-                    fName: response.data.name.split(' ')[0],
-                    lName: response.data.name.split(' ')[1],
-                    contact: response.data.contact,
-                    address: response.data.address
+                    fName: res.data.name.split(' ')[0] || '',
+                    lName: res.data.name.split(' ')[1] || '',
+                    contact: res.data.contact || '',
+                    address: res.data.address || ''
+                });
+            } else {
+                addToast({
+                    title: "Failed to fetch user data",
+                    color: "danger",
                 });
             }
-        }
 
-        fetchUserById();
-    }, [userId]);
+        }).catch(error => {
+            addToast({
+                title: "Error fetching user data",
+                color: "danger",
+                description: error.message,
+            });
+        });
+    }, [userName]);
 
     const handleUserUpdate = async () => {
         // Validate all fields before updating
@@ -83,19 +95,30 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                 role: 'null' // Role is not being updated by regular users
             }
 
-            const response = await updateByRegularUser(userId, userDTO);
-            if (response.statusCode === 200) {
+            updateByRegularUser(userId, userDTO).then(res => {
+                if (res.statusCode === 200) {
+                    addToast({
+                        title: "Profile Updated Successfully",
+                        color: "success",
+                    });
+                    setIsEditBtnClicked(false);
+                } else {
+                    addToast({
+                        title: "Update Failed",
+                        color: "danger",
+                        description: res.message,
+                    });
+                }
+                onOpenChange();
+
+            }).catch(error => {
                 addToast({
-                    title: "User profile updated successfully",
-                    color: "success",
-                });
-                onOpenChange(); // Close the modal after successful update
-            } else {
-                addToast({
-                    title: "Failed to update user profile",
+                    title: "Error Updating Profile",
                     color: "danger",
+                    description: error.message,
                 });
-            }
+            });
+            onOpenChange();
         }
     }
 
@@ -199,7 +222,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                     disabled={!isEditBtnClicked}
                                     onChange={(e) => {handleFirstNameChange(e)}}
                                     className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
+                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
                                     `}
                                 />
                             </div>
@@ -212,7 +235,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                     disabled={!isEditBtnClicked}
                                     onChange={(e) => {handleLastNameChange(e)}}
                                     className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
+                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
                                     `}
                                 />
                             </div>
@@ -227,7 +250,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                 disabled={!isEditBtnClicked}
                                 onChange={(e) => {handleContactChange(e)}}
                                 className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
+                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
                                     `}
                             />
                         </div>
@@ -241,7 +264,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                                 disabled={!isEditBtnClicked}
                                 onChange={(e) => {handleAddressChange(e)}}
                                 className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-green-100' : ''}
+                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
                                     `}
                             />
                         </div>
