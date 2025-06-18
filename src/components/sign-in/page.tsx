@@ -9,7 +9,6 @@ import {useEffect, useState} from "react";
 import {signIn} from "@/services/authService.ts";
 import {SignInDTO} from "@/models/signInDTO.ts";
 import {addToast} from "@heroui/react";
-import {saveToStorage} from "@/services/storageService.ts";
 import * as React from "react";
 import {useAuthContext} from "@/context/authContext.tsx";
 
@@ -50,8 +49,6 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
         if (emailError === null && passwordError === null) {
             signIn(login).then(res => {
                 if (res.statusCode === 200) {
-                    // save user details in session storage
-                    saveToStorage(res.data);
                     setIsLoggedIn(true);
                     setUserName(res.data.userName);
                     setRole(res.data.role);

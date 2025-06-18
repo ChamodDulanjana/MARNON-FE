@@ -51,7 +51,7 @@ const Header = () => {
         } else if (key === 'account') {
             UserProfileOnOpen();
         } else if (key === 'admin') {
-            window.open(ADMIN_PANEL_URL, '_blank'); // Opens admin panel in a new tab
+            window.location.href = ADMIN_PANEL_URL; // Redirects to admin panel in the same tab
         }
     };
 
