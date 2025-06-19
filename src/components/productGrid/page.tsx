@@ -55,13 +55,13 @@ const ProductGrid = ({filters}: ProductGridProps) => {
                                             backgroundImage: `url(${product.image})`,
                                         }}
                                     ></div>
-                                    <h3 className='font-medium font-poppins mt-3 text-[14px]'>
+                                    <h3 className='font-medium font-poppins mt-3 text-[14px] line-clamp-2'>
                                         {product.name}
                                     </h3>
                                     <h4 className='text-[14px] mt-2 text-gray-500 font-poppins font-medium'>
                                         LKR {product.sellingPrice}
                                     </h4>
-                                    <div className='w-6 h-6 border rounded-full border-gray-300 mt-1 p-1 absolute bottom-0'>
+                                    <div className='w-6 h-6 border rounded-full border-gray-400 mt-1 p-1 absolute bottom-0'>
                                         <div
                                             className="w-full h-full rounded-full border border-gray-300"
                                             style={{ backgroundColor: product.color }}
