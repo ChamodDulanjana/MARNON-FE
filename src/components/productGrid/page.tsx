@@ -47,15 +47,15 @@ const ProductGrid = ({filters}: ProductGridProps) => {
                             <Link to={`/product/${product.id}`} key={index}>
                                 <div
                                     key={index}
-                                    className='max-w-64 flex flex-col relative'
+                                    className='w-full flex flex-col relative min-[2560px]:w-[380px]'
                                 >
                                     <div
-                                        className='w-full h-[400px] rounded-md max-lg:h-[350px] max-[425px]:h-[280px] max-[375px]:h-[230px] bg-center bg-cover'
+                                        className='w-full rounded-md bg-center bg-cover h-[230px] min-[340px]:h-[270px] min-[425px]:h-[350px] min-[560px]:h-[450px] 2xl:h-[490px] min-[2560px]:h-[600px]'
                                         style={{
                                             backgroundImage: `url(${product.image})`,
                                         }}
                                     ></div>
-                                    <h3 className='font-medium font-poppins mt-3 text-[15px]'>
+                                    <h3 className='font-medium font-poppins mt-3 text-[14px]'>
                                         {product.name}
                                     </h3>
                                     <h4 className='text-[14px] mt-2 text-gray-500 font-poppins font-medium'>
