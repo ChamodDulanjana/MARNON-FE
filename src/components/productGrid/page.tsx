@@ -50,7 +50,7 @@ const ProductGrid = ({filters}: ProductGridProps) => {
                                     className='w-full flex flex-col relative min-[2560px]:w-[380px]'
                                 >
                                     <div
-                                        className='w-full rounded-md bg-center bg-cover h-[230px] min-[340px]:h-[270px] min-[425px]:h-[350px] min-[560px]:h-[450px] 2xl:h-[490px] min-[2560px]:h-[600px]'
+                                        className='w-full rounded-md bg-center bg-cover h-[230px] min-[340px]:h-[270px] min-[425px]:h-[350px] min-[560px]:h-[450px] 2xl:h-[430px] min-[1660px]:h-[480px] min-[2560px]:h-[600px]'
                                         style={{
                                             backgroundImage: `url(${product.image})`,
                                         }}

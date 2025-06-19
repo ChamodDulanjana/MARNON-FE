@@ -65,29 +65,32 @@ const ProductDisplay = () => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className="flex flex-col lg:flex-row gap-14 p-6 lg:p-16 max-w-7xl mx-auto">
+        <div className="flex flex-col items-center justify-center lg:flex-row gap-14 pt-3 md:pt-10 p-2 lg:p-16 max-w-[2000px]   mx-auto lg:items-start">
             {/* Left side: Images */}
-            <div className="flex lg:flex-row gap-6">
-                {product.image
-                    .filter(img => img.type === 'MAIN')
-                    .map((img, index) => (
-                        <img
-                            key={img.id}
-                            src={img.image}
-                            alt={`main-image-${index}`}
-                            className="w-full max-w-md object-cover rounded-lg"
-                        />
-                    ))
-                }
+            <div className="flex flex-col gap-2 min-[425px]:flex-row">
+                <div className=''>
+                    {product.image
+                        .filter(img => img.type === 'MAIN')
+                        .map((img, index) => (
+                            <img
+                                key={img.id}
+                                src={img.image}
+                                alt={`main-image-${index}`}
+                                className="w-full object-cover rounded-lg min-[425px]:h-[458px] xl:h-[560px] min-[1600px]:h-[680px] min-[2560px]:h-[880px]"
+                            />
+                        ))
+                    }
+                </div>
 
-                <div className="flex flex-col gap-4 items-center justify-start">
+                <div className="flex min-[425px]:flex-col gap-1 items-center justify-center min-[425px]:justify-start">
                     {product.image
                         .map((img, index) => (
                             <img
                                 key={img.id}
                                 src={img.image}
                                 alt={`sub-image-${index}`}
-                                className="w-24 h-36 object-cover border rounded-md cursor-pointer"
+                                className="min-w-24 h-[150px] min-[375px]:w-28 object-cover border rounded-md cursor-pointer min-[425px]:w-28
+                                min-[1600px]:h-[200px] min-[1600px]:w-36 min-[2560px]:h-[260px] min-[2560px]:w-48"
                             />
                         ))
                     }
@@ -96,7 +99,7 @@ const ProductDisplay = () => {
             </div>
 
             {/* Right side: Details */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-4 px-4 min-[425px]:px-10 lg:px-0 max-w-4xl">
                 <h1 className="text-2xl font-semibold">{product.name}</h1>
                 <p className="text-xl font-medium text-gray-800">LKR {product.newPrice}</p>
 
