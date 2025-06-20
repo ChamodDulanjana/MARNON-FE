@@ -81,17 +81,11 @@ const ProductDisplay = () => {
                 <div>
                     {product.image
                         .filter(img => img.type === 'MAIN')
-                        .map((img) => (
-                            /*<img
-                                key={img.id}
-                                src={mainImage}
-                                alt={`main-image`}
-                                className="w-full object-cover rounded-lg min-[425px]:h-[458px] xl:h-[560px] min-[1600px]:h-[680px] min-[2560px]:h-[880px]"
-                            />*/
+                        .map((img, index) => (
                             <ZoomableImage
                                 key={img.id}
                                 src={mainImage}
-                                alt={`main-image`}
+                                alt={`main-image-${index}`}
                             />
                         ))
                     }

@@ -52,7 +52,7 @@ const ShopCategory = () => {
     }, []);
 
     return (
-        <div className='w-full flex flex-col justify-center items-center mb-10'>
+        <div className='w-full flex flex-col justify-center items-center mb-10 xl:px-8'>
             <span className='mt-14 text-3xl font-inter font-bold'>{header}</span>
             <h2 className='mt-2 text-gray-600'>Category / {header}</h2>
 
