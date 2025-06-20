@@ -5,6 +5,8 @@ import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
+import ZoomableImage from "@/components/zoomable-image/page.tsx";
+
 
 type ProductType = {
     id: number,
@@ -72,19 +74,24 @@ const ProductDisplay = () => {
     if (isError)   return <NotFound />;
 
     return (
-        <div className="flex flex-col items-center justify-center lg:flex-row gap-6 min-[2560px]:gap-14 pt-3 md:pt-10 p-2 lg:p-16 max-w-[2000px] mx-auto lg:items-start mb-10">
+        <div className="flex flex-col items-center justify-center lg:flex-row gap-6 xl:gap-14 pt-3 md:pt-10 p-2 lg:px-16 lg:py-14 max-w-[2000px] mx-auto lg:items-start mb-10">
             {/* Left side: Images */}
             {/*Main image*/}
             <div className="flex flex-col gap-2 min-[425px]:flex-row">
-                <div className=''>
+                <div>
                     {product.image
                         .filter(img => img.type === 'MAIN')
-                        .map((img, index) => (
-                            <img
+                        .map((img) => (
+                            /*<img
                                 key={img.id}
                                 src={mainImage}
-                                alt={`main-image-${index}`}
+                                alt={`main-image`}
                                 className="w-full object-cover rounded-lg min-[425px]:h-[458px] xl:h-[560px] min-[1600px]:h-[680px] min-[2560px]:h-[880px]"
+                            />*/
+                            <ZoomableImage
+                                key={img.id}
+                                src={mainImage}
+                                alt={`main-image`}
                             />
                         ))
                     }
@@ -109,14 +116,14 @@ const ProductDisplay = () => {
             </div>
 
             {/* Right side: Details */}
-            <div className="flex-1 space-y-4 px-4 min-[425px]:px-10 lg:px-0 max-w-4xl min-[2560px]:space-y-8">
+            <div className="flex-1 space-y-4 px-4 min-[425px]:px-10 lg:px-0 max-w-3xl min-[2560px]:space-y-8">
                 <h1 className="text-lg font-semibold md:text-xl lg:text-2xl min-[2560px]:text-5xl">{product.name}</h1>
-                <p className="text-[16px] md:text-[18px] font-medium text-gray-600 min-[2560px]:text-3xl">LKR {product.sellingPrice}</p>
+                <p className="text-[16px] md:text-[18px] font-medium text-gray-700 min-[2560px]:text-3xl">LKR {product.sellingPrice}</p>
 
                 <p className="mt-4 text-sm text-gray-600 text-justify min-[2560px]:text-xl">{product.description}</p>
 
-                {/*Color*/}
                 <div className="mt-4 space-y-3">
+                    {/*Color*/}
                     <div>
                         <span className="font-semibold min-[2560px]:text-xl">COLOR:
                             <span className='text-gray-600 font-normal ml-2'>{product.color}</span>
