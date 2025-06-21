@@ -14,14 +14,13 @@ import {useAuthContext} from "@/context/authContext.tsx";
 
 interface SignInProps {
     isOpen: boolean,
-    onOpenChange: () => void
-    loginOnClose: () => void
-    signupOnOpen: () => void
+    onOpenChange: () => void,
+    verifyEmailOnOpen: () => void,
 }
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps) => {
+const SignIn = ({isOpen, onOpenChange, verifyEmailOnOpen}: SignInProps) => {
     const [login, setLogin] = useState<SignInDTO>({email: '', password: ''});
     const [emailError, setEmailError] = useState<string | null>('');
     const [passwordError, setPasswordError] = useState<string | null>('');
@@ -36,8 +35,8 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
     }, [isOpen]);
 
     const handleSignUp = () => {
-        signupOnOpen();
-        loginOnClose();
+        verifyEmailOnOpen();
+        onOpenChange();
     }
 
     const handleLogin = async () => {
@@ -63,7 +62,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                         description: res.message,
                     });
                 }
-                loginOnClose();
+                onOpenChange();
 
             }).catch(error => {
                 const backendResponse = error.response?.data;
@@ -73,7 +72,7 @@ const SignIn = ({isOpen, onOpenChange, loginOnClose, signupOnOpen}: SignInProps)
                     description: backendResponse?.message || "An unexpected error occurred.",
                 });
             })
-            loginOnClose();
+            onOpenChange();
         }
     };
 

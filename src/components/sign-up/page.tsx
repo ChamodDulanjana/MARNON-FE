@@ -13,7 +13,6 @@ import {signUp} from "@/services/authService.ts";
 interface SignUpProps {
     isOpen: boolean,
     onOpenChange: () => void,
-    signUpOnClose: () => void,
     loginOnOpen: () => void
 }
 
@@ -32,7 +31,7 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
 const contactRegex = /^\d{9,15}$/;
 
-const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps) => {
+const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
     const [signUpData, setSignUpData] = useState<signUpData>({
         fName: "",
         lName: "",
@@ -68,11 +67,6 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
             role: ""
         });
     }, [isOpen]);
-
-    const handleSignIn = () => {
-        signUpOnClose();
-        loginOnOpen();
-    }
 
     const handleSignUp = async () => {
         // Validate fields before proceeding
@@ -116,7 +110,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                         description: res.message || "An unexpected error occurred. Please try again later.",
                     });
                 }
-                signUpOnClose();
+                onOpenChange();
 
             }).catch(error => {
                 const backendResponse = error.response?.data;
@@ -126,7 +120,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                     description: backendResponse?.message || "An unexpected error occurred.",
                 });
             });
-            signUpOnClose();
+            onOpenChange();
         }
     }
 
@@ -264,7 +258,7 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                             <p className="text-sm font-semibold w-60 text-center">
                                 Glad to see you joining with us. Please fill up the following fields to set your account up.
                             </p>
-                            <div className="flex flex-col mt-8 w-full px-2">
+                            <div className="flex flex-col mt-8 w-full px-2 mb-4">
                                 <div className='flex gap-5'>
                                     <input
                                         type="text"
@@ -325,17 +319,11 @@ const SignUp = ({isOpen, onOpenChange, signUpOnClose, loginOnOpen}: SignUpProps)
                                 />
                                 <p className='text-red-500 text-[13px]'>{confirmPasswordError}</p>
                                 <Button
-                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-5"
+                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-8"
                                     onPress={() => handleSignUp()}
                                 >
                                     Sign Up
                                 </Button>
-                                <div
-                                    className='w-full flex justify-center items-center my-5'
-                                    onClick={handleSignIn}
-                                >
-                                    <p className='text-blue-500 text-sm cursor-pointer hover:underline text-center'>Already have an account ? Login</p>
-                                </div>
                             </div>
                         </ModalBody>
                     </>

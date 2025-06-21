@@ -15,24 +15,16 @@ import {IoPower, IoSettingsOutline} from "react-icons/io5";
 import {MdAdminPanelSettings} from "react-icons/md";
 import { Key } from "@react-types/shared";
 import handleLogout from "@/util/logout.ts";
+import VerifyEmail from "@/components/verify-email/page.tsx";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
 const Header = () => {
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
-    const {
-        isOpen: isLoginOpen,
-        onOpen: loginOnOpen,
-        onOpenChange: isLoginOpenChange,
-        onClose: loginOnClose
-    } = useDisclosure();
-    const {
-        isOpen: isSignupOpen,
-        onOpen: signupOnOpen,
-        onOpenChange: isSignupOpenChange,
-        onClose: signUpOnClose
-    } = useDisclosure();
+    const {isOpen: loginIsOpen, onOpen: loginOnOpen, onOpenChange: loginOnOpenChange} = useDisclosure();
+    const {isOpen: signupIsOpen, onOpen: signupOnOpen, onOpenChange: signupOnOpenChange} = useDisclosure();
     const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();
+    const {isOpen: verifyEmailIsOpen, onOpen: verifyEmailOnOpen, onOpenChange: verifyEmailOpenChange} = useDisclosure();
     const isWide = useIsScreenWide(850);
     const {isLoggedIn, role} = useAuthContext();
 
@@ -156,13 +148,18 @@ const Header = () => {
             <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} loginOnOpen={loginOnOpen} UserProfileOnOpen={UserProfileOnOpen}/>
 
             {/*Login model*/}
-            {isLoginOpen && (
-                <SignIn isOpen={isLoginOpen} onOpenChange={isLoginOpenChange} loginOnClose={loginOnClose} signupOnOpen={signupOnOpen}/>
+            {loginIsOpen && (
+                <SignIn isOpen={loginIsOpen} onOpenChange={loginOnOpenChange} verifyEmailOnOpen={verifyEmailOnOpen}/>
+            )}
+
+            {/*VerifyEmail Model*/}
+            {verifyEmailIsOpen && (
+                <VerifyEmail isOpen={verifyEmailIsOpen} onOpenChange={verifyEmailOpenChange} signupOnOpen={signupOnOpen} />
             )}
 
             {/*SignUp model*/}
-            {isSignupOpen && (
-                <SignUp isOpen={isSignupOpen} onOpenChange={isSignupOpenChange} signUpOnClose={signUpOnClose} loginOnOpen={loginOnOpen}/>
+            {signupIsOpen && (
+                <SignUp isOpen={signupIsOpen} onOpenChange={signupOnOpenChange} loginOnOpen={loginOnOpen}/>
             )}
 
             {/*User Profile model*/}
