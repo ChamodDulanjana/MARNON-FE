@@ -3,14 +3,16 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    Button, addToast,
+    Button, addToast, Form,
 } from "@heroui/react";
 import {useEffect, useState} from "react";
 import * as React from "react";
 import {SignUpDTO} from "@/models/signUpDTO.ts";
 import {signUp} from "@/services/authService.ts";
-import {passwordRegex} from "@/util/regexPattens.ts";
-import {contactRegex} from "@/util/regexPattens.ts";
+import {passwordRegex, contactRegex, postalCodeRegex} from "@/util/regexPattens.ts";
+import {Input} from "@heroui/input";
+import { FaRegEye } from "react-icons/fa6";
+import { FaRegEyeSlash } from "react-icons/fa6";
 
 interface SignUpProps {
     isOpen: boolean,
@@ -29,44 +31,12 @@ type signUpData = {
 }
 
 const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
-    const [signUpData, setSignUpData] = useState<signUpData>({
-        fName: "",
-        lName: "",
-        password: '',
-        confirmPassword: "",
-        contact: "",
-        address: "",
-    });
-    const [nameError, setNameError] = useState<string | null>('');
-    const [passwordError, setPasswordError] = useState<string | null>('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>('');
-    const [contactError, setContactError] = useState<string | null>('');
-    const [addressError, setAddressError] = useState<string | null>('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+    const [password, setPassword] = useState('');
 
-    useEffect(() => {
-        setNameError('');
-        setPasswordError('');
-        setConfirmPasswordError('');
-        setContactError('');
-        setAddressError('');
-        setSignUpData({
-            fName: "",
-            lName: "",
-            password: '',
-            confirmPassword: "",
-            contact: "",
-            address: "",
-        });
-    }, [isOpen]);
 
-    const handleSignUp = async () => {
-        // Validate fields before proceeding
-        validateFirstName(signUpData.fName);
-        validateLastName(signUpData.lName);
-        validateContact(signUpData.contact);
-        validateAddress(signUpData.address);
-        validatePassword(signUpData.password);
-        validateConfirmPassword(signUpData.confirmPassword);
+    /*const handleSignUp = async () => {
 
         // If all validations pass, proceed with sign-up
         if (nameError === null &&
@@ -111,195 +81,202 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
             });
             onOpenChange();
         }
-    }
+    }*/
 
-    const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, fName: value});
-        validateFirstName(value);
-    }
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-    const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, lName: value});
-        validateLastName(value);
-    }
+        const formData = new FormData(e.currentTarget);
+        const firstName = formData.get('firstName') as string;
+        const lastName = formData.get('lastName') as string;
+        const contact = formData.get('contact') as string;
+        const streetAddress = formData.get('streetAddress') as string;
+        const townCity = formData.get('townCity') as string;
+        const provinceState = formData.get('provinceState') as string;
+        const postalCode = formData.get('postalCode') as string;
+        const password = formData.get('password') as string;
 
-    const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, contact: value});
-        validateContact(value);
-    }
-
-    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, address: value});
-        validateAddress(value);
-    }
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, password: value});
-        validatePassword(value);
-    }
-
-    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, confirmPassword: value});
-        validateConfirmPassword(value);
-    }
-
-    const validateFirstName = (value: string) => {
-        if (value.trim() === '') {
-            setNameError("Both first and last names are required.");
-        } else if (signUpData.lName.trim() === '') {
-            setNameError("Both first and last names are required.");
-        } else {
-            setNameError(null);
-        }
-    }
-
-    const validateLastName = (value: string) => {
-        if (value.trim() === '') {
-            setNameError("Both first and last names are required.");
-        } else if (signUpData.fName.trim() === '') {
-            setNameError("Both first and last names are required.");
-        } else {
-            setNameError(null);
-        }
-    }
-
-    const validateContact = (value: string) => {
-        if (value.trim() === '') {
-            setContactError("Please enter your contact number.");
-        } else if (!contactRegex.test(value)) {
-            setContactError("Please enter a valid contact number (9-15 digits).");
-        } else {
-            setContactError(null);
-        }
-    }
-
-    const validateAddress = (value: string) => {
-        if (value.trim() === '') {
-            setAddressError("Please enter your address.");
-        } else {
-            setAddressError(null);
-        }
-    }
-
-    const validatePassword = (value: string) => {
-        if (value.trim() === '') {
-            setPasswordError("Please enter your password.");
-        } else if (!passwordRegex.test(value)) {
-            setPasswordError(
-                `Password should be:\n` +
-                `• 8–12 characters long\n` +
-                `• At least one uppercase letter\n` +
-                `• At least one lowercase letter\n` +
-                `• At least one number\n` +
-                `• At least one special character`
-            );
-        } else {
-            setPasswordError(null);
-        }
-    }
-
-    const validateConfirmPassword = (value: string) => {
-        if (value.trim() === '') {
-            setConfirmPasswordError("Please confirm your password.");
-        } else if (value !== signUpData.password) {
-            setConfirmPasswordError("Passwords do not match.");
-        } else {
-            setConfirmPasswordError(null);
-        }
-    }
-
+        console.log({ firstName, lastName, contact, streetAddress, townCity, provinceState, postalCode, password });
+    };
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto' scrollBehavior={'inside'}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto font-poppins' size={'lg'} scrollBehavior={'inside'}>
             <ModalContent>
-                {() => (
-                    <>
-                        <ModalHeader className="flex flex-col gap-1">
-                            <h2 className='font-semibold'>Sign Up</h2>
-                            <div className='w-full h-[1px] bg-gray-200 mt-1'></div>
-                        </ModalHeader>
-                        <ModalBody className='flex flex-col items-center'>
-                            <h3 className='font-semibold'>Hello There!</h3>
-                            <p className="text-sm font-semibold w-60 text-center">
-                                Glad to see you joining with us. Please fill up the following fields to set your account
-                                up.
-                            </p>
-                            <div className="flex flex-col mt-8 w-full px-2 mb-4">
-                                <div className='flex gap-5'>
-                                    <input
+                <ModalHeader className="flex flex-col gap-1">
+                    <h2 className='font-semibold'>Sign Up</h2>
+                    <div className='w-full h-[1px] bg-gray-200 mt-1'></div>
+                </ModalHeader>
+                <ModalBody className='flex flex-col items-center'>
+                    <h3 className='font-semibold'>Hello There!</h3>
+                    <p className="text-sm font-semibold max-w-96 text-center">
+                        Glad to see you joining with us. Please fill up the following fields to set your account
+                        up.
+                    </p>
+                    <div className="w-full ">
+                        <Form onSubmit={onSubmit} className='flex flex-col gap-10 mt-8 w-full mb-4'>
+                            {/*Name*/}
+                            <div className='w-full'>
+                                <h2 className='font-semibold text-lg mb-4'>Name</h2>
+                                <p className='text-[12px] mb-1'>Please enter your first and last name.</p>
+                                <div className='flex flex-col gap-4 w-full py-2'>
+                                    <Input
+                                        name="firstName"
+                                        isRequired
+                                        label="First name"
+                                        variant='bordered'
                                         type="text"
-                                        placeholder="First name"
-                                        onChange={(e) => handleFirstNameChange(e)}
-                                        className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                        validate={value => value.length < 3 ? "First name must be at least 3 characters long." : null}
                                     />
-                                    <input
+                                    <Input
+                                        name="lastName"
+                                        isRequired
+                                        label="Last name"
+                                        variant='bordered'
                                         type="text"
-                                        placeholder="Last name"
-                                        onChange={(e) => handleLastNameChange(e)}
-                                        className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                        validate={value => value.length < 3 ? "Last name must be at least 3 characters long." : null}
                                     />
                                 </div>
-                                <p className='text-red-500 text-[13px]'>{nameError}</p>
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={email}
-                                    readOnly
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Contact"
-                                    onChange={(e) => handleContactChange(e)}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
-                                />
-                                <p className='text-red-500 text-[13px]'>{contactError}</p>
-                                <input
-                                    type="text"
-                                    placeholder="Address"
-                                    onChange={(e) => handleAddressChange(e)}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
-                                />
-                                <p className='text-red-500 text-[13px]'>{addressError}</p>
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={(e) => handlePasswordChange(e)}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
-                                />
-                                <p className='text-red-500 text-[13px]'>
-                                    {passwordError && (
-                                        <div className="text-red-500 text-[13px] mt-2">
-                                            {passwordError.split('\n').map((line, index) => (
-                                                <p key={index}>{line}</p>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                </p>
-                                <input
-                                    type="password"
-                                    placeholder="Confirm password"
-                                    onChange={(e) => handleConfirmPasswordChange(e)}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
-                                />
-                                <p className='text-red-500 text-[13px]'>{confirmPasswordError}</p>
-                                <Button
-                                    className="w-full h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-8"
-                                    onPress={() => handleSignUp()}
-                                >
-                                    Sign Up
-                                </Button>
                             </div>
-                        </ModalBody>
-                    </>
-                )}
+
+                            {/*Contact*/}
+                            <div className='w-full'>
+                                <h2 className='font-semibold text-lg mb-4'>Contact</h2>
+                                <p className='text-[12px] mb-2'>Please enter your contact number.</p>
+                                <Input
+                                    name="contact"
+                                    isRequired
+                                    label="Contact"
+                                    variant='bordered'
+                                    type="text"
+                                    validate={value => {
+                                        if (!contactRegex.test(value)){
+                                            return "Please enter a valid contact number (9-15 digits).";
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            {/*Address*/}
+                            <div className='w-full'>
+                                <h2 className='font-semibold text-lg mb-4'>Address</h2>
+                                <p className='text-[12px] mb-1'>Please enter your address. This will be used for shipping and billing purposes.</p>
+                                <div className='flex flex-col gap-4 w-full py-2'>
+                                    <Input
+                                        name="streetAddress"
+                                        isRequired
+                                        label="Street Address"
+                                        variant='bordered'
+                                        type="text"
+                                        validate={value => value.length < 6 ? "Street address must be at least 3 characters long." : null}
+                                    />
+                                    <Input
+                                        name="townCity"
+                                        isRequired
+                                        label="Town/City"
+                                        variant='bordered'
+                                        type="text"
+                                        validate={value => value.length < 4 ? "Town/City must be at least 3 characters long." : null}
+                                    />
+                                    <Input
+                                        name="provinceState"
+                                        isRequired
+                                        label="Province/State"
+                                        variant='bordered'
+                                        type="text"
+                                        validate={value => value.length < 4 ? "Province/State must be at least 3 characters long." : null}
+                                    />
+                                    <Input
+                                        name="postalCode"
+                                        isRequired
+                                        label="Postal Code"
+                                        variant='bordered'
+                                        type="text"
+                                        validate={value => !postalCodeRegex.test(value) ? "Please enter a valid postal code." : null}
+                                    />
+                                </div>
+                            </div>
+
+                            {/*Password*/}
+                            <div className='w-full'>
+                                <h2 className='font-semibold text-lg mb-4'>Password</h2>
+                                <div className='text-[12px] mb-1'>
+                                    Please enter a strong password that meets the following criteria:
+                                    <ul className='list-disc pl-5 mt-2'>
+                                        <li>8–12 characters long</li>
+                                        <li>At least one uppercase letter</li>
+                                        <li>At least one lowercase letter</li>
+                                        <li>At least one number</li>
+                                        <li>At least one special character</li>
+                                    </ul>
+                                </div>
+                                <div className='w-full py-2 flex flex-col gap-5 mt-3'>
+                                    <Input
+                                        endContent={
+                                            <button
+                                                aria-label="toggle password visibility"
+                                                className="focus:outline-none"
+                                                type="button"
+                                                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                                            >
+                                                {isPasswordVisible ? (
+                                                    <FaRegEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                                                ) : (
+                                                    <FaRegEye className="text-2xl text-default-400 pointer-events-none" />
+                                                )}
+                                            </button>
+                                        }
+                                        name="password"
+                                        label="Password"
+                                        type={isPasswordVisible ? "text" : "password"}
+                                        variant="bordered"
+                                        isRequired
+                                        onValueChange={setPassword}
+                                        validate={value => {
+                                            if (!passwordRegex.test(value)) {
+                                                return 'Password does not meet the criteria';
+                                            }
+                                        }}
+                                    />
+                                    <Input
+                                        endContent={
+                                            <button
+                                                aria-label="toggle password visibility"
+                                                className="focus:outline-none"
+                                                type="button"
+                                                onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                                            >
+                                                {isConfirmPasswordVisible ? (
+                                                    <FaRegEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                                                ) : (
+                                                    <FaRegEye className="text-2xl text-default-400 pointer-events-none" />
+                                                )}
+                                            </button>
+                                        }
+                                        name="confirmPassword"
+                                        label="Confirm Password"
+                                        type={isConfirmPasswordVisible ? "text" : "password"}
+                                        variant="bordered"
+                                        isRequired
+                                        validate={value => {
+                                            if (value !== password) {
+                                                return 'Passwords do not match';
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/*SignUp Btn*/}
+                            <Button
+                                type="submit"
+                                color='primary'
+                                className='w-full'
+                            >
+                                Sign Up
+                            </Button>
+                        </Form>
+                    </div>
+                </ModalBody>
             </ModalContent>
         </Modal>
     );

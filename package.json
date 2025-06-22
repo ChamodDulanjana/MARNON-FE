@@ -13,6 +13,7 @@
     "@heroui/avatar": "^2.2.15",
     "@heroui/drawer": "^2.2.16",
     "@heroui/dropdown": "^2.3.20",
+    "@heroui/input": "^2.4.22",
     "@heroui/react": "^2.7.8",
     "@heroui/table": "^2.2.20",
     "@heroui/toast": "^2.0.9",

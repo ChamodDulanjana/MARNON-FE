@@ -18,7 +18,7 @@ function ZoomableImage({ src, alt }: ZoomableImageType) {
 
     return (
         <div
-            className="w-full object-cover rounded-lg min-[425px]:h-[458px] xl:h-[550px] min-[1600px]:h-[680px] min-[2560px]:h-[880px] border"
+            className="w-full object-cover rounded-lg min-[425px]:h-[458px] xl:h-[550px] min-[1600px]:h-[680px] min-[2560px]:h-[880px]"
             style={{
                 backgroundImage: `url(${src})`,
                 backgroundPosition,
