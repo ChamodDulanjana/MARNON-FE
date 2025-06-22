@@ -7,7 +7,7 @@ import NotFound from "@/pages/notFound.tsx";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import ZoomableImage from "@/components/zoomable-image/page.tsx";
 import formatNumber from "@/util/formatNumber.ts";
-
+import { GoDotFill } from "react-icons/go";
 
 type ProductType = {
     id: number,
@@ -100,10 +100,17 @@ const ProductDisplay = () => {
         setMainImage(defaultMainImg);
     }, [product]);
 
+    // reset quantity when selectedSize changes
+    useEffect(() => {
+        setQuantity(1);
+    }, [selectedSize]);
+
+    const handleAddToCartBtn = () => {
+
+    }
+
     if (isLoading) return <LoadingAnimation />;
     if (isError)   return <NotFound />;
-
-    console.log("Product Data:", product);
 
     return (
         <div className="flex flex-col items-center justify-center lg:flex-row gap-6 xl:gap-14 pt-3 md:pt-10 p-2 lg:px-16 lg:py-14 max-w-[2000px] mx-auto lg:items-start mb-10">
@@ -191,24 +198,37 @@ const ProductDisplay = () => {
                             >−</button>
                             <span className="px-4 py-1 border border-gray-300 min-[2560px]:px-8 min-[2560px]:py-4">{quantity}</span>
                             <button
-                                onClick={() => setQuantity(q => q + 1)}
+                                onClick={() => {
+                                    if (selectedSize.qty > quantity){
+                                        setQuantity(q => q + 1);
+                                    }
+                                }}
                                 className="px-[6px] py-1 hover:bg-gray-200 border border-white hover:border-gray-200 min-[2560px]:px-[14px] min-[2560px]:py-4"
                             >＋</button>
                         </div>
 
                         {/*Add to Cart Button*/}
-                        <button className="w-40 h-10 bg-black text-white font-semibold rounded flex items-center justify-center gap-2 min-[2560px]:w-72 min-[2560px]:h-16 min-[2560px]:text-xl">
+                        <button
+                            disabled={selectedSize.qty <= 0}
+                            onClick={handleAddToCartBtn}
+                            className={`w-40 h-10 bg-black text-white font-semibold rounded flex items-center justify-center
+                            gap-2 min-[2560px]:w-72 min-[2560px]:h-16 min-[2560px]:text-xl ${selectedSize.qty <= 0 ? 'opacity-20 cursor-not-allowed' : ''}`}
+                        >
                             <PiShoppingCartSimpleBold className='mr-2'/>
                             Add to Cart
                         </button>
                     </div>
 
+                    {/*Availability and Categories*/}
                     <div className="text-sm text-gray-600 space-y-2 pt-4 min-[2560px]:text-xl min-[2560px]:pt-8">
                         <p className="font-semibold">
                             <span className="font-normal text-gray-500 mr-1">Availability:</span>
                             { selectedSize.qty > 0 ?
                             <span className="text-green-500">In Stock
-                                <span className='ml-2'>({formatNumber(selectedSize.qty)} Available)</span>
+                                <span className='ml-3'>
+                                    <GoDotFill className='text-[10px] mb-1 mr-px inline'/>
+                                    {formatNumber(selectedSize.qty)} Available
+                                </span>
                             </span>
                                 :
                             <span className="text-red-500">Out of Stock</span>
