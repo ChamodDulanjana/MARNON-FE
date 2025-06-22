@@ -6,6 +6,7 @@ import LoadingAnimation from "@/components/loading-animation/page.tsx";
 import NotFound from "@/pages/notFound.tsx";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import ZoomableImage from "@/components/zoomable-image/page.tsx";
+import formatNumber from "@/util/formatNumber.ts";
 
 
 type ProductType = {
@@ -31,11 +32,17 @@ type ProductType = {
     }[]
 }
 
+type SelectedSizeType = {
+    size: string,
+    qty: number
+}
+
 const ProductDisplay = () => {
     const {productId} = useParams();
-    const [selectedSize, setSelectedSize] = useState<string>("S");
+    const [selectedSize, setSelectedSize] = useState<SelectedSizeType>({ size: "", qty: 0 });
     const [quantity, setQuantity] = useState<number>(1);
-    const [mainImage, setMainImage] = useState("");
+    const [mainImage, setMainImage] = useState("example.jpg"); // Default image
+    const [categories, setCategories] = useState(''); // Initialize categories as an empty string
 
     const {
         isLoading,
@@ -64,14 +71,39 @@ const ProductDisplay = () => {
         })
     }, []);
 
-
+    // Set categories as a comma-separated string
     useEffect(() => {
-        const defaultMainImg = product.image.filter(image => image.type === 'MAIN')[0]?.image || '';
+        if (product.category.length > 0) {
+            const categoryNames = product.category.map(cat => cat.name).join(', ');
+            setCategories(categoryNames);
+        } else {
+            setCategories('No categories available');
+        }
+    }, [product.category]);
+
+    // Assign setSelectedSize to the quantity > 0 size when the product size changes
+    useEffect(() => {
+        if (product.size.length > 0) {
+            const availableSize = product.size.find(size => size.qty > 0);
+            if (availableSize) {
+                setSelectedSize({ size: availableSize.size, qty: availableSize.qty });
+            } else {
+                const firstSize = product.size[0];
+                setSelectedSize({ size: firstSize.size, qty: firstSize.qty });
+            }
+        }
+    }, [product.size]);
+
+    // Set the main image to the first MAIN type image or a default image
+    useEffect(() => {
+        const defaultMainImg = product.image.filter(image => image.type === 'MAIN')[0]?.image || 'example.jpg';
         setMainImage(defaultMainImg);
     }, [product]);
 
     if (isLoading) return <LoadingAnimation />;
     if (isError)   return <NotFound />;
+
+    console.log("Product Data:", product);
 
     return (
         <div className="flex flex-col items-center justify-center lg:flex-row gap-6 xl:gap-14 pt-3 md:pt-10 p-2 lg:px-16 lg:py-14 max-w-[2000px] mx-auto lg:items-start mb-10">
@@ -132,14 +164,14 @@ const ProductDisplay = () => {
 
                     {/*Size*/}
                     <div className="pt-4 min-[2560px]:pt-8">
-                        <span className="font-semibold min-[2560px]:text-xl">SIZE:</span> {selectedSize}
+                        <span className="font-semibold min-[2560px]:text-xl">SIZE:</span> {selectedSize.size}
                         <div className="flex gap-3 mt-2">
                             {product.size.map((size, index: number) => (
                                 <button
                                     key={index}
-                                    onClick={() => setSelectedSize(size.size)}
+                                    onClick={() => setSelectedSize({ size: size.size, qty: size.qty })}
                                     className={`w-12 h-10 border border-gray-300 rounded min-[2560px]:w-20 min-[2560px]:h-14 min-[2560px]:text-xl ${
-                                        selectedSize === size.size
+                                        selectedSize.size === size.size
                                             ? "bg-black text-white"
                                             : "bg-white text-black"
                                     }`}
@@ -171,9 +203,20 @@ const ProductDisplay = () => {
                         </button>
                     </div>
 
-                    <div className="text-sm text-gray-600 space-y-1 pt-4 min-[2560px]:text-xl min-[2560px]:pt-8">
-                        <p className="text-green-500 font-semibold"><span className="font-normal text-gray-500 mr-1">Availability:</span> In Stock</p>
-                        <p className="text-gray-400 text-xs">
+                    <div className="text-sm text-gray-600 space-y-2 pt-4 min-[2560px]:text-xl min-[2560px]:pt-8">
+                        <p className="font-semibold">
+                            <span className="font-normal text-gray-500 mr-1">Availability:</span>
+                            { selectedSize.qty > 0 ?
+                            <span className="text-green-500">In Stock
+                                <span className='ml-2'>({formatNumber(selectedSize.qty)} Available)</span>
+                            </span>
+                                :
+                            <span className="text-red-500">Out of Stock</span>
+                            }
+                        </p>
+                        <p className="font-semibold">
+                            <span className="font-normal text-gray-500 mr-1">Categories:</span>
+                            <span className="text-gray-500">{categories}</span>
                         </p>
                     </div>
                 </div>
