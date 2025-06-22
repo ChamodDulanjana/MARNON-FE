@@ -9,41 +9,35 @@ import {useEffect, useState} from "react";
 import * as React from "react";
 import {SignUpDTO} from "@/models/signUpDTO.ts";
 import {signUp} from "@/services/authService.ts";
+import {passwordRegex} from "@/util/regexPattens.ts";
+import {contactRegex} from "@/util/regexPattens.ts";
 
 interface SignUpProps {
     isOpen: boolean,
     onOpenChange: () => void,
-    loginOnOpen: () => void
+    loginOnOpen: () => void,
+    email: string
 }
 
 type signUpData = {
     fName: string,
     lName: string,
-    email: string,
     password: string,
     confirmPassword: string,
     contact: string,
     address: string,
-    role: string
 }
 
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,12}$/;
-const contactRegex = /^\d{9,15}$/;
-
-const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
+const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
     const [signUpData, setSignUpData] = useState<signUpData>({
         fName: "",
         lName: "",
-        email: '',
         password: '',
         confirmPassword: "",
         contact: "",
         address: "",
-        role: ""
     });
     const [nameError, setNameError] = useState<string | null>('');
-    const [emailError, setEmailError] = useState<string | null>('');
     const [passwordError, setPasswordError] = useState<string | null>('');
     const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>('');
     const [contactError, setContactError] = useState<string | null>('');
@@ -51,7 +45,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
 
     useEffect(() => {
         setNameError('');
-        setEmailError('');
         setPasswordError('');
         setConfirmPasswordError('');
         setContactError('');
@@ -59,12 +52,10 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
         setSignUpData({
             fName: "",
             lName: "",
-            email: '',
             password: '',
             confirmPassword: "",
             contact: "",
             address: "",
-            role: ""
         });
     }, [isOpen]);
 
@@ -72,7 +63,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
         // Validate fields before proceeding
         validateFirstName(signUpData.fName);
         validateLastName(signUpData.lName);
-        validateEmail(signUpData.email);
         validateContact(signUpData.contact);
         validateAddress(signUpData.address);
         validatePassword(signUpData.password);
@@ -80,7 +70,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
 
         // If all validations pass, proceed with sign-up
         if (nameError === null &&
-            emailError === null &&
             passwordError === null &&
             confirmPasswordError === null &&
             contactError === null &&
@@ -88,7 +77,7 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
 
             const signUpDTO: SignUpDTO = {
                 name: `${signUpData.fName} ${signUpData.lName}`,
-                email: signUpData.email,
+                email: email,
                 password: signUpData.password,
                 contact: signUpData.contact,
                 address: signUpData.address,
@@ -136,12 +125,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
         validateLastName(value);
     }
 
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setSignUpData({...signUpData, email: value});
-        validateEmail(value);
-    }
-
     const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim();
         setSignUpData({...signUpData, contact: value});
@@ -183,16 +166,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
             setNameError("Both first and last names are required.");
         } else {
             setNameError(null);
-        }
-    }
-
-    const validateEmail = (value: string) => {
-        if (value.trim() === '') {
-            setEmailError("Please enter your email.");
-        } else if (!emailRegex.test(value)) {
-            setEmailError("Please enter a valid email address.");
-        } else {
-            setEmailError(null);
         }
     }
 
@@ -242,8 +215,6 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
     }
 
 
-
-
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto' scrollBehavior={'inside'}>
             <ModalContent>
@@ -256,7 +227,8 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
                         <ModalBody className='flex flex-col items-center'>
                             <h3 className='font-semibold'>Hello There!</h3>
                             <p className="text-sm font-semibold w-60 text-center">
-                                Glad to see you joining with us. Please fill up the following fields to set your account up.
+                                Glad to see you joining with us. Please fill up the following fields to set your account
+                                up.
                             </p>
                             <div className="flex flex-col mt-8 w-full px-2 mb-4">
                                 <div className='flex gap-5'>
@@ -277,10 +249,10 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen}: SignUpProps) => {
                                 <input
                                     type="email"
                                     placeholder="Email"
-                                    onChange={(e) => handleEmailChange(e)}
+                                    value={email}
+                                    readOnly
                                     className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-5"
                                 />
-                                <p className='text-red-500 text-[13px]'>{emailError}</p>
                                 <input
                                     type="text"
                                     placeholder="Contact"

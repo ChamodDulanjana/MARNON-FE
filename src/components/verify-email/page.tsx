@@ -2,7 +2,7 @@ import {Button, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react
 import {useEffect, useState} from "react";
 import * as React from "react";
 import {emailRegex} from "@/util/regexPattens.ts";
-import { MdOutlineVerifiedUser } from "react-icons/md";
+import {MdOutlineVerifiedUser} from "react-icons/md";
 import {addToast} from "@heroui/react";
 import {sendOtpForSignup, verifyOtp} from "@/services/otpService.ts";
 import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp.tsx";
@@ -10,11 +10,12 @@ import {REGEXP_ONLY_DIGITS} from "input-otp";
 
 interface VerifyEmailProps {
     isOpen: boolean,
-    onOpenChange: () => void
-    signupOnOpen: () => void
+    onOpenChange: () => void,
+    signupOnOpen: () => void,
+    setEmailSignUp: (value: string) => void,
 }
 
-const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => {
+const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen, setEmailSignUp}: VerifyEmailProps) => {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>('');
     const [isVerifyBtnClicked, setIsVerifyBtnClicked] = useState(false);
@@ -30,7 +31,7 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
             setDisableOTP(false);
             setIsOtpSent(true);
         };
-    }, []);
+    }, [setEmail]);
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
@@ -49,20 +50,18 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
     }
 
     const handleVerifyEmailBtn = () => {
-        if (emailError === null){
+        if (emailError === null) {
             sendOtpForSignup(email).then(resp => {
                 if (resp.statusCode === 200) {
                     setIsVerifyBtnClicked(true);
                     setIsOtpSent(true);
                 } else {
                     addToast({
-                        title: "Error",
+                        title: "Error Verifying Email",
                         color: "danger",
                         description: resp.message || "An unexpected error occurred.",
                     });
                 }
-                //onOpenChange();
-
             }).catch(error => {
                 const backendResponse = error.response?.data;
                 addToast({
@@ -74,7 +73,6 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
         } else {
             setEmailError('Please enter your email.');
         }
-
     }
 
     const handleVerifyOTP = (value: string) => {
@@ -89,7 +87,7 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                         color: "success",
                         description: "Your email has been successfully verified.",
                     });
-                    onOpenChange();
+                    setEmailSignUp(email);
                     signupOnOpen();
                 } else {
                     addToast({
@@ -97,8 +95,8 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                         color: "danger",
                         description: resp.message || "An unexpected error occurred.",
                     });
-                    onOpenChange();
                 }
+                onOpenChange();
             }).catch(error => {
                 const backendResponse = error.response?.data;
                 addToast({
@@ -153,6 +151,7 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
     return (
         <>
             {isVerifyBtnClicked ? (
+                /*OTP Verification*/
                 <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"md"} className='m-4 my-auto overflow-hidden'>
                     <ModalContent>
                         <ModalHeader className="flex flex-col gap-1">
@@ -162,7 +161,8 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                         <ModalBody className='flex flex-col items-center'>
                             <div className='w-full'>
                                 <p className="text-sm font-semibold  ">
-                                    We have sent an OTP to your email address. Please enter the OTP to verify your email.
+                                    We have sent an OTP to your email address. Please enter the OTP to verify your
+                                    email.
                                 </p>
                             </div>
 
@@ -176,12 +176,12 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                                     autoFocus
                                 >
                                     <InputOTPGroup className='gap-2'>
-                                        <InputOTPSlot index={0} />
-                                        <InputOTPSlot index={1} />
-                                        <InputOTPSlot index={2} />
-                                        <InputOTPSlot index={3} />
-                                        <InputOTPSlot index={4} />
-                                        <InputOTPSlot index={5} />
+                                        <InputOTPSlot index={0}/>
+                                        <InputOTPSlot index={1}/>
+                                        <InputOTPSlot index={2}/>
+                                        <InputOTPSlot index={3}/>
+                                        <InputOTPSlot index={4}/>
+                                        <InputOTPSlot index={5}/>
                                     </InputOTPGroup>
                                 </InputOTP>
                             </div>
@@ -212,6 +212,8 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                     </ModalContent>
                 </Modal>
             ) : (
+
+                /*Verify Email*/
                 <Modal isOpen={isOpen} onOpenChange={onOpenChange} size={"md"} className='m-4 my-auto overflow-hidden'>
                     <ModalContent>
                         <ModalHeader className="flex flex-col gap-1">
@@ -228,6 +230,7 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen}: VerifyEmailProps) => 
                                 <input
                                     type="email"
                                     placeholder="Email"
+                                    value={email}
                                     onChange={(e) => handleEmailChange(e)}
                                     className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
                                 />

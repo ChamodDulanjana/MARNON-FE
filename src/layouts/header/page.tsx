@@ -7,7 +7,7 @@ import {FaBars} from "react-icons/fa";
 import ResponsiveNav from "../../components/responsive-nav/page.tsx";
 import SignUp from "../../components/sign-up/page.tsx";
 import {useIsScreenWide} from "../../hooks/useIsScreenWide.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Tooltip} from "@heroui/tooltip";
 import UserProfile from "../../components/user-profile/page.tsx";
 import {useAuthContext} from "../../context/authContext.tsx";
@@ -27,6 +27,12 @@ const Header = () => {
     const {isOpen: verifyEmailIsOpen, onOpen: verifyEmailOnOpen, onOpenChange: verifyEmailOpenChange} = useDisclosure();
     const isWide = useIsScreenWide(850);
     const {isLoggedIn, role} = useAuthContext();
+    const [emailSignUp, setEmailSignUp] = useState('');
+
+    // Clear states
+    useEffect(() => {
+        setEmailSignUp('');
+    }, []);
 
     useEffect(() => {
         if (isWide) {
@@ -154,12 +160,12 @@ const Header = () => {
 
             {/*VerifyEmail Model*/}
             {verifyEmailIsOpen && (
-                <VerifyEmail isOpen={verifyEmailIsOpen} onOpenChange={verifyEmailOpenChange} signupOnOpen={signupOnOpen} />
+                <VerifyEmail isOpen={verifyEmailIsOpen} onOpenChange={verifyEmailOpenChange} signupOnOpen={signupOnOpen} setEmailSignUp={setEmailSignUp}/>
             )}
 
             {/*SignUp model*/}
             {signupIsOpen && (
-                <SignUp isOpen={signupIsOpen} onOpenChange={signupOnOpenChange} loginOnOpen={loginOnOpen}/>
+                <SignUp isOpen={signupIsOpen} onOpenChange={signupOnOpenChange} loginOnOpen={loginOnOpen} email={emailSignUp}/>
             )}
 
             {/*User Profile model*/}
