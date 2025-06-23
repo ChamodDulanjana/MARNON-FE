@@ -1,12 +1,12 @@
-import {Button, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
+import {Button, Form, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
 import {useEffect, useState} from "react";
-import * as React from "react";
-import {emailRegex} from "@/util/regexPattens.ts";
 import {MdOutlineVerifiedUser} from "react-icons/md";
 import {addToast} from "@heroui/react";
 import {sendOtpForSignup, verifyOtp} from "@/services/otpService.ts";
 import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp.tsx";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
+import {Input} from "@heroui/input";
+import * as React from "react";
 
 interface VerifyEmailProps {
     isOpen: boolean,
@@ -17,7 +17,6 @@ interface VerifyEmailProps {
 
 const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen, setEmailSignUp}: VerifyEmailProps) => {
     const [email, setEmail] = useState('');
-    const [emailError, setEmailError] = useState<string | null>('');
     const [isVerifyBtnClicked, setIsVerifyBtnClicked] = useState(false);
     const [disableOTP, setDisableOTP] = useState(false);
     const [isOtpSent, setIsOtpSent] = useState(false);
@@ -26,53 +25,35 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen, setEmailSignUp}: Verif
     useEffect(() => {
         return () => {
             setEmail('');
-            setEmailError('');
             setIsVerifyBtnClicked(false);
             setDisableOTP(false);
             setIsOtpSent(true);
         };
     }, [setEmail]);
 
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const email = e.target.value;
-        setEmail(email);
-        validateEmail(email);
-    }
+    const handleVerifyEmailBtn = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-    const validateEmail = (email: string) => {
-        if (email.trim() === '') {
-            setEmailError("Please enter your email.");
-        } else if (!emailRegex.test(email)) {
-            setEmailError("Please enter a valid email address.");
-        } else {
-            setEmailError(null);
-        }
-    }
-
-    const handleVerifyEmailBtn = () => {
-        if (emailError === null) {
-            sendOtpForSignup(email).then(resp => {
-                if (resp.statusCode === 200) {
-                    setIsVerifyBtnClicked(true);
-                    setIsOtpSent(true);
-                } else {
-                    addToast({
-                        title: "Error Verifying Email",
-                        color: "danger",
-                        description: resp.message || "An unexpected error occurred.",
-                    });
-                }
-            }).catch(error => {
-                const backendResponse = error.response?.data;
+        // Call the API to send OTP for signup
+        sendOtpForSignup(email).then(resp => {
+            if (resp.statusCode === 200) {
+                setIsVerifyBtnClicked(true);
+                setIsOtpSent(true);
+            } else {
                 addToast({
-                    title: "Error",
+                    title: "Error Verifying Email",
                     color: "danger",
-                    description: backendResponse?.message || "An unexpected error occurred.",
+                    description: resp.message || "An unexpected error occurred.",
                 });
-            })
-        } else {
-            setEmailError('Please enter your email.');
-        }
+            }
+        }).catch(error => {
+            const backendResponse = error.response?.data;
+            addToast({
+                title: "Error",
+                color: "danger",
+                description: backendResponse?.message || "An unexpected error occurred.",
+            });
+        })
     }
 
     const handleVerifyOTP = (value: string) => {
@@ -110,7 +91,7 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen, setEmailSignUp}: Verif
     }
 
     const resendOtp = () => {
-        if (emailError === null) {
+        if (!email || email.trim() !== '') {
             sendOtpForSignup(email).then(resp => {
                 if (resp.statusCode === 200) {
                     setIsOtpSent(true);
@@ -226,25 +207,26 @@ const VerifyEmail = ({isOpen, onOpenChange, signupOnOpen, setEmailSignUp}: Verif
                                     Please enter your email address to verify your email address.
                                 </p>
                             </div>
-                            <div className="flex flex-col my-4 w-full">
-                                <input
+                            <Form onSubmit={handleVerifyEmailBtn} className='w-full flex flex-col my-4'>
+                                <Input
+                                    name="email"
+                                    isRequired
+                                    label="Email"
+                                    variant='bordered'
                                     type="email"
-                                    placeholder="Email"
                                     value={email}
-                                    onChange={(e) => handleEmailChange(e)}
-                                    className="w-full h-12 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black"
+                                    onValueChange={setEmail}
                                 />
-                                <p className='text-red-500 text-[13px]'>{emailError}</p>
-                                <div className='w-full flex justify-end'>
+                                <div className='w-full flex justify-end mt-6'>
                                     <Button
-                                        className="w-36 h-12 bg-black text-white rounded-md flex justify-center items-center font-semibold mt-5"
-                                        onPress={() => handleVerifyEmailBtn()}
+                                        type="submit"
+                                        color='primary'
                                     >
                                         <MdOutlineVerifiedUser className='text-lg'/>
                                         Verify Email
                                     </Button>
                                 </div>
-                            </div>
+                            </Form>
                         </ModalBody>
                     </ModalContent>
                 </Modal>
