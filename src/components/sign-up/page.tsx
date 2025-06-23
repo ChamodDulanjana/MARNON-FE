@@ -5,14 +5,14 @@ import {
     ModalBody,
     Button, addToast, Form,
 } from "@heroui/react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import * as React from "react";
-import {SignUpDTO} from "@/models/signUpDTO.ts";
-import {signUp} from "@/services/authService.ts";
-import {passwordRegex, contactRegex, postalCodeRegex} from "@/util/regexPattens.ts";
+import {passwordRegex, contactRegex} from "@/util/regexPattens.ts";
 import {Input} from "@heroui/input";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
+import {SignUpDTO} from "@/models/signUpDTO.ts";
+import {signUp} from "@/services/authService.ts";
 
 interface SignUpProps {
     isOpen: boolean,
@@ -21,86 +21,62 @@ interface SignUpProps {
     email: string
 }
 
-type signUpData = {
-    fName: string,
-    lName: string,
-    password: string,
-    confirmPassword: string,
-    contact: string,
-    address: string,
-}
-
 const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
     const [password, setPassword] = useState('');
 
-
-    /*const handleSignUp = async () => {
-
-        // If all validations pass, proceed with sign-up
-        if (nameError === null &&
-            passwordError === null &&
-            confirmPasswordError === null &&
-            contactError === null &&
-            addressError === null) {
-
-            const signUpDTO: SignUpDTO = {
-                name: `${signUpData.fName} ${signUpData.lName}`,
-                email: email,
-                password: signUpData.password,
-                contact: signUpData.contact,
-                address: signUpData.address,
-                role: "USER" // Role is always USER for sign-up
-            }
-
-            // Call the signUp service
-            signUp(signUpDTO).then(res => {
-                if (res.statusCode === 201) {
-                    addToast({
-                        title: "Sign Up Successful",
-                        color: "success",
-                    });
-                    loginOnOpen();
-                } else {
-                    addToast({
-                        title: "Sign Up Failed",
-                        color: "danger",
-                        description: res.message || "An unexpected error occurred. Please try again later.",
-                    });
-                }
-                onOpenChange();
-
-            }).catch(error => {
-                const backendResponse = error.response?.data;
-                addToast({
-                    title: "Sign Up Failed",
-                    color: "danger",
-                    description: backendResponse?.message || "An unexpected error occurred.",
-                });
-            });
-            onOpenChange();
-        }
-    }*/
-
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const formData = new FormData(e.currentTarget);
+
+        // Gather form data
         const firstName = formData.get('firstName') as string;
         const lastName = formData.get('lastName') as string;
         const contact = formData.get('contact') as string;
         const streetAddress = formData.get('streetAddress') as string;
-        const townCity = formData.get('townCity') as string;
-        const provinceState = formData.get('provinceState') as string;
-        const postalCode = formData.get('postalCode') as string;
         const password = formData.get('password') as string;
 
-        console.log({ firstName, lastName, contact, streetAddress, townCity, provinceState, postalCode, password });
+        // Build the sign-up data object
+        const signUpDTO: SignUpDTO = {
+            name: `${firstName} ${lastName}`,
+            email: email,
+            password: password,
+            contact: contact,
+            streetAddress: streetAddress,
+            role: "USER" // Role is always USER for sign-up
+        }
+
+        // Call the signUp service
+        signUp(signUpDTO).then(res => {
+            if (res.statusCode === 201) {
+                addToast({
+                    title: "Sign Up Successful",
+                    color: "success",
+                });
+                loginOnOpen();
+            } else {
+                addToast({
+                    title: "Sign Up Failed",
+                    color: "danger",
+                    description: res.message || "An unexpected error occurred. Please try again later.",
+                });
+            }
+
+        }).catch(error => {
+            const backendResponse = error.response?.data;
+            addToast({
+                title: "Sign Up Failed",
+                color: "danger",
+                description: backendResponse?.message || "An unexpected error occurred.",
+            });
+        });
+        onOpenChange();
     };
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto font-poppins' size={'lg'} scrollBehavior={'inside'}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='m-4 my-auto font-poppins' size={'md'} scrollBehavior={'inside'}>
             <ModalContent>
                 <ModalHeader className="flex flex-col gap-1">
                     <h2 className='font-semibold'>Sign Up</h2>
@@ -108,7 +84,7 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
                 </ModalHeader>
                 <ModalBody className='flex flex-col items-center'>
                     <h3 className='font-semibold'>Hello There!</h3>
-                    <p className="text-sm font-semibold max-w-96 text-center">
+                    <p className="text-sm font-normal max-w-96 text-center">
                         Glad to see you joining with us. Please fill up the following fields to set your account
                         up.
                     </p>
@@ -159,41 +135,15 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
                             {/*Address*/}
                             <div className='w-full'>
                                 <h2 className='font-semibold text-lg mb-4'>Address</h2>
-                                <p className='text-[12px] mb-1'>Please enter your address. This will be used for shipping and billing purposes.</p>
-                                <div className='flex flex-col gap-4 w-full py-2'>
-                                    <Input
-                                        name="streetAddress"
-                                        isRequired
-                                        label="Street Address"
-                                        variant='bordered'
-                                        type="text"
-                                        validate={value => value.length < 6 ? "Street address must be at least 3 characters long." : null}
-                                    />
-                                    <Input
-                                        name="townCity"
-                                        isRequired
-                                        label="Town/City"
-                                        variant='bordered'
-                                        type="text"
-                                        validate={value => value.length < 4 ? "Town/City must be at least 3 characters long." : null}
-                                    />
-                                    <Input
-                                        name="provinceState"
-                                        isRequired
-                                        label="Province/State"
-                                        variant='bordered'
-                                        type="text"
-                                        validate={value => value.length < 4 ? "Province/State must be at least 3 characters long." : null}
-                                    />
-                                    <Input
-                                        name="postalCode"
-                                        isRequired
-                                        label="Postal Code"
-                                        variant='bordered'
-                                        type="text"
-                                        validate={value => !postalCodeRegex.test(value) ? "Please enter a valid postal code." : null}
-                                    />
-                                </div>
+                                <p className='text-[12px] mb-2'>Please enter your address. This will be used for shipping and billing purposes.</p>
+                                <Input
+                                    name="streetAddress"
+                                    isRequired
+                                    label="Street Address"
+                                    variant='bordered'
+                                    type="text"
+                                    validate={value => value.length < 6 ? "Street address must be at least 3 characters long." : null}
+                                />
                             </div>
 
                             {/*Password*/}

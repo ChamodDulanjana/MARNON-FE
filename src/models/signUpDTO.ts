@@ -4,6 +4,9 @@ export interface SignUpDTO {
     email: string;
     password: string;
     contact: string;
-    address: string;
-    role: string;
+    streetAddress: string;
+    townOrCity?: string;
+    provinceOrState?: string;
+    postalCode?: string;
+    role?: string;
 }
