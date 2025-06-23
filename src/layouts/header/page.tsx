@@ -16,6 +16,7 @@ import {MdAdminPanelSettings} from "react-icons/md";
 import { Key } from "@react-types/shared";
 import handleLogout from "@/util/logout.ts";
 import VerifyEmail from "@/components/verify-email/page.tsx";
+import menus from "@/assets/data/menus.ts";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
@@ -54,30 +55,24 @@ const Header = () => {
     };
 
     return (
-        <div className={`w-full bg-black text-white flex items-center justify-around px-10 max-sm:px-5 py-5 transition-all duration-300 ease-in-out fixed top-0 z-20  max-[850px]:justify-between`}>
+        <div className={`w-full bg-black text-white flex items-center justify-around px-10 max-sm:px-5 py-5 transition-all 
+        duration-300 ease-in-out fixed top-0 z-40 max-[850px]:justify-between`}>
             {/*Logo*/}
             <div className="font-brith-stone font-extrabold text-3xl">MARNON</div>
 
             {/*Navbar*/}
             <div className='max-[850px]:hidden'>
                 <ul className='flex gap-10 text-[16px] font-normal font-poppins'>
-                    <li className="cursor-pointer">
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li className="cursor-pointer">
-                        <Link to="/men">Men</Link>
-                    </li>
-                    <li className="cursor-pointer">
-                        <Link to="/women">Women</Link>
-                    </li>
-                    <li className="cursor-pointer">
-                        <Link to="/kids">Kids</Link>
-                    </li>
+                    {menus.map((menu) => (
+                        <li key={menu.id} className='cursor-pointer'>
+                            <Link to={menu.url}>{menu.name}</Link>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
             {/*Cart & User*/}
-            <div className="flex gap-6 items-center justify-center max-[850px]:hidden">
+            <div className="flex gap-6 items-center justify-center">
                 {/*Cart Icon*/}
                 <Tooltip content="Cart" placement={'bottom'}>
                     <Link to='/checkout/cart'>
@@ -138,20 +133,20 @@ const Header = () => {
                         </DropdownMenu>
                     </Dropdown>
                 )}
+
+                {/* Hamburger menu icon for mobile view */}
+                <Tooltip content="Menu" placement="bottom">
+                    <div
+                        className='hidden max-[850px]:inline cursor-pointer text-lg'
+                        onClick={() => onOpen()}
+                    >
+                        <FaBars />
+                    </div>
+                </Tooltip>
             </div>
 
-            {/* Hamburger menu icon for mobile view */}
-            <Tooltip content="Menu" placement="bottom">
-                <div
-                    className='hidden max-[850px]:inline cursor-pointer text-lg'
-                    onClick={() => onOpen()}
-                >
-                    <FaBars />
-                </div>
-            </Tooltip>
-
             {/*Responsive navbar for mobile view*/}
-            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} loginOnOpen={loginOnOpen} UserProfileOnOpen={UserProfileOnOpen}/>
+            <ResponsiveNav isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose}/>
 
             {/*Login model*/}
             {loginIsOpen && (
