@@ -82,7 +82,7 @@ const SignUp = ({isOpen, onOpenChange, loginOnOpen, email}: SignUpProps) => {
                     <h2 className='font-semibold'>Sign Up</h2>
                     <div className='w-full h-[1px] bg-gray-200 mt-1'></div>
                 </ModalHeader>
-                <ModalBody className='flex flex-col items-center'>
+                <ModalBody className='flex flex-col items-center scrollbar-hide'>
                     <h3 className='font-semibold'>Hello There!</h3>
                     <p className="text-sm font-normal max-w-96 text-center">
                         Glad to see you joining with us. Please fill up the following fields to set your account

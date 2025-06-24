@@ -115,7 +115,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                     <h1 className='text-xl'>User Profile</h1>
                     <div className='w-full h-px bg-gray-300'></div>
                 </ModalHeader>
-                <ModalBody className='flex flex-col justify-start items-center gap-10 pb-4'>
+                <ModalBody className='flex flex-col justify-start items-center gap-10 pb-4 scrollbar-hide'>
                     <div className='flex flex-col justify-center items-center'>
                         <Avatar
                             name={userName ? userName[0].toUpperCase() : ''}
