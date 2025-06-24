@@ -4,7 +4,10 @@ export interface UserDTO{
     name: string;
     email: string;
     contact: string;
-    address: string;
+    streetAddress: string;
+    townOrCity?: string;
+    provinceOrState?: string;
+    postalCode?: string;
     role: string;
     createDate?: string;
     createBy?: string;

@@ -2,6 +2,6 @@
 export interface UserUpdateDTO{
     name: string;
     contact: string;
-    address: string;
+    streetAddress: string;
     role?: string;
 }

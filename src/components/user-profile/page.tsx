@@ -1,10 +1,12 @@
-import {addToast, Avatar, Button, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
+import {addToast, Avatar, Button, Form, Modal, ModalBody, ModalContent, ModalHeader} from "@heroui/react";
 import { CiEdit } from "react-icons/ci";
 import {useEffect, useState} from "react";
 import {UserUpdateDTO} from "../../models/userUpdateDTO.ts";
 import {getUserByEmail, updateByRegularUser} from "../../services/userService.ts";
 import * as React from "react";
 import {useAuthContext} from "@/context/authContext.tsx";
+import {Input} from "@heroui/input";
+import {contactRegex} from "@/util/regexPattens.ts";
 
 interface UserProfileProps {
     isOpen: boolean;
@@ -15,10 +17,8 @@ interface UserDataProps {
     fName: string;
     lName: string;
     contact: string;
-    address: string;
+    streetAddress: string;
 }
-
-const contactRegex = /^\d{9,15}$/;
 
 const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
     const { userName } = useAuthContext();
@@ -28,11 +28,8 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
         fName: '',
         lName: '',
         contact: '',
-        address: ''
+        streetAddress: ''
     });
-    const [nameError, setNameError] = useState<string | null>('');
-    const [contactError, setContactError] = useState<string | null>('');
-    const [addressError, setAddressError] = useState<string | null>('');
 
     // Reset form fields when the modal opens
     useEffect(() => {
@@ -41,11 +38,8 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
             fName: '',
             lName: '',
             contact: '',
-            address: ''
+            streetAddress: ''
         });
-        setNameError('');
-        setContactError('');
-        setAddressError('');
     }, [isOpen]);
 
     // Fetch user data from the server
@@ -57,7 +51,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                     fName: res.data.name.split(' ')[0] || '',
                     lName: res.data.name.split(' ')[1] || '',
                     contact: res.data.contact || '',
-                    address: res.data.address || ''
+                    streetAddress: res.data.streetAddress || ''
                 });
             } else {
                 addToast({
@@ -75,125 +69,43 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
         });
     }, [userName]);
 
-    const handleUserUpdate = async () => {
-        // Validate all fields before updating
-        const fNameErr = validateFirstName(userData.fName);
-        validateLastName(userData.lName);
-        const contactErr = validateContact(userData.contact);
-        const addressErr = validateAddress(userData.address);
+    const handleUserUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-        setNameError(fNameErr);
-        setContactError(contactErr);
-        setAddressError(addressErr);
+        if (!isEditBtnClicked) return; // 🚫 Prevent accidental submission when not editing
 
-        // If there are no errors, proceed with the update
-        if (!fNameErr && !contactErr && !addressErr) {
-            const userDTO: UserUpdateDTO = {
-                name: `${userData.fName} ${userData.lName}`,
-                contact: userData.contact,
-                address: userData.address,
-                role: 'null' // Role is not being updated by regular users
-            }
+        // Build the user update DTO
+        const userDTO: UserUpdateDTO = {
+            name: `${userData.fName} ${userData.lName}`,
+            contact: userData.contact,
+            streetAddress: userData.streetAddress,
+        }
 
-            updateByRegularUser(userId, userDTO).then(res => {
-                if (res.statusCode === 200) {
-                    addToast({
-                        title: "Profile Updated Successfully",
-                        color: "success",
-                    });
-                    setIsEditBtnClicked(false);
-                } else {
-                    addToast({
-                        title: "Update Failed",
-                        color: "danger",
-                        description: res.message,
-                    });
-                }
-                onOpenChange();
-
-            }).catch(error => {
+        // Call the update service
+        updateByRegularUser(userId, userDTO).then(res => {
+            if (res.statusCode === 200) {
                 addToast({
-                    title: "Error Updating Profile",
-                    color: "danger",
-                    description: error.message,
+                    title: "Profile Updated Successfully",
+                    color: "success",
                 });
-            });
+                setIsEditBtnClicked(false);
+            } else {
+                addToast({
+                    title: "Update Failed",
+                    color: "danger",
+                    description: res.message,
+                });
+            }
             onOpenChange();
-        }
-    }
 
-    const handleEditBtnClick = () => {
-        setIsEditBtnClicked(true);
-    }
-
-
-    const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setUserData({...userData, fName: value});
-        validateFirstName(value);
-    }
-
-    const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setUserData({...userData, lName: value});
-        validateLastName(value);
-    }
-
-    const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setUserData({...userData, contact: value});
-        validateContact(value);
-    }
-
-    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim();
-        setUserData({...userData, address: value});
-        validateAddress(value);
-    }
-
-    const validateFirstName = (value: string): string | null => {
-        if (value.trim() === '') {
-            setNameError("Both first and last names are required.");
-            return "Both first and last names are required.";
-        } else if (userData.lName.trim() === '') {
-            setNameError("Both first and last names are required.");
-            return "Both first and last names are required.";
-        }
-        setNameError(null);
-        return null;
-    }
-
-    const validateLastName = (value: string): string | null => {
-        if (value.trim() === '') {
-            setNameError("Both first and last names are required.");
-            return "Both first and last names are required.";
-        } else if (userData.fName.trim() === '') {
-            setNameError("Both first and last names are required.");
-            return "Both first and last names are required.";
-        }
-        setNameError(null);
-        return null;
-    }
-
-    const validateContact = (value: string): string | null => {
-        if (value.trim() === '') {
-            setContactError("Please enter your contact number.");
-            return "Please enter your contact number.";
-        } else if (!contactRegex.test(value)) {
-            setContactError("Please enter a valid contact number (9-15 digits).");
-            return "Please enter a valid contact number (9-15 digits).";
-        }
-        setContactError(null);
-        return null;
-    }
-
-    const validateAddress = (value: string) => {
-        if (value.trim() === '') {
-            setAddressError("Please enter your address.");
-            return "Please enter your address.";
-        };
-        setAddressError(null);
-        return null;
+        }).catch(error => {
+            addToast({
+                title: "Error Updating Profile",
+                color: "danger",
+                description: error.message,
+            });
+        });
+        onOpenChange();
     }
 
     return (
@@ -203,7 +115,7 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                     <h1 className='text-xl'>User Profile</h1>
                     <div className='w-full h-px bg-gray-300'></div>
                 </ModalHeader>
-                <ModalBody className='flex flex-col justify-start items-center gap-10 my-5'>
+                <ModalBody className='flex flex-col justify-start items-center gap-10 pb-4'>
                     <div className='flex flex-col justify-center items-center'>
                         <Avatar
                             name={userName ? userName[0].toUpperCase() : ''}
@@ -211,87 +123,87 @@ const UserProfile = ({isOpen, onOpenChange}: UserProfileProps) => {
                         />
                         <p className=' font-semibold mt-2'>{userName}</p>
                     </div>
-                    <div className="flex flex-col w-full px-2">
-                        <div className='flex gap-5'>
-                            <div className='w-full'>
-                                <label className='text-[13px]'>First name</label>
-                                <input
-                                    type="text"
-                                    placeholder="First name"
-                                    value={userData.fName}
-                                    disabled={!isEditBtnClicked}
-                                    onChange={(e) => {handleFirstNameChange(e)}}
-                                    className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
-                                    `}
-                                />
-                            </div>
-                            <div className='w-full'>
-                                <label className='text-[13px]'>Last name</label>
-                                <input
-                                    type="text"
-                                    placeholder="Last name"
-                                    value={userData.lName}
-                                    disabled={!isEditBtnClicked}
-                                    onChange={(e) => {handleLastNameChange(e)}}
-                                    className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
-                                    `}
-                                />
-                            </div>
-                        </div>
-                        <p className='text-red-500 text-[13px]'>{nameError}</p>
-                        <div className='w-full mt-5'>
-                            <label className='text-[13px]'>Contact</label>
-                            <input
+                    <Form onSubmit={handleUserUpdate} className="flex flex-col w-full px-2">
+                        <div className='flex gap-5 w-full'>
+                            <Input
+                                name="firstName"
+                                isRequired
+                                disabled={!isEditBtnClicked}
+                                label="First name"
+                                labelPlacement='outside'
+                                variant='bordered'
                                 type="text"
-                                placeholder="Contact"
+                                value={userData.fName}
+                                onChange={(e) => setUserData({...userData, fName: e.target.value})}
+                                validate={value => value.length < 3 ? "First name must be at least 3 characters long." : null}
+                            />
+                            <Input
+                                name="lastName"
+                                isRequired
+                                disabled={!isEditBtnClicked}
+                                label="Last name"
+                                labelPlacement='outside'
+                                variant='bordered'
+                                type="text"
+                                value={userData.lName}
+                                onChange={(e) => setUserData({...userData, lName: e.target.value})}
+                                validate={value => value.length < 3 ? "Last name must be at least 3 characters long." : null}
+                            />
+                        </div>
+                        <div className='w-full mt-5'>
+                            <Input
+                                name="contact"
+                                isRequired
+                                disabled={!isEditBtnClicked}
+                                label="Contact"
+                                labelPlacement='outside'
+                                variant='bordered'
+                                type="text"
                                 value={userData.contact}
-                                disabled={!isEditBtnClicked}
-                                onChange={(e) => {handleContactChange(e)}}
-                                className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
-                                    `}
+                                onChange={(e) => setUserData({...userData, contact: e.target.value})}
+                                validate={value => {
+                                    if (!contactRegex.test(value)){
+                                        return "Please enter a valid contact number (9-15 digits).";
+                                    }
+                                }}
                             />
                         </div>
-                        <p className='text-red-500 text-[13px]'>{contactError}</p>
                         <div className='w-full mt-5'>
-                            <label className='text-[13px]'>Address</label>
-                            <input
-                                type="text"
-                                placeholder="Address"
-                                value={userData.address}
+                            <Input
+                                name="streetAddress"
+                                isRequired
                                 disabled={!isEditBtnClicked}
-                                onChange={(e) => {handleAddressChange(e)}}
-                                className={`w-full text-sm h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-1 focus:ring-black mt-1 
-                                        ${isEditBtnClicked ? 'bg-blue-100' : ''}
-                                    `}
+                                label="Street Address"
+                                labelPlacement='outside'
+                                variant='bordered'
+                                type="text"
+                                value={userData.streetAddress}
+                                onChange={(e) => setUserData({...userData, streetAddress: e.target.value})}
+                                validate={value => value.length < 6 ? "Street address must be at least 3 characters long." : null}
                             />
                         </div>
-                        <p className='text-red-500 text-[13px]'>{addressError}</p>
 
                         {/*Button section*/}
                         <div className='w-full flex justify-end items-center gap-3 mt-5'>
                             {isEditBtnClicked ? (
                                 <Button
+                                    type="submit"
                                     className="w-28 bg-blue-600 text-white rounded-md flex justify-center items-center"
-                                    onPress={() => handleUserUpdate()}
-                                    disabled={false}
                                 >
                                     <CiEdit className='text-[20px]' />
                                     <span className='ml-1'>Update</span>
                                 </Button>
                             ) : (
-                                <Button
-                                    className="w-28 bg-yellow-500 text-black rounded-md flex justify-center items-center"
-                                    onPress={() => handleEditBtnClick()}
+                                <button
+                                    className="w-28 py-2 bg-yellow-500 text-black rounded-md flex justify-center items-center"
+                                    onClick={() => setIsEditBtnClicked(true)}
                                 >
                                     <CiEdit className='text-[20px]' />
                                     <span className='ml-1'>Edit</span>
-                                </Button>
+                                </button>
                             )}
                         </div>
-                    </div>
+                    </Form>
                 </ModalBody>
             </ModalContent>
         </Modal>
