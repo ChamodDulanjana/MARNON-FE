@@ -17,15 +17,17 @@ import { Key } from "@react-types/shared";
 import handleLogout from "@/util/logout.ts";
 import VerifyEmail from "@/components/verify-email/page.tsx";
 import menus from "@/assets/data/menus.ts";
+import Cart from "@/components/cart/page.tsx";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
 const Header = () => {
-    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
-    const {isOpen: loginIsOpen, onOpen: loginOnOpen, onOpenChange: loginOnOpenChange} = useDisclosure();
-    const {isOpen: signupIsOpen, onOpen: signupOnOpen, onOpenChange: signupOnOpenChange} = useDisclosure();
-    const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();
-    const {isOpen: verifyEmailIsOpen, onOpen: verifyEmailOnOpen, onOpenChange: verifyEmailOpenChange} = useDisclosure();
+    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure(); // for responsive navbar
+    const {isOpen: loginIsOpen, onOpen: loginOnOpen, onOpenChange: loginOnOpenChange} = useDisclosure(); // for login modal
+    const {isOpen: signupIsOpen, onOpen: signupOnOpen, onOpenChange: signupOnOpenChange} = useDisclosure();  // for signup modal
+    const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();  // for user profile modal
+    const {isOpen: verifyEmailIsOpen, onOpen: verifyEmailOnOpen, onOpenChange: verifyEmailOpenChange} = useDisclosure();  // for verify email modal
+    const {isOpen: cartIsOpen, onOpen: cartOnOpen, onOpenChange: cartOnOpenChange} = useDisclosure();  // for cart drawer
     const isWide = useIsScreenWide(850);
     const {isLoggedIn, role} = useAuthContext();
     const [emailSignUp, setEmailSignUp] = useState('');
@@ -75,9 +77,9 @@ const Header = () => {
             <div className="flex gap-6 items-center justify-center">
                 {/*Cart Icon*/}
                 <Tooltip content="Cart" placement={'bottom'}>
-                    <Link to='/checkout/cart'>
-                        <span className='text-white text-xl cursor-pointer'><LuShoppingCart /></span>
-                    </Link>
+                    <span onClick={cartOnOpen} className='text-white text-xl cursor-pointer'>
+                        <LuShoppingCart />
+                    </span>
                 </Tooltip>
 
                 {/*User Icon*/}
@@ -166,6 +168,11 @@ const Header = () => {
             {/*User Profile model*/}
             {isUserProfileOpen && (
                 <UserProfile isOpen={isUserProfileOpen} onOpenChange={UserProfileOpenChange}/>
+            )}
+
+            {/*Cart drawer*/}
+            {cartIsOpen && (
+                <Cart isOpen={cartIsOpen} onOpenChange={cartOnOpenChange}/>
             )}
         </div>
     );

@@ -3,6 +3,9 @@ import { HeroUIProvider } from "@heroui/react";
 import {ToastProvider} from "@heroui/toast";
 import {AuthContextProvider} from "./context/authContext.tsx";
 import AppRoutes from "./AppRoutes.tsx";
+import {Provider} from "react-redux";
+import {persistor, store} from "@/redux/store.ts";
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
     return (
@@ -11,7 +14,11 @@ function App() {
                 <HeroUIProvider>
                     <ToastProvider/>
                     <AuthContextProvider>
-                        <AppRoutes />
+                        <Provider store={store}>
+                            <PersistGate loading={null} persistor={persistor}>
+                                <AppRoutes />
+                            </PersistGate>
+                        </Provider>
                     </AuthContextProvider>
                 </HeroUIProvider>
             </BrowserRouter>
