@@ -8,10 +8,10 @@ import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import ZoomableImage from "@/components/zoomable-image/page.tsx";
 import formatNumber from "@/util/formatNumber.ts";
 import { GoDotFill } from "react-icons/go";
-import { useDispatch } from 'react-redux';
 import { addToCart } from '@/redux/cart/cartSlice.ts';
 import {colors} from "@/assets/data/colors.ts";
 import {useShopContext} from "@/context/shopContext.tsx";
+import {useAppDispatch} from "@/redux/hooks.ts";
 
 type ProductType = {
     id: number,
@@ -47,7 +47,7 @@ const ProductDisplay = () => {
     const [quantity, setQuantity] = useState<number>(1);
     const [mainImage, setMainImage] = useState("example.jpg"); // Default image
     const [categories, setCategories] = useState(''); // Initialize categories as an empty string
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { cartOnOpen } = useShopContext(); // for cart drawer
 
     const {

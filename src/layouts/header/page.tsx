@@ -19,6 +19,8 @@ import VerifyEmail from "@/components/verify-email/page.tsx";
 import menus from "@/assets/data/menus.ts";
 import Cart from "@/components/cart/page.tsx";
 import {useShopContext} from "@/context/shopContext.tsx";
+import {CartItem} from "@/redux/cart/types.ts";
+import {useAppSelector} from "@/redux/hooks.ts";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
@@ -32,6 +34,7 @@ const Header = () => {
     const {isLoggedIn, role} = useAuthContext();
     const [emailSignUp, setEmailSignUp] = useState('');
     const {cartOnOpen, cartIsOpen} = useShopContext(); // for cart drawer
+    const cartItems: CartItem[] = useAppSelector((state) => state.cart.items);
 
     // Clear states
     useEffect(() => {
@@ -75,10 +78,13 @@ const Header = () => {
             </div>
 
             {/*Cart & User*/}
-            <div className="flex gap-6 items-center justify-center">
+            <div className="flex gap-8 items-center justify-center">
                 {/*Cart Icon*/}
                 <Tooltip content="Cart" placement={'bottom'}>
                     <span onClick={cartOnOpen} className='text-white text-xl cursor-pointer'>
+                        { cartItems.length > 0 && (
+                            <span className='absolute w-7 h-6 rounded-full text-sm bg-red-500 -mt-4 ml-2 flex items-center justify-center font-semibold'>{cartItems.length}</span>
+                        )}
                         <LuShoppingCart />
                     </span>
                 </Tooltip>

@@ -22,7 +22,7 @@ const Cart = () => {
         dispatch(removeFromCart({ productId, size }));
     };
 
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
+    const total = Number(cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2));
 
     return (
         <Drawer
@@ -35,7 +35,7 @@ const Cart = () => {
             <DrawerContent>
                 <DrawerBody>
                     <div className='w-full flex justify-around py-2'>
-                        <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600'>{cartItems.length}</div>
+                        <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700'>{cartItems.length}</div>
                         <p className='font-poppins text-lg mt-1 font-semibold'>Shopping Cart</p>
                         <div className='w-1 h-1'></div>
                     </div>
@@ -93,7 +93,7 @@ const Cart = () => {
                                     <span>Subtotal:</span>
                                     <span>
                                         <span className='mr-1'>LKR</span>
-                                        {total}
+                                        {Intl.NumberFormat(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(total)}
                                     </span>
                                 </div>
 
