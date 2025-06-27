@@ -30,18 +30,20 @@ const Cart = () => {
             onOpenChange={cartOnOpenChange}
             placement={"right"}
             size={"lg"}
-            className="rounded-none outline-0 transition-transform duration-700 ease-in-out font-poppins pb-5"
+            className="rounded-none outline-0 transition-transform duration-700 ease-in-out font-poppins pb-5 overflow-x-hidden"
         >
             <DrawerContent>
                 <DrawerBody>
-                    <div className='w-full flex justify-center py-4'>
-                        <p className='font-poppins text-lg mt-1 ml-4 font-semibold'>Shopping Cart</p>
+                    <div className='w-full flex justify-around py-2'>
+                        <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600'>{cartItems.length}</div>
+                        <p className='font-poppins text-lg mt-1 font-semibold'>Shopping Cart</p>
+                        <div className='w-1 h-1'></div>
                     </div>
                     <Divider />
                     {cartItems.length === 0 ? (
                         <p className="text-center text-gray-500">Your cart is empty.</p>
                     ) : (
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-6 pb-28">
                             {cartItems.map((item, idx) => (
                                 <div key={idx} className="flex gap-4 items-start border-b pb-5  py-3">
                                     <img
@@ -51,7 +53,7 @@ const Cart = () => {
                                     />
 
                                     <div className="flex-1 space-y-1">
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between gap-4">
                                             <h3 className="font-normal text-sm line-clamp-2 max-w-80">{item.name}</h3>
                                             <button onClick={() => handleRemove(item.productId, item.size)}>
                                                 <FiTrash2 className="text-red-500 hover:text-red-700 text-lg" />
@@ -86,17 +88,19 @@ const Cart = () => {
                                 </div>
                             ))}
 
-                            <div className="flex justify-between items-center text-lg font-semibold">
-                                <span>Total:</span>
-                                <span>
-                                    <span className='mr-1'>LKR</span>
-                                    {total}
-                                </span>
-                            </div>
+                            <div className='w-full flex flex-col gap-4 absolute bottom-0 overflow-hidden pr-12 py-4 bg-white'>
+                                <div className="flex justify-between items-center text-lg font-semibold">
+                                    <span>Subtotal:</span>
+                                    <span>
+                                        <span className='mr-1'>LKR</span>
+                                        {total}
+                                    </span>
+                                </div>
 
-                            <Button className="w-full bg-black text-white rounded mt-4">
-                                Proceed to Checkout
-                            </Button>
+                                <Button className="w-full bg-black text-white rounded">
+                                    Proceed to Checkout
+                                </Button>
+                            </div>
                         </div>
                     )}
 
