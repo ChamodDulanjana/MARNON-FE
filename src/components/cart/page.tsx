@@ -1,22 +1,20 @@
 import {Button, Divider, Drawer, DrawerBody, DrawerContent} from "@heroui/react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { removeFromCart, addToCart } from "@/redux/cart/cartSlice";
+import { removeFromCart, updateQuantity } from "@/redux/cart/cartSlice";
 import { FiTrash2 } from "react-icons/fi";
 import {CartItem} from "@/redux/cart/types.ts";
+import {useShopContext} from "@/context/shopContext.tsx";
 
-interface CartProps {
-    isOpen: boolean,
-    onOpenChange: () => void
-}
 
-const Cart = ({isOpen, onOpenChange}: CartProps) => {
+const Cart = () => {
     const dispatch = useAppDispatch();
     const cartItems: CartItem[] = useAppSelector((state) => state.cart.items);
+    const { cartIsOpen, cartOnOpenChange } = useShopContext();
 
 
     const handleQtyChange = (productId: number, size: string, qty: number) => {
         if (qty > 0) {
-            dispatch(addToCart({ productId, size, quantity: qty } as any));
+            dispatch(updateQuantity({ productId, size, quantity: qty }));
         }
     };
 
@@ -28,8 +26,8 @@ const Cart = ({isOpen, onOpenChange}: CartProps) => {
 
     return (
         <Drawer
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
+            isOpen={cartIsOpen}
+            onOpenChange={cartOnOpenChange}
             placement={"right"}
             size={"lg"}
             className="rounded-none outline-0 transition-transform duration-700 ease-in-out font-poppins pb-5"
@@ -45,7 +43,6 @@ const Cart = ({isOpen, onOpenChange}: CartProps) => {
                     ) : (
                         <div className="flex flex-col gap-6">
                             {cartItems.map((item, idx) => (
-                                console.log(item),
                                 <div key={idx} className="flex gap-4 items-start border-b pb-5  py-3">
                                     <img
                                         src={item.image}

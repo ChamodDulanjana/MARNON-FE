@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {getProductById} from "../services/productService.ts";
 import {useQuery} from "@tanstack/react-query";
 import LoadingAnimation from "@/components/loading-animation/page.tsx";
@@ -10,6 +10,8 @@ import formatNumber from "@/util/formatNumber.ts";
 import { GoDotFill } from "react-icons/go";
 import { useDispatch } from 'react-redux';
 import { addToCart } from '@/redux/cart/cartSlice.ts';
+import {colors} from "@/assets/data/colors.ts";
+import {useShopContext} from "@/context/shopContext.tsx";
 
 type ProductType = {
     id: number,
@@ -46,6 +48,7 @@ const ProductDisplay = () => {
     const [mainImage, setMainImage] = useState("example.jpg"); // Default image
     const [categories, setCategories] = useState(''); // Initialize categories as an empty string
     const dispatch = useDispatch();
+    const { cartOnOpen } = useShopContext(); // for cart drawer
 
     const {
         isLoading,
@@ -108,16 +111,24 @@ const ProductDisplay = () => {
         setQuantity(1);
     }, [selectedSize]);
 
+    // set colorName based on the product color
+    const colorName = useMemo(() => {
+        return colors.find(col => col.hex === product.color)?.name || 'Unknown Color';
+    }, [product.color]);
+
     const handleAddToCartBtn = () => {
-        dispatch(addToCart({
-            productId: product.id,
-            name: product.name,
-            price: product.sellingPrice,
-            size: selectedSize.size,
-            color: product.color,
-            quantity,
-            image: mainImage,
-        }));
+        if (selectedSize.qty > 0 && quantity > 0) {
+            dispatch(addToCart({
+                productId: product.id,
+                name: product.name,
+                image: mainImage,
+                size: selectedSize.size,
+                color: colorName,
+                price: product.sellingPrice,
+                quantity: quantity
+            }));
+            cartOnOpen(); // Open the cart drawer after adding to cart
+        }
     }
 
     if (isLoading) return <LoadingAnimation />;
@@ -170,7 +181,7 @@ const ProductDisplay = () => {
                     {/*Color*/}
                     <div>
                         <span className="font-semibold min-[2560px]:text-xl">COLOR:
-                            <span className='text-gray-600 font-normal ml-2'>{product.color}</span>
+                            <span className='text-gray-600 font-normal ml-2'>{colorName}</span>
                         </span>
                         <div className='w-7 h-7 mt-2 flex items-center justify-center border border-gray-400  min-[2560px]:w-12 min-[2560px]:h-12'>
                             <div

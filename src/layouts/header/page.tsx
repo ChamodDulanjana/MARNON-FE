@@ -18,6 +18,7 @@ import handleLogout from "@/util/logout.ts";
 import VerifyEmail from "@/components/verify-email/page.tsx";
 import menus from "@/assets/data/menus.ts";
 import Cart from "@/components/cart/page.tsx";
+import {useShopContext} from "@/context/shopContext.tsx";
 
 const ADMIN_PANEL_URL = import.meta.env.VITE_ADMIN_PANEL_URL || '';
 
@@ -27,10 +28,10 @@ const Header = () => {
     const {isOpen: signupIsOpen, onOpen: signupOnOpen, onOpenChange: signupOnOpenChange} = useDisclosure();  // for signup modal
     const {isOpen: isUserProfileOpen, onOpen: UserProfileOnOpen, onOpenChange: UserProfileOpenChange} = useDisclosure();  // for user profile modal
     const {isOpen: verifyEmailIsOpen, onOpen: verifyEmailOnOpen, onOpenChange: verifyEmailOpenChange} = useDisclosure();  // for verify email modal
-    const {isOpen: cartIsOpen, onOpen: cartOnOpen, onOpenChange: cartOnOpenChange} = useDisclosure();  // for cart drawer
     const isWide = useIsScreenWide(850);
     const {isLoggedIn, role} = useAuthContext();
     const [emailSignUp, setEmailSignUp] = useState('');
+    const {cartOnOpen, cartIsOpen} = useShopContext(); // for cart drawer
 
     // Clear states
     useEffect(() => {
@@ -172,7 +173,7 @@ const Header = () => {
 
             {/*Cart drawer*/}
             {cartIsOpen && (
-                <Cart isOpen={cartIsOpen} onOpenChange={cartOnOpenChange}/>
+                <Cart/>
             )}
         </div>
     );
