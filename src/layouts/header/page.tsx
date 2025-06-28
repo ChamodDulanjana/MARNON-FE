@@ -179,7 +179,7 @@ const Header = () => {
 
             {/*Cart drawer*/}
             {cartIsOpen && (
-                <Cart/>
+                <Cart loginOnOpen={loginOnOpen}/>
             )}
         </div>
     );

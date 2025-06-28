@@ -4,6 +4,7 @@ import Home from './pages/home'
 import ShopCategory from './pages/shopCategory'
 import ProductDisplay from './pages/product'
 import Footer from './layouts/footer/page'
+import Checkout from "@/pages/checkout.tsx";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
                 <Route path="/product" element={<ProductDisplay />}>
                     <Route path=":productId" element={<ProductDisplay />} />
                 </Route>
+                <Route path="/cart/checkout" element={<Checkout />} />
             </Routes>
         </div>
         <Footer />
