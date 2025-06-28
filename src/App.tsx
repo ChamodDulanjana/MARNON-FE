@@ -7,6 +7,7 @@ import {Provider} from "react-redux";
 import {persistor, store} from "@/redux/store.ts";
 import { PersistGate } from 'redux-persist/integration/react';
 import { ShopContextProvider } from "./context/shopContext.tsx";
+import {LoadingContextProvider} from "@/context/loadingContext.tsx";
 
 function App() {
     return (
@@ -16,11 +17,13 @@ function App() {
                     <ToastProvider/>
                     <AuthContextProvider>
                         <ShopContextProvider>
-                            <Provider store={store}>
-                                <PersistGate loading={null} persistor={persistor}>
-                                    <AppRoutes />
-                                </PersistGate>
-                            </Provider>
+                            <LoadingContextProvider>
+                                <Provider store={store}>
+                                    <PersistGate loading={null} persistor={persistor}>
+                                        <AppRoutes />
+                                    </PersistGate>
+                                </Provider>
+                            </LoadingContextProvider>
                         </ShopContextProvider>
                     </AuthContextProvider>
                 </HeroUIProvider>
