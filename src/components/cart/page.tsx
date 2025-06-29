@@ -120,17 +120,16 @@ const Cart = ({loginOnOpen}: CartProps) => {
                                     </div>
                                 ))}
 
-                                <div
-                                    className='w-full flex flex-col gap-4 absolute bottom-0 overflow-hidden pr-12 py-4 bg-white'>
+                                <div className='w-full flex flex-col gap-4 absolute bottom-0 overflow-hidden pr-12 py-4 bg-white'>
                                     <div className="flex justify-between items-center text-lg font-semibold">
                                         <span>Subtotal:</span>
                                         <span>
-                                        <span className='mr-1'>LKR</span>
+                                            <span className='mr-1'>LKR</span>
                                             {Intl.NumberFormat(undefined, {
                                                 minimumFractionDigits: 2,
                                                 maximumFractionDigits: 2
                                             }).format(total)}
-                                    </span>
+                                        </span>
                                     </div>
 
                                     <Button className="w-full bg-black text-white rounded" onPress={handleCheckoutBtn}>

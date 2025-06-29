@@ -8,7 +8,7 @@ export interface UserDTO{
     townOrCity?: string;
     provinceOrState?: string;
     postalCode?: string;
-    role: string;
+    role?: string;
     createDate?: string;
     createBy?: string;
     modifyDate?: string;
